@@ -88,7 +88,11 @@ namespace LimFTPClient
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            ParamsHelper.SystemURI = new Uri(ParamsHelper.ServerURI.ToString() + "/WinMobile_2003");
+            int MajorOSVersion = Environment.OSVersion.Version.Major;
+
+            if (MajorOSVersion == 4) ParamsHelper.OSVersion = "WinMobile_2003";
+            else ParamsHelper.OSVersion = "WinMobile_5";
+            ParamsHelper.SystemURI = new Uri(ParamsHelper.ServerURI.ToString() + "/" + ParamsHelper.OSVersion);
             Connect();
         }
 

@@ -13,7 +13,9 @@ namespace LimFTPClient
         static public Uri SystemURI;
         static public Uri AppURI;
         static public string DownloadPath;
+        static public string InstallPath;
         static public string ConfigPath;
+        static public string OSVersion;
 
         static public double BytesToMegs(ulong Bytes)
         {
