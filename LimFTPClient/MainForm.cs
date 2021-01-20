@@ -23,6 +23,11 @@ namespace LimFTPClient
             {
                 IO.RemoveParameters();
             }
+
+            PropMenuItem.Enabled = false;
+            PropButton.Enabled = false;
+            DeleteMenuItem.Enabled = false;
+            DeleteButton.Enabled = false;
         }
 
         private void HelpMenuItem_Click(object sender, EventArgs e)
@@ -61,11 +66,6 @@ namespace LimFTPClient
            
             try
             {
-                //SystemsBox.Items.AddRange(FTP.ReadListing(Parameters.CurrentURI).ToArray());
-                //AppsBox.Items.Add("Test");
-                //AppsBox.Items.Add("Test2");
-                //ConnectionStatusLabel.Text = "Подключено";
-
                 List<string> AppsList = FTPHelper.ReadListing(ParamsHelper.CurrentURI);
 
                 foreach (string app in AppsList)

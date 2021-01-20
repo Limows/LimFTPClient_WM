@@ -33,7 +33,7 @@
             this.MainMenu = new System.Windows.Forms.MainMenu();
             this.ActionsMenuItem = new System.Windows.Forms.MenuItem();
             this.ParamsMenuItem = new System.Windows.Forms.MenuItem();
-            this.BackMenuItem = new System.Windows.Forms.MenuItem();
+            this.UpdateMenuItem = new System.Windows.Forms.MenuItem();
             this.RefMenu = new System.Windows.Forms.MenuItem();
             this.HelpMenuItem = new System.Windows.Forms.MenuItem();
             this.AboutMenuItem = new System.Windows.Forms.MenuItem();
@@ -43,12 +43,14 @@
             this.SearchBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.InstalledPage = new System.Windows.Forms.TabPage();
+            this.InstalledLabel = new System.Windows.Forms.Label();
             this.PropButton = new System.Windows.Forms.Button();
             this.DeleteButton = new System.Windows.Forms.Button();
             this.MemLabel = new System.Windows.Forms.Label();
             this.FreeMemLabel = new System.Windows.Forms.Label();
             this.InstalledBox = new System.Windows.Forms.ListBox();
-            this.InstalledLabel = new System.Windows.Forms.Label();
+            this.PropMenuItem = new System.Windows.Forms.MenuItem();
+            this.DeleteMenuItem = new System.Windows.Forms.MenuItem();
             this.TabControl.SuspendLayout();
             this.NewPage.SuspendLayout();
             this.InstalledPage.SuspendLayout();
@@ -62,7 +64,9 @@
             // ActionsMenuItem
             // 
             this.ActionsMenuItem.MenuItems.Add(this.ParamsMenuItem);
-            this.ActionsMenuItem.MenuItems.Add(this.BackMenuItem);
+            this.ActionsMenuItem.MenuItems.Add(this.UpdateMenuItem);
+            this.ActionsMenuItem.MenuItems.Add(this.PropMenuItem);
+            this.ActionsMenuItem.MenuItems.Add(this.DeleteMenuItem);
             this.ActionsMenuItem.Text = "Действия";
             // 
             // ParamsMenuItem
@@ -70,10 +74,10 @@
             this.ParamsMenuItem.Text = "Параметры";
             this.ParamsMenuItem.Click += new System.EventHandler(this.ParamsMenuItem_Click);
             // 
-            // BackMenuItem
+            // UpdateMenuItem
             // 
-            this.BackMenuItem.Text = "Назад";
-            this.BackMenuItem.Click += new System.EventHandler(this.BackMenuItem_Click);
+            this.UpdateMenuItem.Text = "Обновить";
+            this.UpdateMenuItem.Click += new System.EventHandler(this.BackMenuItem_Click);
             // 
             // RefMenu
             // 
@@ -149,8 +153,17 @@
             this.InstalledPage.Controls.Add(this.InstalledBox);
             this.InstalledPage.Location = new System.Drawing.Point(0, 0);
             this.InstalledPage.Name = "InstalledPage";
-            this.InstalledPage.Size = new System.Drawing.Size(240, 245);
+            this.InstalledPage.Size = new System.Drawing.Size(232, 242);
             this.InstalledPage.Text = "Установленные";
+            // 
+            // InstalledLabel
+            // 
+            this.InstalledLabel.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
+            this.InstalledLabel.Location = new System.Drawing.Point(0, 1);
+            this.InstalledLabel.Name = "InstalledLabel";
+            this.InstalledLabel.Size = new System.Drawing.Size(240, 17);
+            this.InstalledLabel.Text = "Установленные приложения";
+            this.InstalledLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // PropButton
             // 
@@ -191,14 +204,13 @@
             this.InstalledBox.Size = new System.Drawing.Size(240, 170);
             this.InstalledBox.TabIndex = 0;
             // 
-            // InstalledLabel
+            // PropMenuItem
             // 
-            this.InstalledLabel.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
-            this.InstalledLabel.Location = new System.Drawing.Point(0, 1);
-            this.InstalledLabel.Name = "InstalledLabel";
-            this.InstalledLabel.Size = new System.Drawing.Size(240, 17);
-            this.InstalledLabel.Text = "Установленные приложения";
-            this.InstalledLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.PropMenuItem.Text = "Свойства";
+            // 
+            // DeleteMenuItem
+            // 
+            this.DeleteMenuItem.Text = "Удалить";
             // 
             // MainForm
             // 
@@ -226,7 +238,7 @@
         private System.Windows.Forms.MenuItem ActionsMenuItem;
         private System.Windows.Forms.MenuItem RefMenu;
         private System.Windows.Forms.MenuItem ParamsMenuItem;
-        private System.Windows.Forms.MenuItem BackMenuItem;
+        private System.Windows.Forms.MenuItem UpdateMenuItem;
         private System.Windows.Forms.MenuItem HelpMenuItem;
         private System.Windows.Forms.MenuItem AboutMenuItem;
         private System.Windows.Forms.TabControl TabControl;
@@ -241,6 +253,8 @@
         private System.Windows.Forms.Button PropButton;
         private System.Windows.Forms.Button DeleteButton;
         private System.Windows.Forms.Label InstalledLabel;
+        private System.Windows.Forms.MenuItem PropMenuItem;
+        private System.Windows.Forms.MenuItem DeleteMenuItem;
     }
 }
 

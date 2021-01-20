@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Reflection;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.IO.Compression;
+using System.Windows.Forms;
 
 namespace LimFTPClient
 {
@@ -22,7 +22,7 @@ namespace LimFTPClient
 
         public static ulong GetStorageSpace(string Path)
         {
-            if (Path == "")
+            if (String.IsNullOrEmpty(Path))
             {
                 throw new ArgumentNullException(Path);
             }
@@ -53,11 +53,21 @@ namespace LimFTPClient
                     using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
                     {
                         //decompressionStream.CopyTo(decompressedFileStream);
-                        CopyTo(decompressionStream, decompressedFileStream, 81920);
+                        CopyTo(decompressionStream, decompressedFileStream, 8192);
                         //Console.WriteLine($"Decompressed: {fileToDecompress.Name}");
                     }      
                 }
             }
+        }
+
+        static public string OpenDirDialog()
+        {
+            FolderBrowserDialog OpenDir = new FolderBrowserDialog();
+            if (OpenDir.ShowDialog() == DialogResult.OK)
+            {
+                return OpenDir.SelectedPath;
+            }
+            else return "";
         }
 
         private static void CopyTo(Stream source, Stream destination, int bufferSize)
@@ -73,9 +83,9 @@ namespace LimFTPClient
 
         static public void LoadParameters()
         {
-            if (ParamsHelper.ConfigPath == "")
+            if (String.IsNullOrEmpty(ParamsHelper.ConfigPath))
             {
-                ParamsHelper.ConfigPath = IO.GetCurrentDirectory();
+                ParamsHelper.ConfigPath = IO.GetConfigPath();
             }
 
             FileInfo ConfigFile = new FileInfo(ParamsHelper.ConfigPath);
@@ -87,21 +97,26 @@ namespace LimFTPClient
             Reader.Close();
         }
 
+        static private string GetConfigPath()
+        {
+            return GetCurrentDirectory() + "\\Default.cfg";
+        }
+
         static public string GetCurrentDirectory()
         {
-            return Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase) + "\\Default.cfg";
+            return Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
         }
 
         static public void SaveParameters()
         {
-            if (ParamsHelper.ConfigPath == "")
+            if (String.IsNullOrEmpty(ParamsHelper.ConfigPath))
             {
-                ParamsHelper.ConfigPath = IO.GetCurrentDirectory();
+                ParamsHelper.ConfigPath = IO.GetConfigPath();
             }
 
             FileInfo ConfigFile = new FileInfo(ParamsHelper.ConfigPath);
 
-            if (ParamsHelper.DownloadPath != null)
+            if (!String.IsNullOrEmpty(ParamsHelper.DownloadPath))
             {
                 BinaryWriter Writer;
 
@@ -119,9 +134,9 @@ namespace LimFTPClient
 
         static public void RemoveParameters()
         {
-            if (ParamsHelper.ConfigPath == "")
+            if (String.IsNullOrEmpty(ParamsHelper.ConfigPath))
             {
-                ParamsHelper.ConfigPath = IO.GetCurrentDirectory();
+                ParamsHelper.ConfigPath = IO.GetConfigPath();
             }
 
             File.Delete(ParamsHelper.ConfigPath);

@@ -25,18 +25,17 @@ namespace LimFTPClient
         private void DownloadButton_Click(object sender, EventArgs e)
         {
             string FileName = AppName + ".zip";
-            ParamsHelper.CurrentURI = new Uri(ParamsHelper.AppURI.ToString() + "/" + FileName);
-            //MessageBox.Show(Parameters.CurrentURI.ToString());
+            ParamsHelper.CurrentURI = ParamsHelper.AppURI;
 
-            if (ParamsHelper.DownloadPath != "")
+            if (!String.IsNullOrEmpty(ParamsHelper.DownloadPath))
             {
                 StatusLabel.Text = "Загрузка в папку " + ParamsHelper.DownloadPath;
                 try
                 {
-                    //FTPHelper.DownloadFile(ParamsHelper.CurrentURI, ParamsHelper.DownloadPath + "\\" + FileName);
+                    FTPHelper.DownloadFile(ParamsHelper.CurrentURI, ParamsHelper.DownloadPath, FileName);
                     StatusLabel.Text = "Успешно загружено";
 
-                    
+
 
                     DialogResult Result = MessageBox.Show("Распаковать пакет?", "Сообщение", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
 
@@ -45,28 +44,21 @@ namespace LimFTPClient
                         //ZipFile.ExtractToDirectory(Parameters.DownloadPath + "\\" + FileName, Parameters.DownloadPath + "\\" + AppName);
                         IO.ExtractToDirectory(ParamsHelper.DownloadPath + "\\" + FileName, ParamsHelper.DownloadPath + "\\" + AppName);
                     }
-                    
-                }
-                catch (WebException Exception)
-                {
-                    if (Exception.Response.ToString() == "550")
-                    {
-                        File.Delete(ParamsHelper.DownloadPath + "\\" + FileName);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Невозможно сохранить в " + ParamsHelper.DownloadPath + "\nВозможно программа должна быть\nзапущена от имени администратора", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
-                    }
-                    StatusLabel.Text = "Загрузка не удалась";
+
                 }
                 catch (UnauthorizedAccessException)
                 {
                     MessageBox.Show("Невозможно сохранить в " + ParamsHelper.DownloadPath + "\nВозможно программа должна быть\nзапущена от имени администратора", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
                     StatusLabel.Text = "Загрузка не удалась";
                 }
-                catch (NotSupportedException)
+                catch (OpenNETCF.Net.Ftp.FTPException)
                 {
                     MessageBox.Show("Невозможно подключиться к серверу", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
+                    StatusLabel.Text = "Загрузка не удалась";
+                }
+                catch(IOException)
+                {
+                    MessageBox.Show("Невозможно сохранить в " + ParamsHelper.DownloadPath + "\nВыберите другую директорию", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
                     StatusLabel.Text = "Загрузка не удалась";
                 }
 

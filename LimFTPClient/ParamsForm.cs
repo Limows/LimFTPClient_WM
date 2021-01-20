@@ -42,21 +42,29 @@ namespace LimFTPClient
             }
         }
 
-        private void OpenDirButton_Click(object sender, EventArgs e)
+        private void OpenDirButton1_Click(object sender, EventArgs e)
         {
-            //FileDialog OpenDir = new OpenFileDialog();
+            DownloadPathBox.Text = IO.OpenDirDialog();
+        }
+
+        private string OpenDirDialog()
+        {
             FolderBrowserDialog OpenDir = new FolderBrowserDialog();
             if (OpenDir.ShowDialog() == DialogResult.OK)
             {
-                DownloadPathBox.Text = OpenDir.SelectedPath;
-                //DownloadPathBox.Text = Path.GetDirectoryName(OpenDir.FileName);
+                return OpenDir.SelectedPath;
             }
-
+            else return "";
         }
 
         private void ParamsBox_Load(object sender, EventArgs e)
         {
             DownloadPathBox.Text = ParamsHelper.DownloadPath;
+        }
+
+        private void OpenDirButton2_Click(object sender, EventArgs e)
+        {
+            InstallPathBox.Text = IO.OpenDirDialog();
         }
     }
 }

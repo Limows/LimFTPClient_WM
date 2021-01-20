@@ -13,57 +13,22 @@ namespace LimFTPClient
 {
     class FTPHelper
     {
-        /*
-        static public Stream CreateDownloadRequest(Uri URI)
-        {   
-            WebRequest FTPRequest = WebRequest.Create(URI);
-            //FTPRequest.UseBinary = true;
-            //FTPRequest.KeepAlive = false;
-            //FTPRequest.Credentials = new NetworkCredential("anon", "");
-            //FTPRequest.Method = WebRequestMethods.Ftp.DownloadFile;
-
-            WebResponse Response = FTPRequest.GetResponse();
-            return Response.GetResponseStream();
-        }
-        */
-
-        /*
-        static public void DownloadFile(Uri URI, string FilePath)
+       
+        static public void DownloadFile(Uri URI, string DownloadDir, string FileName)
         {
 
-            //Stream FTPReader = CreateDownloadRequest(URI);
-            FileStream outputStream;
+            FTP Ftp = new FTP(URI.Host, URI.Port);
 
-            //FTPReader.Close();
+            Ftp.BeginConnect(URI.UserInfo, "");
 
-            try
-            {
-                outputStream = new FileStream(FilePath, FileMode.Create);
-            }
-            catch
-            {
-                //FTPReader.Dispose();
-                //FTPReader.Close();
+            Ftp.ChangeDirectory(URI.AbsolutePath);
 
-                throw;
-            }
+            Ftp.GetFile(FileName, DownloadDir + "\\" + FileName, true);
 
-            int bufferSize = 1024;
-            int readCount;
-            byte[] buffer = new byte[bufferSize];
+            Ftp.Disconnect();
 
-            //readCount = FTPReader.Read(buffer, 0, bufferSize);
-            while (readCount > 0)
-            {
-                outputStream.Write(buffer, 0, readCount);
-                //readCount = FTPReader.Read(buffer, 0, bufferSize);
-            }
-
-            outputStream.Close();
-            //FTPReader.Dispose();
-            //FTPReader.Close();
         }
-        */
+
         /*
         static public string LoadInfo(Uri URI)
         {
@@ -86,45 +51,9 @@ namespace LimFTPClient
             return AppInfo;
         }
         */
-        //static public Stream CreateListingRequest(Uri URI)
-        //{
-
-            //WebRequest FTPRequest = WebRequest.Create(URI);
-            //FTPRequest.UseBinary = true;
-            //FTPRequest.KeepAlive = false;
-            //FTPRequest.Credentials = new NetworkCredential("anon", "");
-            //FTPRequest.Method = WebRequestMethods.Ftp.ListDirectory;
-            //WebResponse Response = FTPRequest.GetResponse();
-
-            //return Response.GetResponseStream();
-        //}
-
-        void FtpConnected(FTP source)
-        {
-            // when this happens we're ready to send command
-            OnResponse("Connected.");
-        }
-
-        void FtpResponseReceived(FTP source, FTPResponse Response)
-        {
-            OnResponse(Response.Text);
-        }
-
-        private void OnResponse(string response)
-        {
-            //if (this.InvokeRequired)
-            //{
-            //    this.Invoke(new StringDelegate(OnResponse), new object[] { response });
-            //    return;
-            //}
-            //ListViewItem item = new ListViewItem(new string[] { DateTime.Now.ToShortTimeString(), response });
-            //status.Items.Insert(0, item);
-            //status.Columns[1].Width = -1;
-        }
 
         static public List<string> ReadListing(Uri URI)
         {
-            //StreamReader FTPReader = new StreamReader(CreateListingRequest(URI));
 
             FTP Ftp = new FTP(URI.Host, URI.Port);
             //Ftp.ResponseReceived += new FTPResponseHandler(m_ftp_ResponseReceived);
@@ -133,13 +62,7 @@ namespace LimFTPClient
 
             Ftp.ChangeDirectory(URI.AbsolutePath);
 
-            //Ftp.Connected();
-
-            //Ftp.Connected += new FTPConnectedHandler(FtpConnected);
-
             List<string> SystemsList = new List<string>();
-            
-            //FTPFiles files = Ftp.GetFileList();
 
             string Listing = Ftp.GetFileList(false);
 
@@ -155,7 +78,7 @@ namespace LimFTPClient
                 }
                 catch
                 {
-                    line = "";
+                    line = null;
                 }
 
                 if (line.IndexOf('.') == -1)
@@ -165,11 +88,11 @@ namespace LimFTPClient
             }
             
 
-            //if (SystemsList.Count == 0)
-            //{
-            //    ParamsHelper.CurrentURI = ParamsHelper.ServerURI;
-            //    throw new Exception("Repo is empty");
-            //}
+            if (SystemsList.Count == 0)
+            {
+                ParamsHelper.CurrentURI = ParamsHelper.ServerURI;
+                throw new Exception("Repo is empty");
+            }
 
             Ftp.Disconnect();
 
