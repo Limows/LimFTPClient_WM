@@ -10,9 +10,9 @@ You need the following things to build this program:
 
 ## Supported functions
 
- - Selecting App
+ - Selecting application
  - App page contains description and logo
- - Listing installed Apps on device
+ - Listing installed on device applications
  - Displaying free space in the installation folder
 
 ## Contributing
