@@ -12,6 +12,7 @@ You need the following things to build this program:
 
  - Selecting application
  - App page contains description and logo
+ - Downloading app package
  - Listing installed on device applications
  - Displaying free space in the installation folder
 
