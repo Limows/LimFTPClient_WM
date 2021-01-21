@@ -63,6 +63,8 @@ namespace LimFTPClient
         {
             //ConnectionStatusLabel.Text = "Подключение...";
             ParamsHelper.CurrentURI = ParamsHelper.SystemURI;
+            AppsBox.DataSource = null;
+            AppsBox.Items.Clear();
            
             try
             {
@@ -104,6 +106,7 @@ namespace LimFTPClient
         {   
             InstalledBox.DataSource = null;
             InstalledBox.Items.Clear();
+
             try
             {
                 List<string> InstalledList = new List<string>();
