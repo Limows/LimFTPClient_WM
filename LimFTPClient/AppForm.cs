@@ -41,16 +41,16 @@ namespace LimFTPClient
 
                     if (Result == DialogResult.Yes)
                     {
-                        //try
-                        //{
+                        try
+                        {
                             //ZipFile.ExtractToDirectory(Parameters.DownloadPath + "\\" + FileName, Parameters.DownloadPath + "\\" + AppName);
                             IO.ExtractToDirectory(ParamsHelper.DownloadPath + "\\" + FileName, ParamsHelper.DownloadPath + "\\" + AppName);
-                        //}
-                        //catch
-                        //{
-                        //    MessageBox.Show("Ошибка при распаковке", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
-                        //    File.Delete(ParamsHelper.DownloadPath + "\\" + AppName);
-                        //}   
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Ошибка при распаковке", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
+                            File.Delete(ParamsHelper.DownloadPath + "\\" + AppName);
+                        }   
                     }
 
                 }
