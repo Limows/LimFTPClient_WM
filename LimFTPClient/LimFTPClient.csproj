@@ -125,6 +125,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Sys.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />

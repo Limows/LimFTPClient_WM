@@ -6,7 +6,6 @@ using System.Reflection;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.IO.Compression;
-using System.Windows.Forms;
 
 namespace LimFTPClient
 {
@@ -50,7 +49,7 @@ namespace LimFTPClient
 
                 using (FileStream decompressedFileStream = File.Create(newFileName))
                 {
-                    using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
+                    using (DeflateStream decompressionStream = new DeflateStream(originalFileStream, CompressionMode.Decompress))
                     {
                         //decompressionStream.CopyTo(decompressedFileStream);
                         CopyTo(decompressionStream, decompressedFileStream, 8192);
@@ -60,24 +59,15 @@ namespace LimFTPClient
             }
         }
 
-        static public string OpenDirDialog()
-        {
-            FolderBrowserDialog OpenDir = new FolderBrowserDialog();
-            if (OpenDir.ShowDialog() == DialogResult.OK)
-            {
-                return OpenDir.SelectedPath;
-            }
-            else return "";
-        }
-
         private static void CopyTo(Stream source, Stream destination, int bufferSize)
         {
-            byte[] array = new byte[bufferSize];
-            int count;
+            byte[] bytes = new byte[4096];
 
-            while ((count = source.Read(array, 0, array.Length)) != 0)
+            int cnt;
+
+            while ((cnt = source.Read(bytes, 0, bytes.Length)) != 0)
             {
-                destination.Write(array, 0, count);
+                destination.Write(bytes, 0, cnt);
             }
         }
 

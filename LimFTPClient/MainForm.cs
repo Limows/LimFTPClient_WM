@@ -44,6 +44,8 @@ namespace LimFTPClient
         private void BackMenuItem_Click(object sender, EventArgs e)
         {
             Connect();
+
+            GetAppsList();
         }
 
         private void ParamsMenuItem_Click(object sender, EventArgs e)
@@ -61,8 +63,6 @@ namespace LimFTPClient
         {
             //ConnectionStatusLabel.Text = "Подключение...";
             ParamsHelper.CurrentURI = ParamsHelper.SystemURI;
-            AppsBox.DataSource = null;
-            AppsBox.Items.Clear();
            
             try
             {
@@ -92,8 +92,32 @@ namespace LimFTPClient
 
             if (MajorOSVersion == 4) ParamsHelper.OSVersion = "WinMobile_2003";
             else ParamsHelper.OSVersion = "WinMobile_5";
+
             ParamsHelper.SystemURI = new Uri(ParamsHelper.ServerURI.ToString() + "/" + ParamsHelper.OSVersion);
+
             Connect();
+
+            GetAppsList();
+        }
+
+        private void GetAppsList()
+        {   
+            InstalledBox.DataSource = null;
+            InstalledBox.Items.Clear();
+            try
+            {
+                List<string> InstalledList = new List<string>();
+                InstalledList = Sys.GetInstalledApps();
+
+                foreach (string app in InstalledList)
+                {
+                    InstalledBox.Items.Add(app);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1);
+            }
         }
 
         private void SystemsBox_SelectedIndexChanged(object sender, EventArgs e)

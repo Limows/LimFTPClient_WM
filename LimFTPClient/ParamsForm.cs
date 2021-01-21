@@ -18,33 +18,46 @@ namespace LimFTPClient
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            if (DownloadPathBox.Text != "")
-            {
-                if (Directory.Exists(DownloadPathBox.Text))
-                {
-                    ParamsHelper.DownloadPath = DownloadPathBox.Text;
-                    Close();
-                }
-                else
-                {
-                    DialogResult Result = MessageBox.Show("Такая папка не существует.\nСоздать?", "Предупреждение", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+            ParamsHelper.DownloadPath = CheckDirectory(DownloadPathBox.Text);
+            ParamsHelper.InstallPath = CheckDirectory(InstallPathBox.Text);
 
-                    if (Result == DialogResult.Yes)
-                    {
-                        Directory.CreateDirectory(DownloadPathBox.Text);
-                        Close();
-                    }
-                }
+            if (String.IsNullOrEmpty(ParamsHelper.DownloadPath) || String.IsNullOrEmpty(ParamsHelper.InstallPath))
+            {
+                MessageBox.Show("Путь не может быть пустым", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+            }
+            else Close();
+        }
+
+        private string CheckDirectory(string Path)
+        {
+            if (Directory.Exists(Path))
+            {
+                return Path;
             }
             else
             {
-                MessageBox.Show("Путь не может быть пустым", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+                DialogResult Result = MessageBox.Show("Такая директория не существует.\nСоздать?", "Предупреждение", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+
+                if (Result == DialogResult.Yes)
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(Path);
+                        return Path;
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Не удалось создать директорию", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
+                        return "";
+                    }
+                }
+                else return "";
             }
         }
 
         private void OpenDirButton1_Click(object sender, EventArgs e)
         {
-            DownloadPathBox.Text = IO.OpenDirDialog();
+            DownloadPathBox.Text = OpenDirDialog();
         }
 
         private string OpenDirDialog()
@@ -65,7 +78,7 @@ namespace LimFTPClient
 
         private void OpenDirButton2_Click(object sender, EventArgs e)
         {
-            InstallPathBox.Text = IO.OpenDirDialog();
+            InstallPathBox.Text = OpenDirDialog();
         }
     }
 }
