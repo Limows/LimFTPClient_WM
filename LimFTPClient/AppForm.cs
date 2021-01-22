@@ -50,26 +50,34 @@ namespace LimFTPClient
                         {
                             MessageBox.Show("Ошибка при распаковке", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
                             File.Delete(ParamsHelper.DownloadPath + "\\" + AppName);
-                        }   
+                        }
                     }
 
                 }
+
                 catch (UnauthorizedAccessException)
                 {
                     MessageBox.Show("Невозможно сохранить в " + ParamsHelper.DownloadPath + "\nВозможно программа должна быть\nзапущена от имени администратора", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
-                    StatusLabel.Text = "Загрузка не удалась";
                 }
-                catch (OpenNETCF.Net.Ftp.FTPException)
+                catch (OpenNETCF.Net.Ftp.FTPException NewEx)
                 {
-                    MessageBox.Show("Невозможно подключиться к серверу", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
-                    StatusLabel.Text = "Загрузка не удалась";
+                    if (NewEx.Message == "Method only valid with an open connection")
+                    {
+                        MessageBox.Show("Невозможно подключиться к серверу", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
+                    }
                 }
-                catch(IOException)
+                catch (IOException)
                 {
                     MessageBox.Show("Невозможно сохранить в " + ParamsHelper.DownloadPath + "\nВыберите другую директорию", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
+                }
+                catch (System.Net.Sockets.SocketException)
+                {
+                    MessageBox.Show("Невозможно подключиться к серверу", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
+                }
+                finally
+                {
                     StatusLabel.Text = "Загрузка не удалась";
                 }
-
 
             }
             else

@@ -19,11 +19,35 @@ namespace LimFTPClient
 
             FTP Ftp = new FTP(URI.Host, URI.Port);
 
-            Ftp.BeginConnect(URI.UserInfo, "");
+            try
+            {
+                Ftp.BeginConnect(URI.UserInfo, "");
+            }
+            catch
+            {
+                Ftp.Disconnect();
+                throw;
+            }
 
-            Ftp.ChangeDirectory(URI.AbsolutePath);
+            try
+            {
+                Ftp.ChangeDirectory(URI.AbsolutePath);
+            }
+            catch
+            {
+                Ftp.Disconnect();
+                throw;
+            }
 
-            Ftp.GetFile(FileName, DownloadDir + "\\" + FileName, true);
+            try
+            {
+                Ftp.GetFile(FileName, DownloadDir + "\\" + FileName, true);
+            }
+            catch
+            {
+                Ftp.Disconnect();
+                throw;
+            }
 
             Ftp.Disconnect();
 
@@ -58,10 +82,26 @@ namespace LimFTPClient
             FTP Ftp = new FTP(URI.Host, URI.Port);
             //Ftp.ResponseReceived += new FTPResponseHandler(m_ftp_ResponseReceived);
             //Ftp.Connected += new FTPConnectedHandler(
-            Ftp.BeginConnect(URI.UserInfo, "");
 
-            Ftp.ChangeDirectory(URI.AbsolutePath);
+            try
+            {
+                Ftp.BeginConnect(URI.UserInfo, "");
+            }
+            catch
+            {
+                Ftp.Disconnect();
+                throw;
+            }
 
+            try
+            {
+                Ftp.ChangeDirectory(URI.AbsolutePath);
+            }
+            catch
+            {
+                Ftp.Disconnect();
+                throw;
+            }
             List<string> SystemsList = new List<string>();
 
             string Listing = Ftp.GetFileList(false);
