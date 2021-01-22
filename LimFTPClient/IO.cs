@@ -19,6 +19,11 @@ namespace LimFTPClient
         out ulong lpTotalNumberOfBytes,
         out ulong lpTotalNumberOfFreeBytes);
 
+        /// <summary>
+        /// Get storage space
+        /// </summary>
+        /// <param name="Path"></param>
+        /// <returns>Current storage space</returns> 
         public static ulong GetStorageSpace(string Path)
         {
             if (String.IsNullOrEmpty(Path))
@@ -92,6 +97,10 @@ namespace LimFTPClient
             return GetCurrentDirectory() + "\\Default.cfg";
         }
 
+        /// <summary>
+        /// Get current directory
+        /// </summary>
+        /// <returns>Current directory path</returns> 
         static public string GetCurrentDirectory()
         {
             return Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);

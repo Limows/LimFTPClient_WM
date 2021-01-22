@@ -17,6 +17,11 @@ namespace LimFTPClient
         static public string ConfigPath;
         static public string OSVersion;
 
+        /// <summary>
+        /// Convert bytes to megabytes
+        /// </summary>
+        /// <param name="Bytes"></param>
+        /// <returns>Megabytes</returns> 
         static public double BytesToMegs(ulong Bytes)
         {
             return ((double)Bytes / 1024) / 1024;

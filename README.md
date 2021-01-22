@@ -6,7 +6,9 @@ Small client app for my FTP server (Windows Mobile version)
 You need the following things to build this program:
 
  - Visual Studio 2005/2008
- - OpenNetCF library (See OpenNetCF folder)
+ - Windows Mobile SDK
+ 
+## Usage
 
 ## Supported functions
 
@@ -15,6 +17,10 @@ You need the following things to build this program:
  - Downloading app package
  - Listing installed on device applications
  - Displaying free space in the installation folder
+ 
+## Used projects
+
+ - OpenNetCF.Net.FTP library
 
 ## Contributing
 

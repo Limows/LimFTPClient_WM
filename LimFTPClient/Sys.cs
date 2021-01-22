@@ -8,6 +8,10 @@ namespace LimFTPClient
 {
     class Sys
     {
+        /// <summary>
+        /// Get list of installed apps
+        /// </summary>
+        /// <returns>List of installed apps</returns> 
         public static List<string> GetInstalledApps()
         {
             string SoftwareKey = "Software\\Apps";

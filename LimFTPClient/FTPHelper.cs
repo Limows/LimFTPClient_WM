@@ -13,7 +13,12 @@ namespace LimFTPClient
 {
     class FTPHelper
     {
-       
+        /// <summary>
+        /// Retrieves a file from the FTP server
+        /// </summary>
+        /// <param name="URI"></param>
+        /// <param name="DownloadDir"></param>
+        /// <param name="FileName"></param>
         static public void DownloadFile(Uri URI, string DownloadDir, string FileName)
         {
 
@@ -53,9 +58,15 @@ namespace LimFTPClient
 
         }
 
-        /*
-        static public string LoadInfo(Uri URI)
-        {
+        /// <summary>
+        /// Retrieves a package information from the FTP server
+        /// </summary>
+        /// <param name="URI"></param>
+        /// <param name="AppName"></param>
+        /// <returns>The file info as a string</returns> 
+        static public string LoadInfo(Uri URI, string AppName)
+        {   
+            /*
             Stream FTPReader = CreateDownloadRequest(URI);
             string AppInfo = "";
             int bufferSize = 1024;
@@ -73,9 +84,53 @@ namespace LimFTPClient
             FTPReader.Close();
 
             return AppInfo;
-        }
-        */
+             */
 
+            FTP Ftp = new FTP(URI.Host, URI.Port);
+            string FileName = AppName + ".zip";
+            string FileSize;
+
+            try
+            {
+                Ftp.BeginConnect(URI.UserInfo, "");
+            }
+            catch
+            {
+                Ftp.Disconnect();
+                throw;
+            }
+
+            try
+            {
+                Ftp.ChangeDirectory(URI.AbsolutePath);
+            }
+            catch
+            {
+                Ftp.Disconnect();
+                throw;
+            }
+
+            try
+            {
+                FileSize = Ftp.GetFileSize(FileName);
+                FileSize = ParamsHelper.BytesToMegs((ulong)Convert.ToInt64(FileSize)).ToString("0.##") + " МБ";
+            }
+            catch
+            {
+                Ftp.Disconnect();
+                throw;
+            }
+
+            Ftp.Disconnect();
+
+            return FileSize;
+        }
+
+        /// <summary>
+        /// Retrieves the listing of the files in current directory on FTP server
+        /// </summary>
+        /// <param name="URI"></param>
+        /// <returns>The server file list as a List</returns>
         static public List<string> ReadListing(Uri URI)
         {
 
@@ -102,9 +157,20 @@ namespace LimFTPClient
                 Ftp.Disconnect();
                 throw;
             }
-            List<string> SystemsList = new List<string>();
 
-            string Listing = Ftp.GetFileList(false);
+            List<string> SystemsList = new List<string>();
+            string Listing;
+
+            try
+            {
+                Listing = Ftp.GetFileList(false);
+            }
+            catch
+            {
+                Listing = "";
+                Ftp.Disconnect();
+                throw;
+            }
 
             string[] Files = Listing.Replace("\n", "").Split('\r');
 
@@ -127,7 +193,6 @@ namespace LimFTPClient
                 }
             }
             
-
             if (SystemsList.Count == 0)
             {
                 ParamsHelper.CurrentURI = ParamsHelper.ServerURI;

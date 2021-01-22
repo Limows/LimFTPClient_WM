@@ -31,7 +31,7 @@ namespace LimFTPClient
             {
                 StatusLabel.Text = "Загрузка в папку " + ParamsHelper.DownloadPath;
                 try
-                {
+                {   
                     FTPHelper.DownloadFile(ParamsHelper.CurrentURI, ParamsHelper.DownloadPath, FileName);
                     StatusLabel.Text = "Успешно загружено";
 
@@ -90,16 +90,17 @@ namespace LimFTPClient
 
         private void AppForm_Load(object sender, EventArgs e)
         {
-            this.Text = AppName;
-            string InfoFileName = AppName + ".info";
-            NameLabel.Text = AppName;
+            this.Text = AppName.Replace("_", " ");
+            //string InfoFileName = AppName + ".info";
+            NameLabel.Text = AppName.Replace("_", " ");
             StatusLabel.Text = "";
 
-            ParamsHelper.CurrentURI = new Uri(ParamsHelper.AppURI.ToString() + "/" + InfoFileName);
+            ParamsHelper.CurrentURI = ParamsHelper.AppURI;
 
             try
             {
-                //AboutAppBox.Text = FTPHelper.LoadInfo(ParamsHelper.CurrentURI);            
+                //AboutAppBox.Text = FTPHelper.LoadInfo(ParamsHelper.CurrentURI);
+                SizeLabel.Text = FTPHelper.LoadInfo(ParamsHelper.CurrentURI, AppName);
             }
             catch
             {

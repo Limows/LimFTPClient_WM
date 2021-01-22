@@ -74,6 +74,121 @@ namespace OpenNETCF.Net.Ftp
 	/// </summary>
 	public class FTP
 	{
+        /// <summary>
+        /// Handler for FTP responses
+        /// </summary>
+        public delegate void FTPResponseHandler(FTP source, FTPResponse Response);
+        /// <summary>
+        /// Handler for FTP commands
+        /// </summary>
+        public delegate void FTPCommandHandler(FTP source, string CommandSent);
+        /// <summary>
+        /// Handler for FTP connections
+        /// </summary>
+        public delegate void FTPConnectedHandler(FTP source);
+
+        /// <summary>
+        /// FTP Mode
+        /// </summary>
+        internal enum FTPMode
+        {
+            Passive = 0,
+            Active = 1
+        }
+
+        /// <summary>
+        /// FTP Transfer type
+        /// </summary>
+        public enum FTPTransferType
+        {
+            /// <summary>
+            /// Binary Transfer
+            /// </summary>
+            Binary = 0,
+            /// <summary>
+            /// ASCII Transfer
+            /// </summary>
+            ASCII = 1
+        }
+
+        /// <summary>
+        /// Detected FTP Server type
+        /// </summary>
+        public enum FTPServerType
+        {
+            /// <summary>
+            /// Unix-compliant server
+            /// </summary>
+            Unix = 0,
+            /// <summary>
+            /// Windows/IIS-compliant server
+            /// </summary>
+            Windows = 1,
+            /// <summary>
+            /// Unknown server type
+            /// </summary>
+            Unknown = 2
+        }
+
+        /// <summary>
+        /// Information returned in a response from an FTP command
+        /// <seealso cref="FTP.ReadResponse()"/>
+        /// </summary>
+        public struct FTPResponse
+        {
+            /// <summary>
+            /// Response ID value
+            /// </summary>
+            public StatusCode ID;
+            /// <summary>
+            /// Response text
+            /// </summary>
+            public string Text;
+        }
+
+        /// <summary>
+        /// FTP File Type
+        /// </summary>
+        public enum FTPFileType
+        {
+            /// <summary>
+            /// A file
+            /// </summary>
+            File = 0,
+            /// <summary>
+            /// A directory
+            /// </summary>
+            Directory = 1
+        }
+
+        public enum StatusCode
+        {
+            RestartMarkerReply = 110,
+            ServiceReadyInNMinutes = 120,
+            ConnectionAlreadyOpen = 125,
+            FileStatusOK = 150,
+
+            CommandOkay = 200,
+            CommandNotImplemented = 202,
+            SystemStatus = 211,
+            DirectoryStatus = 212,
+            FileStatus = 213,
+            HelpMessage = 214,
+            SystemType = 215,
+            ServiceReady = 220,
+            ControlConnectionClosed = 221,
+            ConnectionOpen = 225,
+            ClosingConnection = 226,
+            EnteringPassiveMode = 227,
+            LoginSuccess = 230,
+            FileActionComplete = 250,
+            PathCreated = 257,
+
+            NameAccepted = 331,
+            NameRequired = 332,
+            FileActionPendingInfo = 350
+        }
+
 		private static int BUFFER_SIZE = 512;
         private static int DEFAULT_PORT = 21;
 
@@ -98,10 +213,6 @@ namespace OpenNETCF.Net.Ftp
 		/// Event raised when a command is sent to the FTP server
 		/// </summary>
 		public event FTPCommandHandler  CommandSent;
-		/// <summary>
-		/// Event raised when a connection is made with the FTP server
-		/// </summary>
-		public event FTPConnectedHandler	Connected;
 
 		#region ctors / dtor
 		/// <summary>
@@ -148,132 +259,6 @@ namespace OpenNETCF.Net.Ftp
 			}
 		}
 
-		private void ConnectThread()
-		{
-			IPEndPoint	endpoint;
-			FTPResponse response;
-
-			m_cmdsocket = new Socket(AddressFamily.InterNetwork, 
-				SocketType.Stream, 
-				ProtocolType.Tcp);
-
-			try
-
-			{
-				IPAddress address=IPAddress.Parse(m_host);
-				endpoint = new IPEndPoint(address, m_port);                      
-			}
-
-			catch(System.FormatException )
-			{                       
-				try
-				{
-					IPAddress address = Dns.Resolve(m_host).AddressList[0];
-					endpoint = new IPEndPoint(address, m_port);            
-				}
-				catch(SocketException)
-				{
-					return;
-				}
-
-			}
-
-			// make the connection
-			try
-			{
-				m_cmdsocket.Connect(endpoint);
-			}
-			catch(Exception)
-			{
-				return;
-			}
-			
-			// check the result
-			response = ReadResponse();
-
-			if(response.ID != StatusCode.ServiceReady)
-			{
-				m_cmdsocket.Close();
-				m_cmdsocket = null;
-
-				if(!m_exceptions)
-				{
-					return;
-				}
-				else
-				{
-					m_connected = false;
-					return;
-				}
-			}
-
-			// set the user id
-			response = SendCommand("USER " + m_uid, false);
-
-			// check the response
-            if (!((response.ID == StatusCode.NameAccepted) || (response.ID == StatusCode.LoginSuccess)))
-			{	
-				m_cmdsocket.Close();
-				m_cmdsocket=null;
-				Disconnect();
-
-				if(!m_exceptions)
-				{
-					return;
-				}
-				else
-				{
-					m_connected = false;
-					return;
-				}
-			}
-
-			// if a PWD is required, send it
-            if (response.ID == StatusCode.NameAccepted)
-			{
-				response = SendCommand("PASS " + m_pwd, false);
-                if (!((response.ID == StatusCode.CommandNotImplemented) || (response.ID == StatusCode.LoginSuccess)))
-				{
-					m_cmdsocket.Close();
-					m_cmdsocket=null;
-					Disconnect();
-					m_connected = false;
-					return;
-				}
-			}
-
-			// get the server type
-			response = SendCommand("SYST", false);
-			if(response.Text.ToUpper().IndexOf("UNIX") > -1)
-			{
-				m_server = FTPServerType.Unix;
-			}
-			else if(response.Text.ToUpper().IndexOf("WINDOWS") > -1)
-			{
-				m_server = FTPServerType.Windows;
-			}
-			else
-			{
-				m_server = FTPServerType.Unknown;
-			}
-
-			m_connected = true;
-
-            //foreach (FTPConnectedHandler fh in Connected.GetInvocationList())
-            //{
-            //    fh(this);
-            //}            
-		}
-
-		/// <summary>
-		/// Connect to the FTP server anonymously, using the supplied email address for a password
-		/// </summary>
-		/// <param name="emailAddress">String passed as the password</param>
-		public void BeginConnect(string emailAddress)
-		{
-			BeginConnect("anonymous", emailAddress);
-		}
-
 		/// <summary>
 		/// Connect to the FTP server using the supplied username and password
 		/// </summary>
@@ -291,34 +276,100 @@ namespace OpenNETCF.Net.Ftp
 
 			try
 			{
-				//Thread thread = new Thread(new System.Threading.ThreadStart(ConnectThread));
-                //thread.IsBackground = true;
-				//thread.Start();
-                ConnectThread();
-                /*
-                int t = 0;
+                IPEndPoint endpoint;
+                FTPResponse response;
 
-				while(! m_connectwait.WaitOne(250, false))
-				{
-					// check 4 times/second for a connection
-					if(t++ > (m_timeout / 250))
-					{
-						throw new Exception("Connection Timeout");
-					}
+                m_cmdsocket = new Socket(AddressFamily.InterNetwork,
+                    SocketType.Stream,
+                    ProtocolType.Tcp);
 
-					// yield to other processes/threads
-					System.Threading.Thread.Sleep(10);
-				}
+                try
+                {
+                    IPAddress address = IPAddress.Parse(m_host);
+                    endpoint = new IPEndPoint(address, m_port);
+                }
+                catch (System.FormatException)
+                {
+                    try
+                    {
+                        //IPAddress address = Dns.Resolve(m_host).AddressList[0];
+                        IPAddress address = Dns.GetHostEntry(m_host).AddressList[0];
+                        endpoint = new IPEndPoint(address, m_port);
+                    }
+                    catch (SocketException)
+                    {
+                        return;
+                    }
 
-				m_connectwait.Reset();
-				if(Connected != null)
-				{
-					foreach(FTPConnectedHandler fh in Connected.GetInvocationList())
-					{
-						fh(this);
-					}
-				}
-                */
+                }
+
+                // make the connection
+                try
+                {
+                    m_cmdsocket.Connect(endpoint);
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+
+                // check the result
+                response = ReadResponse();
+
+                if (response.ID != StatusCode.ServiceReady)
+                {
+                    m_cmdsocket.Close();
+                    m_cmdsocket = null;
+
+                    if (!m_exceptions)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        m_connected = false;
+                        return;
+                    }
+                }
+
+                // set the user id
+                response = SendCommand("USER " + m_uid, false);
+
+                // check the response
+                if (!((response.ID == StatusCode.NameAccepted) || (response.ID == StatusCode.LoginSuccess)))
+                {
+                    m_cmdsocket.Close();
+                    m_cmdsocket = null;
+                    Disconnect();
+
+                    if (!m_exceptions)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        m_connected = false;
+                        return;
+                    }
+                }
+
+                // if a PWD is required, send it
+                if (response.ID == StatusCode.NameAccepted)
+                {
+                    response = SendCommand("PASS " + m_pwd, false);
+                    if (!((response.ID == StatusCode.CommandNotImplemented) || (response.ID == StatusCode.LoginSuccess)))
+                    {
+                        m_cmdsocket.Close();
+                        m_cmdsocket = null;
+                        Disconnect();
+                        m_connected = false;
+                        return;
+                    }
+                }
+
+                m_server = FTPServerType.Unix;
+                m_connected = true;
+
             }
 			catch(Exception ex)
 			{
@@ -357,6 +408,7 @@ namespace OpenNETCF.Net.Ftp
 			FTPResponse response;
 
 			// make sure we're connected
+            /*
 			CheckConnect();
 
 			if(File.Exists(localFileName))
@@ -370,6 +422,7 @@ namespace OpenNETCF.Net.Ftp
 					throw new FTPException("Local File already exists");
 				}
 			}
+            */
 
             using (var output = File.Create(localFileName))
             using (var socket = OpenDataSocket())
@@ -412,64 +465,6 @@ namespace OpenNETCF.Net.Ftp
 				return;
 			}
 
-            if (!((response.ID == StatusCode.ClosingConnection) || (response.ID == StatusCode.FileActionComplete)))
-			{
-				if(!m_exceptions)
-				{
-					return;
-				}
-				else
-				{
-					throw new FTPException(response.Text);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Send a file to the FTP server
-		/// </summary>
-		/// <param name="localFile">Name of the local file to send</param>
-		/// <param name="remoteFileName">Name to save the remote file as</param>
-		public void SendFile(FileStream localFile, string remoteFileName)
-		{
-			FTPResponse response;
-			int			bytesSent	= 0;
-
-			// make sure we're connected
-			CheckConnect();
-
-			Socket socket = OpenDataSocket();
-
-			// send the STOR command
-			response = SendCommand("STOR " + Path.GetFileName(remoteFileName));
-
-            if (!((response.ID == StatusCode.ConnectionAlreadyOpen) || (response.ID == StatusCode.FileStatusOK)))
-			{
-				if(!m_exceptions)
-				{
-					return;
-				}
-				else
-				{
-					throw new FTPException(response.Text);
-				}
-			}
-
-			// seek to the start of the file
-			localFile.Seek(0, SeekOrigin.Begin);
-			
-			// send the data
-			while((bytesSent = localFile.Read(m_buffer, 0, m_buffer.Length)) > 0)
-			{
-				socket.Send(m_buffer, bytesSent, 0);
-			}
-
-			if (socket.Connected)
-			{
-				socket.Close();
-			}
-
-			response = ReadResponse();
             if (!((response.ID == StatusCode.ClosingConnection) || (response.ID == StatusCode.FileActionComplete)))
 			{
 				if(!m_exceptions)
@@ -539,210 +534,29 @@ namespace OpenNETCF.Net.Ftp
 			return dirInfo.ToString();
 		}
 
-		/// <summary>
-		/// Get a list of the files in the current remote directory
-		/// <seealso cref="FTPFiles"/>
-		/// <seealso cref="RemoteDirectory"/>
-		/// </summary>
-		/// <returns>An FTPFiles of the remote files</returns>
-		public FTPFiles EnumFiles()
-		{
-			FTPFiles		files = new FTPFiles();			
-	
-			string fileList = GetFileList(true); 
-			
-			if(fileList.Length == 0)
-			{
-				return null;
-			}
+        /// <summary>
+        /// Get a size of current file
+        /// </summary>
+        /// <param name="remoteFileName">Name of the file to get</param>
+        /// <returns>String with file size</returns>
+        public string GetFileSize(string remoteFileName)
+        {
+            FTPResponse response = SendCommand("SIZE " + remoteFileName);
 
+            if (!(response.ID == StatusCode.FileStatus))
+            {
+                if (!m_exceptions)
+                {
+                    return "";
+                }
+                else
+                {
+                    throw new IOException(response.Text);
+                }
+            }
 
-			string[] lines = fileList.Replace("\n", "").Split('\r');
-			DateTime	filedate = new DateTime(0);
-			int			filesize = 0;
-			FTPFileType filetype = FTPFileType.File;
-			int			pos		 = 0;
-
-			switch(m_server)
-			{
-				case FTPServerType.Windows:
-				{
-					for(int l = 0 ; l < lines.Length ; l++)
-					{
-						if(lines[l].Trim().Length == 0)
-						{
-							continue;
-						}
-
-						// get file date
-						try
-						{
-							filedate = Convert.ToDateTime(lines[l].Substring(0,17));
-						}
-						catch(Exception)
-						{
-							continue;
-						}
-
-						lines[l] = lines[l].Substring(18).Trim();
-				
-						// get type
-						if(lines[l].IndexOf("<DIR>") > -1)
-						{
-							// IIS directory
-							filetype = FTPFileType.Directory;
-							lines[l] = lines[l].Replace("<DIR>", "").Trim();
-
-							// no size
-							filesize = -1;
-						}
-						else
-						{
-							filetype = FTPFileType.File;
-
-							// get size
-							pos = lines[l].IndexOf(' ');
-
-							if(pos < 0)
-							{
-								continue;
-							}
-
-							filesize = Convert.ToInt32(lines[l].Substring(0, pos));
-							lines[l] = lines[l].Substring(pos).Trim();
-						}
-
-						files.Add(new FTPFile(lines[l], filetype, filesize, filedate));
-					}
-
-					return files;
-				}
-				case FTPServerType.Unix:
-				{
-					for(int l = 0 ; l < lines.Length ; l++)
-					{
-						if(lines[l].Length == 0)
-						{
-							continue;
-						}
-
-						if(lines[l][0] == 'd')
-						{
-							filetype = FTPFileType.Directory;
-						}
-						else
-						{
-							filetype = FTPFileType.File;
-						}
-
-						// crop the permissions info, etc.
-						lines[l] = lines[l].Substring(30).Trim();
-
-						// get size
-						pos = lines[l].IndexOf(' ');
-
-						if(pos < 0)
-						{
-							continue;
-						}
-
-						try
-						{
-							filesize = Convert.ToInt32(lines[l].Substring(0, pos));
-						}
-						catch(Exception)
-						{
-							continue;
-						}
-
-						lines[l] = lines[l].Substring(pos).Trim();
-
-						// get file date
-						try
-						{
-							int y, m, d, h, n;
-
-							switch(lines[l].Substring(0, 3).ToLower())
-							{
-								case "jan":
-									m = 1;
-									break;
-								case "feb":
-									m = 2;
-									break;
-								case "mar":
-									m = 3;
-									break;
-								case "apr":
-									m = 4;
-									break;
-								case "may":
-									m = 5;
-									break;
-								case "jun":
-									m = 6;
-									break;
-								case "jul":
-									m = 7;
-									break;
-								case "aug":
-									m = 8;
-									break;
-								case "sep":
-									m = 9;
-									break;
-								case "oct":
-									m = 10;
-									break;
-								case "nov":
-									m = 11;
-									break;
-								case "dec":
-									m = 12;
-									break;
-								default:
-									m = 1;
-									break;
-							}
-
-							d = int.Parse(lines[l].Substring(4, 2));
-
-							if(lines[l].IndexOf(':') > -1)
-							{
-								// time
-
-								h = int.Parse(lines[l].Substring(7, 2));
-								n = int.Parse(lines[l].Substring(10, 2));
-								y = DateTime.Now.Year;
-							}
-							else
-							{
-								// year
-								h = 0;
-								n = 0;
-
-								y = int.Parse(lines[l].Substring(8, 4));
-							}
-
-							filedate = new DateTime(y, m, d, h, n, 0);
-						}
-						catch(Exception)
-						{
-							filedate = DateTime.MinValue;
-						}
-
-						lines[l] = lines[l].Substring(12).Trim();
-
-						files.Add(new FTPFile(lines[l], filetype, filesize, filedate));
-					}
-					return files;
-				}
-				default:
-				{
-					return null;
-				}
-			}
-		}
+            return response.Text;
+        }
 
 		/// <summary>
 		/// Change the remote working directory
@@ -753,88 +567,11 @@ namespace OpenNETCF.Net.Ftp
 			FTPResponse response;
 
 			// make sure we're connected
-			CheckConnect();
+			//CheckConnect();
 
 			response = SendCommand("CWD " + directory);
 
             if (response.ID != StatusCode.FileActionComplete)
-			{
-				if(!m_exceptions)
-				{
-					return;
-				}
-				else
-				{
-					throw new FTPException(response.Text);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Delete a file on the FTP server
-		/// </summary>
-		/// <param name="fileName">Name of the file to delete</param>
-		public void DeleteFile(string fileName)
-		{
-			FTPResponse response;
-
-			// make sure we're connected
-			CheckConnect();
-
-			response = SendCommand("DELE " + fileName);
-
-            if (response.ID != StatusCode.FileActionComplete)
-			{
-				if(!m_exceptions)
-				{
-					return;
-				}
-				else
-				{
-					throw new FTPException(response.Text);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Delete an empty directory from the FTP server
-		/// </summary>
-		/// <param name="directory">Directory to remove</param>
-		public void DeleteDirectory(string directory)
-		{
-			FTPResponse response;
-
-			// make sure we're connected
-			CheckConnect();
-
-			response = SendCommand("RMD " + directory);
-
-            if (response.ID != StatusCode.FileActionComplete)
-			{
-				if(!m_exceptions)
-				{
-					return;
-				}
-				else
-				{
-					throw new FTPException(response.Text);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Create a directory on the FTP server
-		/// </summary>
-		/// <param name="directory">Name of the directory to create</param>
-		public void CreateDirectory(string directory)
-		{
-			FTPResponse response;
-
-			// make sure we're connected
-			CheckConnect();
-
-			response = SendCommand("MKD " + directory);
-            if (response.ID != StatusCode.PathCreated)
 			{
 				if(!m_exceptions)
 				{
@@ -881,47 +618,6 @@ namespace OpenNETCF.Net.Ftp
 			return SendCommand(command, true);
 		}
 
-		/// <summary>
-		/// Rename a file on the FTP server
-		/// </summary>
-		/// <param name="currentFileName">The file's current name</param>
-		/// <param name="newFileName">The new name for the file</param>
-		public void RenameFile(string currentFileName, string newFileName)
-		{
-			FTPResponse response;
-
-			// make sure we're connected
-			CheckConnect();
-
-			response = SendCommand("RNFR " + currentFileName);
-            if (response.ID != StatusCode.FileActionPendingInfo)
-			{
-				if(!m_exceptions)
-				{
-					return;
-				}
-				else
-				{
-					throw new FTPException(response.Text);
-				}
-			}
-
-			// this will overwrite the newfilename if it exists!
-			// we should add a check here
-			response = SendCommand("RNTO " + newFileName);
-            if (response.ID != StatusCode.FileActionComplete)
-			{
-				if(!m_exceptions)
-				{
-					return;
-				}
-				else
-				{
-					throw new FTPException(response.Text);
-				}
-			}
-		}
-
 		private FTPResponse ReadResponse()
 		{
             lock (m_cmdsocket)
@@ -932,7 +628,7 @@ namespace OpenNETCF.Net.Ftp
                 int bytesrecvd = 0;
 
                 // make sure any command sent has enough time to respond
-                Thread.Sleep(750);
+                Thread.Sleep(700);
 
                 for (; m_cmdsocket.Available > 0; )
                 {
@@ -1076,7 +772,8 @@ namespace OpenNETCF.Net.Ftp
 			}
 			else
 			{
-				IPHostEntry ipHost = Dns.GetHostByName(Dns.GetHostName());
+				//IPHostEntry ipHost = Dns.GetHostByName(Dns.GetHostName());
+                IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
 
 				long ip = ipHost.AddressList[0].Address;
 
@@ -1114,7 +811,7 @@ namespace OpenNETCF.Net.Ftp
 				throw new FTPException("Can't connect to remote server");
 			}
 
-			System.Threading.Thread.Sleep(1000);
+			System.Threading.Thread.Sleep(500);
 
 			return socket;
 		}
