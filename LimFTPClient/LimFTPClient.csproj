@@ -69,6 +69,12 @@
     <Compile Include="AppForm.Designer.cs">
       <DependentUpon>AppForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="AboutAppBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutAppBox.Designer.cs">
+      <DependentUpon>AboutAppBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="FolderBrowserDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,6 +106,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AppForm.resx">
       <DependentUpon>AppForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AboutAppBox.resx">
+      <DependentUpon>AboutAppBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FolderBrowserDialog.resx">

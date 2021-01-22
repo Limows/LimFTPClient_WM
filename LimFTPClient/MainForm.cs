@@ -140,7 +140,8 @@ namespace LimFTPClient
 
         private void PropButton_Click(object sender, EventArgs e)
         {
-
+            AboutAppBox NewAboutAppBox = new AboutAppBox(InstalledBox.Text);
+            NewAboutAppBox.ShowDialog();
         }
 
         private void TabControl_SelectedIndexChanged(object sender, EventArgs e)
@@ -153,6 +154,15 @@ namespace LimFTPClient
             {
                 MemLabel.Text = "0 байт";
             }
+
+            PropButton.Enabled = !PropButton.Enabled;
+            PropMenuItem.Enabled = !PropMenuItem.Enabled;
+        }
+
+        private void PropMenuItem_Click(object sender, EventArgs e)
+        {
+            AboutAppBox NewAboutAppBox = new AboutAppBox(InstalledBox.Text);
+            NewAboutAppBox.ShowDialog();
         }
     }
 }

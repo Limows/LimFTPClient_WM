@@ -35,8 +35,6 @@ namespace LimFTPClient
                     FTPHelper.DownloadFile(ParamsHelper.CurrentURI, ParamsHelper.DownloadPath, FileName);
                     StatusLabel.Text = "Успешно загружено";
 
-
-
                     DialogResult Result = MessageBox.Show("Распаковать пакет?", "Сообщение", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
 
                     if (Result == DialogResult.Yes)
@@ -104,7 +102,7 @@ namespace LimFTPClient
             }
             catch
             {
-                AboutAppBox.Text = "Для этого приложения ещё нет описания";
+                SizeLabel.Text = "0 МБ";
             }
 
             AboutAppBox.Text = "Для этого приложения ещё нет описания";

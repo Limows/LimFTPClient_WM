@@ -22,7 +22,7 @@ namespace LimFTPClient
 
                 foreach (string appname in RegKey.GetSubKeyNames())
                 {
-                    if (appname != "Shared" && appname != "Microsoft Application Installer")
+                    if (appname != "Shared" && appname != "Microsoft Application Installer" && appname != "Customization Tools")
                     {
                         //InstalledBox.Items.Add(appname);
                         AppsList.Add(appname);
@@ -31,6 +31,20 @@ namespace LimFTPClient
             }
 
             return AppsList;
+        }
+
+        public static string GetInstallDir(string AppName)
+        {
+            string SoftwareKey = "Software\\Apps\\" + AppName;
+            //List<string> AppsList = new List<string>();
+            string InstallDir;
+
+            using (RegistryKey RegKey = Registry.LocalMachine.OpenSubKey(SoftwareKey))
+            {
+                InstallDir = Convert.ToString(RegKey.GetValue("InstallDir", ""));   
+            }
+
+            return InstallDir;
         }
     }
 }
