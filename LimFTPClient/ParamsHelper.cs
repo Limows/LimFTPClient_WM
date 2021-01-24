@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 
 namespace LimFTPClient
 {
@@ -16,6 +17,9 @@ namespace LimFTPClient
         static public string InstallPath;
         static public string ConfigPath;
         static public string OSVersion;
+        static public List<string> AppsList;
+        static public EventWaitHandle ThreadEvent;
+        static public bool IsThreadAlive;
 
         /// <summary>
         /// Convert bytes to megabytes

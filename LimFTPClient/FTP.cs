@@ -282,26 +282,16 @@ namespace OpenNETCF.Net.Ftp
                 m_cmdsocket = new Socket(AddressFamily.InterNetwork,
                     SocketType.Stream,
                     ProtocolType.Tcp);
-                /*
+
                 try
                 {
-                    IPAddress address = IPAddress.Parse(m_host);
+                    IPAddress address = Dns.GetHostEntry(m_host).AddressList[0];
                     endpoint = new IPEndPoint(address, m_port);
                 }
-                catch (System.FormatException)
-                {*/
-                    try
-                    {
-                        //IPAddress address = Dns.Resolve(m_host).AddressList[0];
-                        IPAddress address = Dns.GetHostEntry(m_host).AddressList[0];
-                        endpoint = new IPEndPoint(address, m_port);
-                    }
-                    catch (SocketException)
-                    {
-                        return;
-                    }
-
-                //}
+                catch (SocketException)
+                {
+                    return;
+                }
 
                 // make the connection
                 try
@@ -406,23 +396,6 @@ namespace OpenNETCF.Net.Ftp
 		{
 			int			bytesrecvd	= 0;
 			FTPResponse response;
-
-			// make sure we're connected
-            /*
-			CheckConnect();
-
-			if(File.Exists(localFileName))
-			{
-				if(overwrite)
-				{
-					System.IO.File.Delete(localFileName);
-				}
-				else
-				{
-					throw new FTPException("Local File already exists");
-				}
-			}
-            */
 
             using (var output = File.Create(localFileName))
             using (var socket = OpenDataSocket())
@@ -567,7 +540,6 @@ namespace OpenNETCF.Net.Ftp
 			FTPResponse response;
 
 			// make sure we're connected
-			//CheckConnect();
 
 			response = SendCommand("CWD " + directory);
 

@@ -21,31 +21,14 @@ namespace LimFTPClient
         /// <param name="FileName"></param>
         static public void DownloadFile(Uri URI, string DownloadDir, string FileName)
         {
-
             FTP Ftp = new FTP(URI.Host, URI.Port);
 
             try
             {
                 Ftp.BeginConnect(URI.UserInfo, "");
-            }
-            catch
-            {
-                Ftp.Disconnect();
-                throw;
-            }
 
-            try
-            {
                 Ftp.ChangeDirectory(URI.AbsolutePath);
-            }
-            catch
-            {
-                Ftp.Disconnect();
-                throw;
-            }
 
-            try
-            {
                 Ftp.GetFile(FileName, DownloadDir + "\\" + FileName, true);
             }
             catch
@@ -55,7 +38,6 @@ namespace LimFTPClient
             }
 
             Ftp.Disconnect();
-
         }
 
         /// <summary>
@@ -93,15 +75,7 @@ namespace LimFTPClient
             try
             {
                 Ftp.BeginConnect(URI.UserInfo, "");
-            }
-            catch
-            {
-                Ftp.Disconnect();
-                throw;
-            }
 
-            try
-            {
                 Ftp.ChangeDirectory(URI.AbsolutePath);
             }
             catch
@@ -131,25 +105,16 @@ namespace LimFTPClient
         /// </summary>
         /// <param name="URI"></param>
         /// <returns>The server file list as a List</returns>
-        static public List<string> ReadListing(Uri URI)
+        static public void ReadListing(Uri URI)
         {
-
             FTP Ftp = new FTP(URI.Host, URI.Port);
-            //Ftp.ResponseReceived += new FTPResponseHandler(m_ftp_ResponseReceived);
-            //Ftp.Connected += new FTPConnectedHandler(
+            ParamsHelper.AppsList = new List<string>();
+            string Listing;
 
             try
             {
                 Ftp.BeginConnect(URI.UserInfo, "");
-            }
-            catch
-            {
-                Ftp.Disconnect();
-                throw;
-            }
 
-            try
-            {
                 Ftp.ChangeDirectory(URI.AbsolutePath);
             }
             catch
@@ -157,9 +122,6 @@ namespace LimFTPClient
                 Ftp.Disconnect();
                 throw;
             }
-
-            List<string> SystemsList = new List<string>();
-            string Listing;
 
             try
             {
@@ -176,17 +138,13 @@ namespace LimFTPClient
 
             foreach (string file in Files)
             {
-                string line;
-
                 if (!String.IsNullOrEmpty(file) && file.IndexOf('.') == -1)
                 {
-                    line = file.Replace("_", " ");
-                    SystemsList.Add(line);
+                    ParamsHelper.AppsList.Add(file.Replace("_", " "));
                 }
-
             }
-            
-            if (SystemsList.Count == 0)
+
+            if (ParamsHelper.AppsList.Count == 0)
             {
                 ParamsHelper.CurrentURI = ParamsHelper.ServerURI;
                 throw new Exception("Repo is empty");
@@ -194,8 +152,10 @@ namespace LimFTPClient
 
             Ftp.Disconnect();
 
-            return SystemsList;
-        }
-        
+            ParamsHelper.ThreadEvent.Set();
+
+            ParamsHelper.IsThreadAlive = false;
+
+        }       
     }
 }

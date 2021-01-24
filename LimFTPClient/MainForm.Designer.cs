@@ -50,6 +50,9 @@
             this.MemLabel = new System.Windows.Forms.Label();
             this.FreeMemLabel = new System.Windows.Forms.Label();
             this.InstalledBox = new System.Windows.Forms.ListBox();
+            this.ListingThreadTimer = new System.Windows.Forms.Timer();
+            this.LoadingBar = new System.Windows.Forms.ProgressBar();
+            this.StatusLabel = new System.Windows.Forms.Label();
             this.TabControl.SuspendLayout();
             this.NewPage.SuspendLayout();
             this.InstalledPage.SuspendLayout();
@@ -112,6 +115,8 @@
             // NewPage
             // 
             this.NewPage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+            this.NewPage.Controls.Add(this.StatusLabel);
+            this.NewPage.Controls.Add(this.LoadingBar);
             this.NewPage.Controls.Add(this.AppsBox);
             this.NewPage.Controls.Add(this.SearchBox);
             this.NewPage.Controls.Add(this.label1);
@@ -207,6 +212,25 @@
             this.InstalledBox.Size = new System.Drawing.Size(240, 170);
             this.InstalledBox.TabIndex = 0;
             // 
+            // ListingThreadTimer
+            // 
+            this.ListingThreadTimer.Tick += new System.EventHandler(this.ListingThreadTimer_Tick);
+            // 
+            // LoadingBar
+            // 
+            this.LoadingBar.Location = new System.Drawing.Point(36, 111);
+            this.LoadingBar.Maximum = 1000;
+            this.LoadingBar.Name = "LoadingBar";
+            this.LoadingBar.Size = new System.Drawing.Size(164, 20);
+            // 
+            // StatusLabel
+            // 
+            this.StatusLabel.BackColor = System.Drawing.Color.White;
+            this.StatusLabel.Location = new System.Drawing.Point(35, 91);
+            this.StatusLabel.Name = "StatusLabel";
+            this.StatusLabel.Size = new System.Drawing.Size(100, 20);
+            this.StatusLabel.Text = "Загрузка списка";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -216,11 +240,13 @@
             this.ClientSize = new System.Drawing.Size(240, 268);
             this.Controls.Add(this.TabControl);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.Menu = this.MainMenu;
             this.Name = "MainForm";
             this.Text = "LimFTP Client";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Closing += new System.ComponentModel.CancelEventHandler(this.MainForm_Closing);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.TabControl.ResumeLayout(false);
             this.NewPage.ResumeLayout(false);
             this.InstalledPage.ResumeLayout(false);
@@ -249,6 +275,9 @@
         private System.Windows.Forms.Button DeleteButton;
         private System.Windows.Forms.Label InstalledLabel;
         private System.Windows.Forms.MenuItem RegisterMenuItem;
+        private System.Windows.Forms.Timer ListingThreadTimer;
+        private System.Windows.Forms.ProgressBar LoadingBar;
+        private System.Windows.Forms.Label StatusLabel;
     }
 }
 

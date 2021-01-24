@@ -98,6 +98,11 @@ namespace LimFTPClient
 
             ParamsHelper.CurrentURI = ParamsHelper.AppURI;
 
+            //ThreadStart AppStarter = delegate { FTPHelper.ReadListing(ParamsHelper.CurrentURI); };
+            //Thread ListingThread = new Thread(ListingStarter);
+            //ListingThread.Start();
+            //ParamsHelper.IsThreadAlive = true;
+
             try
             {
                 //AboutAppBox.Text = FTPHelper.LoadInfo(ParamsHelper.CurrentURI);

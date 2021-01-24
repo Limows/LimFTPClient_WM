@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Net;
+using System.Threading;
 
 namespace LimFTPClient
 {
@@ -27,6 +28,10 @@ namespace LimFTPClient
             RegisterMenuItem.Enabled = false;
             PropButton.Enabled = false;
             DeleteButton.Enabled = false;
+            ListingThreadTimer.Enabled = false;
+            ListingThreadTimer.Interval = 10;
+            LoadingBar.Visible = false;
+            StatusLabel.Visible = false;
         }
 
         private void HelpMenuItem_Click(object sender, EventArgs e)
@@ -42,9 +47,9 @@ namespace LimFTPClient
 
         private void BackMenuItem_Click(object sender, EventArgs e)
         {
-            Connect();
-
             GetAppsList();
+
+            Connect();
         }
 
         private void ParamsMenuItem_Click(object sender, EventArgs e)
@@ -60,24 +65,26 @@ namespace LimFTPClient
 
         private void Connect()
         {
-            //ConnectionStatusLabel.Text = "Подключение...";
             ParamsHelper.CurrentURI = ParamsHelper.SystemURI;
-            AppsBox.DataSource = null;
-            AppsBox.Items.Clear();
+            ParamsHelper.ThreadEvent = new AutoResetEvent(false);
+            ThreadStart ListingStarter = delegate { FTPHelper.ReadListing(ParamsHelper.CurrentURI); };
+            Thread ListingThread = new Thread(ListingStarter);
+            ParamsHelper.IsThreadAlive = true;
            
             try
             {
-                List<string> AppsList = FTPHelper.ReadListing(ParamsHelper.CurrentURI);
+                ListingThread.Start();
 
-                foreach (string app in AppsList)
-                {
-                    AppsBox.Items.Add(app);
-                }
+
+                LoadingBar.Value = 0;
+                ListingThreadTimer.Enabled = true;
             }
             catch
             {
-                //ConnectionStatusLabel.Text = "Подключение не удалось";
                 MessageBox.Show("Не удалось подключиться к серверу", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
+                
+                LoadingBar.Value = 0;
+                ListingThreadTimer.Enabled = false;
             }
 
         }
@@ -96,9 +103,9 @@ namespace LimFTPClient
 
             ParamsHelper.SystemURI = new Uri(ParamsHelper.ServerURI.ToString() + "/" + ParamsHelper.OSVersion);
 
-            Connect();
-
             GetAppsList();
+
+            Connect();
         }
 
         private void GetAppsList()
@@ -146,7 +153,7 @@ namespace LimFTPClient
             }
             else
             {
-                MessageBox.Show("Приложение не выбрано", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1);    
+                MessageBox.Show("Приложение не выбрано", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);    
             }
         }
 
@@ -169,5 +176,37 @@ namespace LimFTPClient
         {
 
         }
+
+        private void ListingThreadTimer_Tick(object sender, EventArgs e)
+        {
+            if (!ParamsHelper.IsThreadAlive)
+            {
+                AppsBox.DataSource = null;
+                AppsBox.Items.Clear();
+
+                foreach (string app in ParamsHelper.AppsList)
+                {
+                    AppsBox.Items.Add(app);
+                }
+
+                ListingThreadTimer.Enabled = false;
+
+                LoadingBar.Visible = false;
+                StatusLabel.Visible = false;
+            }
+            else
+            {
+                StatusLabel.Visible = true;
+                LoadingBar.Visible = true;
+                LoadingBar.Value += 1;
+            }
+
+        }
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
     }
 }
