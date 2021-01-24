@@ -6,7 +6,6 @@ using System.Reflection;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.IO.Compression;
-using Yark;
 
 namespace LimFTPClient
 {
