@@ -6,6 +6,7 @@ using System.Reflection;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.IO.Compression;
+using Yark;
 
 namespace LimFTPClient
 {
@@ -40,28 +41,27 @@ namespace LimFTPClient
             else return 0;
         }
 
-        //[DllImport("zlib.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        [DllImport("zlib.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        static extern int uncompress(byte[] destBuffer, ref ulong destLen, byte[] sourceBuffer, ulong sourceLen);
         //static extern int uncompress (byte dest, ulong destLen, byte source, ulong sourceLen);
 
         public static void ExtractToDirectory(string CompressedFilePath, string ExtractedFilePath)
         {
-            FileInfo fileToDecompress = new FileInfo(CompressedFilePath);
+            //FileInfo fileToDecompress = new FileInfo(CompressedFilePath);
+            //string newFileName = ExtractedFilePath;
+            //FileStream decompressedFileStream = File.Create(newFileName);
 
-            using (FileStream originalFileStream = fileToDecompress.OpenRead())
-            {
-                //string currentFileName = fileToDecompress.FullName;
-                string newFileName = ExtractedFilePath;
+            //ArchiveProvider Decompressor = new ArchiveProvider();
 
-                using (FileStream decompressedFileStream = File.Create(newFileName))
-                {
-                    using (DeflateStream decompressionStream = new DeflateStream(originalFileStream, CompressionMode.Decompress))
-                    {
-                        //decompressionStream.CopyTo(decompressedFileStream);
-                        CopyTo(decompressionStream, decompressedFileStream, 8192);
-                        //Console.WriteLine($"Decompressed: {fileToDecompress.Name}");
-                    }      
-                }
-            }
+            //Decompressor.Decompress(CompressedFilePath, ExtractedFilePath, null);
+
+            //ulong _dLen = (uint)8192;
+            //byte[] data = compressed_data;
+            //byte[] _d = new byte[_dLen];
+
+            //if (uncompress(_d, ref _dLen, data, (uint)data.Length) != 0)
+                //return null;
+
         }
 
         private static void CopyTo(Stream source, Stream destination, int bufferSize)

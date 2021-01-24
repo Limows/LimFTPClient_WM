@@ -24,9 +24,8 @@ namespace LimFTPClient
                 IO.RemoveParameters();
             }
 
-            PropMenuItem.Enabled = false;
+            RegisterMenuItem.Enabled = false;
             PropButton.Enabled = false;
-            DeleteMenuItem.Enabled = false;
             DeleteButton.Enabled = false;
         }
 
@@ -119,7 +118,7 @@ namespace LimFTPClient
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1);
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
             }
         }
 
@@ -140,8 +139,15 @@ namespace LimFTPClient
 
         private void PropButton_Click(object sender, EventArgs e)
         {
-            AboutAppBox NewAboutAppBox = new AboutAppBox(InstalledBox.Text);
-            NewAboutAppBox.ShowDialog();
+            if (!String.IsNullOrEmpty(InstalledBox.Text))
+            {
+                AboutAppBox NewAboutAppBox = new AboutAppBox(InstalledBox.Text);
+                NewAboutAppBox.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Приложение не выбрано", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1);    
+            }
         }
 
         private void TabControl_SelectedIndexChanged(object sender, EventArgs e)
@@ -156,13 +162,12 @@ namespace LimFTPClient
             }
 
             PropButton.Enabled = !PropButton.Enabled;
-            PropMenuItem.Enabled = !PropMenuItem.Enabled;
+            //RegisterMenuItem.Enabled = !RegisterMenuItem.Enabled;
         }
 
-        private void PropMenuItem_Click(object sender, EventArgs e)
+        private void RegisterMenuItem_Click(object sender, EventArgs e)
         {
-            AboutAppBox NewAboutAppBox = new AboutAppBox(InstalledBox.Text);
-            NewAboutAppBox.ShowDialog();
+
         }
     }
 }

@@ -34,56 +34,58 @@
             this.textBoxInstallPath = new System.Windows.Forms.TextBox();
             this.OKButton = new System.Windows.Forms.Button();
             this.MainMenu = new System.Windows.Forms.MainMenu();
-            this.labelInstallPath = new System.Windows.Forms.Label();
+            this.labelInstallDate = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelProductName
             // 
             this.labelProductName.Location = new System.Drawing.Point(7, 10);
             this.labelProductName.Name = "labelProductName";
-            this.labelProductName.Size = new System.Drawing.Size(143, 20);
+            this.labelProductName.Size = new System.Drawing.Size(226, 20);
             this.labelProductName.Text = "Имя программы";
             // 
             // labelVersion
             // 
             this.labelVersion.Location = new System.Drawing.Point(7, 30);
             this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(143, 20);
+            this.labelVersion.Size = new System.Drawing.Size(226, 20);
             this.labelVersion.Text = "Версия";
             // 
             // labelCompanyName
             // 
             this.labelCompanyName.Location = new System.Drawing.Point(7, 50);
             this.labelCompanyName.Name = "labelCompanyName";
-            this.labelCompanyName.Size = new System.Drawing.Size(143, 20);
+            this.labelCompanyName.Size = new System.Drawing.Size(226, 20);
             this.labelCompanyName.Text = "Имя компании";
+            this.labelCompanyName.ParentChanged += new System.EventHandler(this.labelCompanyName_ParentChanged);
             // 
             // textBoxInstallPath
             // 
             this.textBoxInstallPath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
             this.textBoxInstallPath.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxInstallPath.Location = new System.Drawing.Point(7, 93);
+            this.textBoxInstallPath.Location = new System.Drawing.Point(9, 90);
             this.textBoxInstallPath.Multiline = true;
             this.textBoxInstallPath.Name = "textBoxInstallPath";
             this.textBoxInstallPath.ReadOnly = true;
-            this.textBoxInstallPath.Size = new System.Drawing.Size(226, 140);
+            this.textBoxInstallPath.Size = new System.Drawing.Size(224, 142);
             this.textBoxInstallPath.TabIndex = 7;
+            this.textBoxInstallPath.Text = "Путь установки: ";
             // 
             // OKButton
             // 
-            this.OKButton.Location = new System.Drawing.Point(161, 239);
+            this.OKButton.Location = new System.Drawing.Point(161, 240);
             this.OKButton.Name = "OKButton";
             this.OKButton.Size = new System.Drawing.Size(72, 20);
             this.OKButton.TabIndex = 12;
             this.OKButton.Text = "OK";
             this.OKButton.Click += new System.EventHandler(this.OKButton_Click);
             // 
-            // labelInstallPath
+            // labelInstallDate
             // 
-            this.labelInstallPath.Location = new System.Drawing.Point(7, 70);
-            this.labelInstallPath.Name = "labelInstallPath";
-            this.labelInstallPath.Size = new System.Drawing.Size(143, 20);
-            this.labelInstallPath.Text = "Путь установки:";
+            this.labelInstallDate.Location = new System.Drawing.Point(7, 70);
+            this.labelInstallDate.Name = "labelInstallDate";
+            this.labelInstallDate.Size = new System.Drawing.Size(226, 20);
+            this.labelInstallDate.Text = "Дата установки";
             // 
             // AboutAppBox
             // 
@@ -92,7 +94,7 @@
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
             this.ClientSize = new System.Drawing.Size(240, 268);
-            this.Controls.Add(this.labelInstallPath);
+            this.Controls.Add(this.labelInstallDate);
             this.Controls.Add(this.OKButton);
             this.Controls.Add(this.textBoxInstallPath);
             this.Controls.Add(this.labelCompanyName);
@@ -113,6 +115,6 @@
         private System.Windows.Forms.TextBox textBoxInstallPath;
         private System.Windows.Forms.Button OKButton;
         private System.Windows.Forms.MainMenu MainMenu;
-        private System.Windows.Forms.Label labelInstallPath;
+        private System.Windows.Forms.Label labelInstallDate;
     }
 }

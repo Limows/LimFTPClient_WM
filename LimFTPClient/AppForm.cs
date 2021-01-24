@@ -26,14 +26,17 @@ namespace LimFTPClient
         {
             string FileName = AppName + ".zip";
             ParamsHelper.CurrentURI = ParamsHelper.AppURI;
+            bool IsDownloaded = false;
 
             if (!String.IsNullOrEmpty(ParamsHelper.DownloadPath))
             {
                 StatusLabel.Text = "Загрузка в папку " + ParamsHelper.DownloadPath;
+
                 try
                 {   
                     FTPHelper.DownloadFile(ParamsHelper.CurrentURI, ParamsHelper.DownloadPath, FileName);
-                    StatusLabel.Text = "Успешно загружено";
+
+                    IsDownloaded = true;
 
                     DialogResult Result = MessageBox.Show("Распаковать пакет?", "Сообщение", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
 
@@ -41,7 +44,6 @@ namespace LimFTPClient
                     {
                         try
                         {
-                            //ZipFile.ExtractToDirectory(Parameters.DownloadPath + "\\" + FileName, Parameters.DownloadPath + "\\" + AppName);
                             IO.ExtractToDirectory(ParamsHelper.DownloadPath + "\\" + FileName, ParamsHelper.DownloadPath + "\\" + AppName);
                         }
                         catch
@@ -74,7 +76,8 @@ namespace LimFTPClient
                 }
                 finally
                 {
-                    StatusLabel.Text = "Загрузка не удалась";
+                    if (IsDownloaded) StatusLabel.Text = "Успешно загружено";
+                    else StatusLabel.Text = "Загрузка не удалась";
                 }
 
             }

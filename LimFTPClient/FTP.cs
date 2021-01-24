@@ -282,14 +282,14 @@ namespace OpenNETCF.Net.Ftp
                 m_cmdsocket = new Socket(AddressFamily.InterNetwork,
                     SocketType.Stream,
                     ProtocolType.Tcp);
-
+                /*
                 try
                 {
                     IPAddress address = IPAddress.Parse(m_host);
                     endpoint = new IPEndPoint(address, m_port);
                 }
                 catch (System.FormatException)
-                {
+                {*/
                     try
                     {
                         //IPAddress address = Dns.Resolve(m_host).AddressList[0];
@@ -301,7 +301,7 @@ namespace OpenNETCF.Net.Ftp
                         return;
                     }
 
-                }
+                //}
 
                 // make the connection
                 try

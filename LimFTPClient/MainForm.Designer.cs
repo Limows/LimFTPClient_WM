@@ -34,8 +34,7 @@
             this.ActionsMenuItem = new System.Windows.Forms.MenuItem();
             this.ParamsMenuItem = new System.Windows.Forms.MenuItem();
             this.UpdateMenuItem = new System.Windows.Forms.MenuItem();
-            this.PropMenuItem = new System.Windows.Forms.MenuItem();
-            this.DeleteMenuItem = new System.Windows.Forms.MenuItem();
+            this.RegisterMenuItem = new System.Windows.Forms.MenuItem();
             this.RefMenu = new System.Windows.Forms.MenuItem();
             this.HelpMenuItem = new System.Windows.Forms.MenuItem();
             this.AboutMenuItem = new System.Windows.Forms.MenuItem();
@@ -65,8 +64,7 @@
             // 
             this.ActionsMenuItem.MenuItems.Add(this.ParamsMenuItem);
             this.ActionsMenuItem.MenuItems.Add(this.UpdateMenuItem);
-            this.ActionsMenuItem.MenuItems.Add(this.PropMenuItem);
-            this.ActionsMenuItem.MenuItems.Add(this.DeleteMenuItem);
+            this.ActionsMenuItem.MenuItems.Add(this.RegisterMenuItem);
             this.ActionsMenuItem.Text = "Действия";
             // 
             // ParamsMenuItem
@@ -79,14 +77,10 @@
             this.UpdateMenuItem.Text = "Обновить";
             this.UpdateMenuItem.Click += new System.EventHandler(this.BackMenuItem_Click);
             // 
-            // PropMenuItem
+            // RegisterMenuItem
             // 
-            this.PropMenuItem.Text = "Свойства";
-            this.PropMenuItem.Click += new System.EventHandler(this.PropMenuItem_Click);
-            // 
-            // DeleteMenuItem
-            // 
-            this.DeleteMenuItem.Text = "Удалить";
+            this.RegisterMenuItem.Text = "Регистрация";
+            this.RegisterMenuItem.Click += new System.EventHandler(this.RegisterMenuItem_Click);
             // 
             // RefMenu
             // 
@@ -162,7 +156,7 @@
             this.InstalledPage.Controls.Add(this.InstalledBox);
             this.InstalledPage.Location = new System.Drawing.Point(0, 0);
             this.InstalledPage.Name = "InstalledPage";
-            this.InstalledPage.Size = new System.Drawing.Size(240, 245);
+            this.InstalledPage.Size = new System.Drawing.Size(232, 242);
             this.InstalledPage.Text = "Установленные";
             // 
             // InstalledLabel
@@ -254,8 +248,7 @@
         private System.Windows.Forms.Button PropButton;
         private System.Windows.Forms.Button DeleteButton;
         private System.Windows.Forms.Label InstalledLabel;
-        private System.Windows.Forms.MenuItem PropMenuItem;
-        private System.Windows.Forms.MenuItem DeleteMenuItem;
+        private System.Windows.Forms.MenuItem RegisterMenuItem;
     }
 }
 

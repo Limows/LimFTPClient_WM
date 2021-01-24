@@ -178,19 +178,12 @@ namespace LimFTPClient
             {
                 string line;
 
-                try
+                if (!String.IsNullOrEmpty(file) && file.IndexOf('.') == -1)
                 {
                     line = file.Replace("_", " ");
-                }
-                catch
-                {
-                    line = null;
-                }
-
-                if (line.IndexOf('.') == -1)
-                {
                     SystemsList.Add(line);
                 }
+
             }
             
             if (SystemsList.Count == 0)

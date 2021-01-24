@@ -15,16 +15,21 @@ namespace LimFTPClient
         {
             InitializeComponent();
 
-            this.Text = String.Format("О {0}", AppName);
+            this.Text = String.Format("О Программе");
             this.labelProductName.Text = AppName;
             //this.labelVersion.Text = String.Format("Версия {0}", AssemblyVersion);
-            //this.labelCompanyName.Text = String.Format("Автор {0}", AssemblyCompany);
-            this.textBoxInstallPath.Text = Sys.GetInstallDir(AppName);
+            this.labelCompanyName.Text = String.Format("Автор: {0}", AppName.Split(' ')[0]);
+            this.textBoxInstallPath.Text += Sys.GetInstallDir(AppName);
         }
 
         private void OKButton_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void labelCompanyName_ParentChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
