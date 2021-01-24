@@ -6,7 +6,7 @@ using System.Reflection;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.IO.Compression;
-//using Yark;
+using Yark;
 
 namespace LimFTPClient
 {
@@ -45,15 +45,22 @@ namespace LimFTPClient
         static extern int uncompress(byte[] destBuffer, ref ulong destLen, byte[] sourceBuffer, ulong sourceLen);
         //static extern int uncompress (byte dest, ulong destLen, byte source, ulong sourceLen);
 
+        [DllImport("7zcelib.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        static extern int ExtractFile(char[] ArchiveName, char[] FileName, char[] OutputDir);
+
         public static void ExtractToDirectory(string CompressedFilePath, string ExtractedFilePath)
         {
             //FileInfo fileToDecompress = new FileInfo(CompressedFilePath);
             //string newFileName = ExtractedFilePath;
             //FileStream decompressedFileStream = File.Create(newFileName);
 
+            Directory.CreateDirectory(ExtractedFilePath);
+
             //ArchiveProvider Decompressor = new ArchiveProvider();
 
             //Decompressor.Decompress(CompressedFilePath, ExtractedFilePath, null);
+
+            ExtractFile(CompressedFilePath.ToCharArray(), "CapScrUtil.ppc.wm5.cab".ToCharArray(), ExtractedFilePath.ToCharArray());
 
             //ulong _dLen = (uint)8192;
             //byte[] data = compressed_data;

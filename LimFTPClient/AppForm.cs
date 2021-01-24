@@ -125,5 +125,11 @@ namespace LimFTPClient
             ParamsHelper.CurrentURI = ParamsHelper.SystemURI;
             //MessageBox.Show(Parameters.CurrentURI.ToString());
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string FileName = AppName + ".zip";
+            IO.ExtractToDirectory(ParamsHelper.DownloadPath + "\\" + FileName, ParamsHelper.DownloadPath + "\\" + AppName);
+        }
     }
 }
