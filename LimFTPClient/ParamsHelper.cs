@@ -8,7 +8,8 @@ using System.Threading;
 namespace LimFTPClient
 {
     class ParamsHelper
-    {
+    {   
+
         static public Uri ServerURI = new Uri("ftp://anon@limowski.xyz:2121");
         static public Uri CurrentURI;
         static public Uri SystemURI;
@@ -20,6 +21,17 @@ namespace LimFTPClient
         static public List<string> AppsList;
         static public EventWaitHandle ThreadEvent;
         static public bool IsThreadAlive;
+        static public bool IsThreadError;
+        static public Exception ThreadException;
+        static public string ArcFile; 
+        
+        /*
+        public enum OSVersions
+        {
+            WinMobile5 = "WinMobile_5",
+            WinMobile2003 = "WinMobile_2003"
+        }
+         */
 
         /// <summary>
         /// Convert bytes to megabytes

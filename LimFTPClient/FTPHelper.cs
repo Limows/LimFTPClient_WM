@@ -5,9 +5,10 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-
 using OpenNETCF.Net.Ftp;
 using System.IO;
+using System.Net;
+using System.Net.Sockets;
 
 namespace LimFTPClient
 {
@@ -23,10 +24,10 @@ namespace LimFTPClient
         {
             FTP Ftp = new FTP(URI.Host, URI.Port);
 
+            Ftp.BeginConnect(URI.UserInfo, "");
+
             try
             {
-                Ftp.BeginConnect(URI.UserInfo, "");
-
                 Ftp.ChangeDirectory(URI.AbsolutePath);
 
                 Ftp.GetFile(FileName, DownloadDir + "\\" + FileName, true);
@@ -72,20 +73,12 @@ namespace LimFTPClient
             string FileName = AppName + ".zip";
             string FileSize;
 
+            Ftp.BeginConnect(URI.UserInfo, "");
+
             try
             {
-                Ftp.BeginConnect(URI.UserInfo, "");
-
                 Ftp.ChangeDirectory(URI.AbsolutePath);
-            }
-            catch
-            {
-                Ftp.Disconnect();
-                throw;
-            }
 
-            try
-            {
                 FileSize = Ftp.GetFileSize(FileName);
                 FileSize = ParamsHelper.BytesToMegs((ulong)Convert.ToInt64(FileSize)).ToString("0.##") + " МБ";
             }
@@ -111,27 +104,21 @@ namespace LimFTPClient
             ParamsHelper.AppsList = new List<string>();
             string Listing;
 
+            Ftp.BeginConnect(URI.UserInfo, "");
+
             try
             {
-                Ftp.BeginConnect(URI.UserInfo, "");
-
                 Ftp.ChangeDirectory(URI.AbsolutePath);
-            }
-            catch
-            {
-                Ftp.Disconnect();
-                throw;
-            }
-
-            try
-            {
                 Listing = Ftp.GetFileList(false);
             }
-            catch
+            catch(Exception NewEx)
             {
                 Listing = "";
                 Ftp.Disconnect();
-                throw;
+                ParamsHelper.IsThreadAlive = false;
+                ParamsHelper.IsThreadError = true;
+                ParamsHelper.ThreadException = NewEx;
+                return;
             }
 
             string[] Files = Listing.Replace("\n", "").Split('\r');
@@ -139,7 +126,7 @@ namespace LimFTPClient
             foreach (string file in Files)
             {
                 if (!String.IsNullOrEmpty(file) && file.IndexOf('.') == -1)
-                {
+                {   
                     ParamsHelper.AppsList.Add(file.Replace("_", " "));
                 }
             }
@@ -147,7 +134,11 @@ namespace LimFTPClient
             if (ParamsHelper.AppsList.Count == 0)
             {
                 ParamsHelper.CurrentURI = ParamsHelper.ServerURI;
-                throw new Exception("Repo is empty");
+                Ftp.Disconnect();
+                ParamsHelper.IsThreadAlive = false;
+                ParamsHelper.IsThreadError = true;
+                ParamsHelper.ThreadException = new Exception("Repo is empty");
+                return;
             }
 
             Ftp.Disconnect();

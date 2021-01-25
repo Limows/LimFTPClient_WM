@@ -1,5 +1,24 @@
 # Changelog
 
+## [v0.3.10] - (25.01.21)
+
+### Added
+
+ - Async in application listing
+ - Unpacking function
+ - Installation function
+
+### Changed
+
+ - Gzip replaced by  ICSharpCode.SharpZipLib
+ - Code cleaned up
+ - App info more informative 
+
+### Fixed
+
+ - UI fixes
+ - IO fixes
+
 ## [v0.3.9] - (23.01.21)
 
 ### Added

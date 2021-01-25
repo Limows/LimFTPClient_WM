@@ -290,6 +290,9 @@ namespace OpenNETCF.Net.Ftp
                 }
                 catch (SocketException)
                 {
+                    m_cmdsocket = null;
+			        m_server	= FTPServerType.Unknown;
+			        m_connected = false;
                     return;
                 }
 

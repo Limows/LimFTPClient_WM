@@ -30,8 +30,6 @@ namespace LimFTPClient
             DeleteButton.Enabled = false;
             ListingThreadTimer.Enabled = false;
             ListingThreadTimer.Interval = 10;
-            LoadingBar.Visible = false;
-            StatusLabel.Visible = false;
         }
 
         private void HelpMenuItem_Click(object sender, EventArgs e)
@@ -70,22 +68,11 @@ namespace LimFTPClient
             ThreadStart ListingStarter = delegate { FTPHelper.ReadListing(ParamsHelper.CurrentURI); };
             Thread ListingThread = new Thread(ListingStarter);
             ParamsHelper.IsThreadAlive = true;
+            ParamsHelper.IsThreadError = false;
            
-            try
-            {
-                ListingThread.Start();
+            ListingThread.Start();
 
-
-                LoadingBar.Value = 0;
-                ListingThreadTimer.Enabled = true;
-            }
-            catch
-            {
-                MessageBox.Show("Не удалось подключиться к серверу", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
-                
-                LoadingBar.Value = 0;
-                ListingThreadTimer.Enabled = false;
-            }
+            ListingThreadTimer.Enabled = true;
 
         }
 
@@ -181,24 +168,41 @@ namespace LimFTPClient
         {
             if (!ParamsHelper.IsThreadAlive)
             {
-                AppsBox.DataSource = null;
-                AppsBox.Items.Clear();
-
-                foreach (string app in ParamsHelper.AppsList)
+                if (ParamsHelper.IsThreadError)
                 {
-                    AppsBox.Items.Add(app);
+                    try
+                    {
+                        throw ParamsHelper.ThreadException;
+                    }
+                    catch
+                    {
+                        ListingThreadTimer.Enabled = false;
+                        Cursor.Current = Cursors.Default;
+                        MessageBox.Show("Не удалось подключиться к серверу", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
+                    }
+
+                }
+                else
+                {
+                    AppsBox.DataSource = null;
+                    AppsBox.Items.Clear();
+
+                    foreach (string app in ParamsHelper.AppsList)
+                    {
+                        AppsBox.Items.Add(app);
+                    }
+
+                    ListingThreadTimer.Enabled = false;
+                    Cursor.Current = Cursors.Default;
                 }
 
-                ListingThreadTimer.Enabled = false;
-
-                LoadingBar.Visible = false;
-                StatusLabel.Visible = false;
             }
             else
             {
-                StatusLabel.Visible = true;
-                LoadingBar.Visible = true;
-                LoadingBar.Value += 1;
+                if (Cursor.Current != Cursors.WaitCursor)
+                {
+                    Cursor.Current = Cursors.WaitCursor;
+                }
             }
 
         }

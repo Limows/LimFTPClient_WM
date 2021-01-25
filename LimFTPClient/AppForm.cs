@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Net;
 using System.Threading;
+using System.Diagnostics;
 
 namespace LimFTPClient
 {
@@ -27,6 +28,7 @@ namespace LimFTPClient
             string FileName = AppName + ".zip";
             ParamsHelper.CurrentURI = ParamsHelper.AppURI;
             bool IsDownloaded = false;
+            bool IsInstalled = false;
 
             if (!String.IsNullOrEmpty(ParamsHelper.DownloadPath))
             {
@@ -38,18 +40,34 @@ namespace LimFTPClient
 
                     IsDownloaded = true;
 
-                    DialogResult Result = MessageBox.Show("Распаковать пакет?", "Сообщение", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                    DialogResult Result = MessageBox.Show("Установить?", "Сообщение", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
 
                     if (Result == DialogResult.Yes)
                     {
                         try
                         {
                             IO.ExtractToDirectory(ParamsHelper.DownloadPath + "\\" + FileName, ParamsHelper.DownloadPath + "\\" + AppName);
+
+                            if (!String.IsNullOrEmpty(ParamsHelper.InstallPath))
+                            {
+
+                                string[] Cabs = Directory.GetFiles(ParamsHelper.DownloadPath + "\\" + AppName, "*.cab");
+
+                                foreach (string cab in Cabs)
+                                {
+                                    Sys.AppInstall(cab, AppName);
+                                }
+
+                                IsInstalled = true;
+                            }
+                            else
+                            {
+                                MessageBox.Show("Отсутствует путь для установки", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
+                            }
                         }
                         catch
                         {
-                            MessageBox.Show("Ошибка при распаковке", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
-                            File.Delete(ParamsHelper.DownloadPath + "\\" + AppName);
+                            MessageBox.Show("Ошибка при установке", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
                         }
                     }
 
@@ -77,7 +95,11 @@ namespace LimFTPClient
                 finally
                 {
                     if (IsDownloaded) StatusLabel.Text = "Успешно загружено";
-                    else StatusLabel.Text = "Загрузка не удалась";
+                    else
+                    {
+                        if (IsInstalled) StatusLabel.Text = "Успешно установлено";
+                        else StatusLabel.Text = "Загрузка не удалась";
+                    }
                 }
 
             }
@@ -116,8 +138,6 @@ namespace LimFTPClient
             AboutAppBox.Text = "Для этого приложения ещё нет описания";
 
             ParamsHelper.CurrentURI = ParamsHelper.AppURI;
-
-
         }
 
         private void AppForm_FormClosing(object sender, CancelEventArgs e)
@@ -128,8 +148,7 @@ namespace LimFTPClient
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string FileName = AppName + ".zip";
-            IO.ExtractToDirectory(ParamsHelper.DownloadPath + "\\" + FileName, ParamsHelper.DownloadPath + "\\" + AppName);
+
         }
     }
 }

@@ -51,8 +51,6 @@
             this.FreeMemLabel = new System.Windows.Forms.Label();
             this.InstalledBox = new System.Windows.Forms.ListBox();
             this.ListingThreadTimer = new System.Windows.Forms.Timer();
-            this.LoadingBar = new System.Windows.Forms.ProgressBar();
-            this.StatusLabel = new System.Windows.Forms.Label();
             this.TabControl.SuspendLayout();
             this.NewPage.SuspendLayout();
             this.InstalledPage.SuspendLayout();
@@ -115,8 +113,6 @@
             // NewPage
             // 
             this.NewPage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
-            this.NewPage.Controls.Add(this.StatusLabel);
-            this.NewPage.Controls.Add(this.LoadingBar);
             this.NewPage.Controls.Add(this.AppsBox);
             this.NewPage.Controls.Add(this.SearchBox);
             this.NewPage.Controls.Add(this.label1);
@@ -216,21 +212,6 @@
             // 
             this.ListingThreadTimer.Tick += new System.EventHandler(this.ListingThreadTimer_Tick);
             // 
-            // LoadingBar
-            // 
-            this.LoadingBar.Location = new System.Drawing.Point(36, 111);
-            this.LoadingBar.Maximum = 1000;
-            this.LoadingBar.Name = "LoadingBar";
-            this.LoadingBar.Size = new System.Drawing.Size(164, 20);
-            // 
-            // StatusLabel
-            // 
-            this.StatusLabel.BackColor = System.Drawing.Color.White;
-            this.StatusLabel.Location = new System.Drawing.Point(35, 91);
-            this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(100, 20);
-            this.StatusLabel.Text = "Загрузка списка";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -276,8 +257,6 @@
         private System.Windows.Forms.Label InstalledLabel;
         private System.Windows.Forms.MenuItem RegisterMenuItem;
         private System.Windows.Forms.Timer ListingThreadTimer;
-        private System.Windows.Forms.ProgressBar LoadingBar;
-        private System.Windows.Forms.Label StatusLabel;
     }
 }
 

@@ -3,6 +3,9 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Win32;
+using System.IO;
+using System.Threading;
+using System.Diagnostics;
 
 namespace LimFTPClient
 {
@@ -45,6 +48,31 @@ namespace LimFTPClient
             }
 
             return InstallDir;
+        }
+
+        static public void AppInstall(string CabPath, string AppName)
+        {
+            string ConsoleArguments = "/delete 0 /noaskdest ";
+            string InstallPath = ParamsHelper.InstallPath + "\\" + AppName;
+
+            string SoftwareKey = "Software\\Apps\\Microsoft Application Installer";
+
+            RegistryKey AppInstallerKey = Registry.LocalMachine.OpenSubKey(SoftwareKey, true);
+            RegistryKey InstallKey = AppInstallerKey.CreateSubKey("Install");
+            InstallKey.SetValue(CabPath, InstallPath);
+
+            //Directory.CreateDirectory(InstallPath);
+       
+            Process InstallProc = new Process();
+            InstallProc.StartInfo.FileName = "\\windows\\wceload.exe";
+
+            InstallProc.StartInfo.Arguments = ConsoleArguments +"\"" + CabPath + "\"";
+
+            InstallProc.Start();
+
+            InstallProc.WaitForExit();
+
+            InstallKey.DeleteValue(CabPath); 
         }
     }
 }

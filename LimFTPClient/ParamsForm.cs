@@ -73,7 +73,7 @@ namespace LimFTPClient
         private void ParamsBox_Load(object sender, EventArgs e)
         {
             DownloadPathBox.Text = ParamsHelper.DownloadPath;
-            InstallPathBox.Text = "\\Program Files";
+            InstallPathBox.Text = ParamsHelper.InstallPath;
         }
 
         private void OpenDirButton2_Click(object sender, EventArgs e)
