@@ -146,9 +146,5 @@ namespace LimFTPClient
             //MessageBox.Show(Parameters.CurrentURI.ToString());
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
