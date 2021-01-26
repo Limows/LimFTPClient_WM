@@ -20,6 +20,9 @@ namespace LimFTPClient
         {
             ParamsHelper.DownloadPath = CheckDirectory(DownloadPathBox.Text);
             ParamsHelper.InstallPath = CheckDirectory(InstallPathBox.Text);
+            ParamsHelper.IsAutoInstall = AutoInstallBox.Checked;
+            ParamsHelper.IsRmPackage = RmPackageBox.Checked;
+            ParamsHelper.IsOverwrite = OverwriteDirsBox.Checked;
 
             if (String.IsNullOrEmpty(ParamsHelper.DownloadPath) || String.IsNullOrEmpty(ParamsHelper.InstallPath))
             {
@@ -63,6 +66,7 @@ namespace LimFTPClient
         private string OpenDirDialog()
         {
             FolderBrowserDialog OpenDir = new FolderBrowserDialog();
+
             if (OpenDir.ShowDialog() == DialogResult.OK)
             {
                 return OpenDir.SelectedPath;
@@ -74,6 +78,13 @@ namespace LimFTPClient
         {
             DownloadPathBox.Text = ParamsHelper.DownloadPath;
             InstallPathBox.Text = ParamsHelper.InstallPath;
+            AutoInstallBox.Checked = false;
+            AutoInstallBox.Enabled = false;
+            RmPackageBox.Checked = false;
+            RmPackageBox.Enabled = false;
+            OverwriteDirsBox.Checked = true;
+            OverwriteDirsBox.Enabled = false;
+
         }
 
         private void OpenDirButton2_Click(object sender, EventArgs e)

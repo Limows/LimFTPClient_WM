@@ -395,17 +395,54 @@ namespace OpenNETCF.Net.Ftp
 		/// <param name="remoteFileName">Name of the file to get</param>
 		/// <param name="localFileName">Local name under which to save the retrieved file</param>
 		/// <param name="overwrite">Overwrite the local file if it already exists</param>
-		public void GetFile(string remoteFileName, string localFileName, bool overwrite)
-		{
-			int			bytesrecvd	= 0;
-			FTPResponse response;
+        public void GetFile(string remoteFileName, string localFileName, bool overwrite)
+        {
+            int bytesrecvd = 0;
+            FTPResponse response;
 
             using (var output = File.Create(localFileName))
-            using (var socket = OpenDataSocket())
             {
-                response = SendCommand("RETR " + remoteFileName);
+                using (var socket = OpenDataSocket())
+                {
+                    response = SendCommand("RETR " + remoteFileName);
 
-                if (!((response.ID == StatusCode.FileStatusOK) || (response.ID == StatusCode.ConnectionAlreadyOpen)))
+                    if (!((response.ID == StatusCode.FileStatusOK) || (response.ID == StatusCode.ConnectionAlreadyOpen)))
+                    {
+                        if (!m_exceptions)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            throw new IOException(response.Text);
+                        }
+                    }
+
+                    // get the data
+                    while (true)
+                    {
+                        bytesrecvd = socket.Receive(m_buffer, m_buffer.Length, 0);
+                        output.Write(m_buffer, 0, bytesrecvd);
+
+                        if (bytesrecvd <= 0)
+                        {
+                            break;
+                        }
+                    }
+                    if (socket.Connected)
+                    {
+                        socket.Close();
+                    }
+                }
+
+                response = ReadResponse();
+
+                if (response.ID == 0)
+                {
+                    return;
+                }
+
+                if (!((response.ID == StatusCode.ClosingConnection) || (response.ID == StatusCode.FileActionComplete)))
                 {
                     if (!m_exceptions)
                     {
@@ -413,46 +450,11 @@ namespace OpenNETCF.Net.Ftp
                     }
                     else
                     {
-                        throw new IOException(response.Text);
+                        throw new FTPException(response.Text);
                     }
-                }
-
-                // get the data
-                while (true)
-                {
-                    bytesrecvd = socket.Receive(m_buffer, m_buffer.Length, 0);
-                    output.Write(m_buffer, 0, bytesrecvd);
-
-                    if (bytesrecvd <= 0)
-                    {
-                        break;
-                    }
-                }
-                if (socket.Connected)
-                {
-                    socket.Close();
                 }
             }
-
-			response = ReadResponse();
-
-			if(response.ID == 0)
-			{
-				return;
-			}
-
-            if (!((response.ID == StatusCode.ClosingConnection) || (response.ID == StatusCode.FileActionComplete)))
-			{
-				if(!m_exceptions)
-				{
-					return;
-				}
-				else
-				{
-					throw new FTPException(response.Text);
-				}
-			}
-		}
+        }
 
 		/// <summary>
 		/// Retrieves the filelist string as the FTP server sends it

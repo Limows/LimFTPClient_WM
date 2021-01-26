@@ -50,29 +50,130 @@ namespace LimFTPClient
             return InstallDir;
         }
 
-        static public void AppInstall(string CabPath, string AppName)
+        static public bool AppInstall(string AppPath, string AppName, bool Overwrite)
+        {
+            string InstallPath = ParamsHelper.InstallPath + "\\" + AppName;
+            bool IsInstalled = false;
+
+            string[] Cabs = Directory.GetFiles(AppPath, "*.cab");
+
+            if (Cabs.Length == 0)
+            {
+                IsInstalled = DirInstall(AppPath, InstallPath, AppName, Overwrite);    
+            }
+            else
+            {
+
+                foreach (string cab in Cabs)
+                {
+                    IsInstalled = CabInstall(cab, InstallPath);
+                }
+            }
+
+            return true;
+        }
+
+        static public bool CabInstall(string CabPath, string InstallPath)
         {
             string ConsoleArguments = "/delete 0 /noaskdest ";
-            string InstallPath = ParamsHelper.InstallPath + "\\" + AppName;
-
             string SoftwareKey = "Software\\Apps\\Microsoft Application Installer";
 
-            RegistryKey AppInstallerKey = Registry.LocalMachine.OpenSubKey(SoftwareKey, true);
-            RegistryKey InstallKey = AppInstallerKey.CreateSubKey("Install");
-            InstallKey.SetValue(CabPath, InstallPath);
+            using (RegistryKey AppInstallerKey = Registry.LocalMachine.OpenSubKey(SoftwareKey, true))
+            {
+                using (RegistryKey InstallKey = AppInstallerKey.CreateSubKey("Install"))
+                {
+                    InstallKey.SetValue(CabPath, InstallPath);
 
-            //Directory.CreateDirectory(InstallPath);
-       
-            Process InstallProc = new Process();
-            InstallProc.StartInfo.FileName = "\\windows\\wceload.exe";
+                    //Directory.CreateDirectory(InstallPath);
 
-            InstallProc.StartInfo.Arguments = ConsoleArguments +"\"" + CabPath + "\"";
+                    Process InstallProc = new Process();
+                    InstallProc.StartInfo.FileName = "\\windows\\wceload.exe";
 
-            InstallProc.Start();
+                    InstallProc.StartInfo.Arguments = ConsoleArguments + "\"" + CabPath + "\"";
 
-            InstallProc.WaitForExit();
+                    InstallProc.Start();
 
-            InstallKey.DeleteValue(CabPath); 
+                    InstallProc.WaitForExit();
+
+                    InstallKey.DeleteValue(CabPath);
+                }
+            }
+
+            return true;
+        }
+
+        static public bool DirInstall(string DirPath, string InstallPath, string AppName, bool Overwrite)
+        {
+            string ShortcutName = Environment.GetFolderPath(Environment.SpecialFolder.Programs) + "\\" + AppName + ".lnk";
+
+            if (Directory.Exists(InstallPath))
+            {
+                if (Overwrite)
+                {
+                    Directory.Delete(InstallPath, true);
+                    Directory.Move(DirPath, InstallPath);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                Directory.Move(DirPath, InstallPath);   
+            }
+
+            string[] Execs = Directory.GetFiles(InstallPath, "*.exe");
+
+            if (Execs.Length != 1)
+            {
+                   
+            }
+            else 
+            {
+                CreateShortcut(ShortcutName, Execs[0]);
+            }
+
+            AddToRegistry(AppName, InstallPath);
+
+            return true;
+
+        }
+
+        static public void CreateShortcut(string ShortcutName, string TargetName)
+        {   
+            FileInfo Shortcut = new FileInfo(ShortcutName);
+            TextWriter Writer;
+
+            if (!File.Exists(ShortcutName))
+            {
+                Writer = new StreamWriter(Shortcut.Open(FileMode.Create));
+            }
+            else
+            {
+                File.Delete(ShortcutName);
+                Writer = new StreamWriter(Shortcut.Open(FileMode.Create)); 
+            }
+
+            Writer.Write(TargetName.Length + "#");
+            Writer.WriteLine("\"" + TargetName + "\"");
+
+            Writer.Close();
+        }
+
+        static public void AddToRegistry(string AppName, string InstallPath)
+        {
+            string SoftwareKey = "Software\\Apps\\";
+
+            using (RegistryKey RegKey = Registry.LocalMachine.OpenSubKey(SoftwareKey, true))
+            {
+                using (RegistryKey AppKey = RegKey.CreateSubKey(AppName))
+                {
+                    AppKey.SetValue("InstallDir", InstallPath);
+                    AppKey.SetValue("Instl", 1);
+                    AppKey.SetValue("InstlDir", InstallPath);
+                }
+            }
         }
     }
 }

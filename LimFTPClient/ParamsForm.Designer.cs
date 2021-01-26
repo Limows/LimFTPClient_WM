@@ -37,6 +37,9 @@
             this.InstallPathLabel = new System.Windows.Forms.Label();
             this.OpenDirButton2 = new System.Windows.Forms.Button();
             this.InstallPathBox = new System.Windows.Forms.TextBox();
+            this.AutoInstallBox = new System.Windows.Forms.CheckBox();
+            this.RmPackageBox = new System.Windows.Forms.CheckBox();
+            this.OverwriteDirsBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // SaveButton
@@ -94,6 +97,30 @@
             this.InstallPathBox.Size = new System.Drawing.Size(167, 21);
             this.InstallPathBox.TabIndex = 10;
             // 
+            // AutoInstallBox
+            // 
+            this.AutoInstallBox.Location = new System.Drawing.Point(5, 63);
+            this.AutoInstallBox.Name = "AutoInstallBox";
+            this.AutoInstallBox.Size = new System.Drawing.Size(230, 20);
+            this.AutoInstallBox.TabIndex = 13;
+            this.AutoInstallBox.Text = "Автоматическая установка";
+            // 
+            // RmPackageBox
+            // 
+            this.RmPackageBox.Location = new System.Drawing.Point(5, 37);
+            this.RmPackageBox.Name = "RmPackageBox";
+            this.RmPackageBox.Size = new System.Drawing.Size(230, 20);
+            this.RmPackageBox.TabIndex = 14;
+            this.RmPackageBox.Text = "Удалить после установки";
+            // 
+            // OverwriteDirsBox
+            // 
+            this.OverwriteDirsBox.Location = new System.Drawing.Point(5, 11);
+            this.OverwriteDirsBox.Name = "OverwriteDirsBox";
+            this.OverwriteDirsBox.Size = new System.Drawing.Size(230, 20);
+            this.OverwriteDirsBox.TabIndex = 15;
+            this.OverwriteDirsBox.Text = "Перезаписывать файлы";
+            // 
             // ParamsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -102,6 +129,9 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
             this.ClientSize = new System.Drawing.Size(240, 268);
             this.ControlBox = false;
+            this.Controls.Add(this.OverwriteDirsBox);
+            this.Controls.Add(this.RmPackageBox);
+            this.Controls.Add(this.AutoInstallBox);
             this.Controls.Add(this.InstallPathLabel);
             this.Controls.Add(this.OpenDirButton2);
             this.Controls.Add(this.InstallPathBox);
@@ -126,5 +156,8 @@
         private System.Windows.Forms.Label InstallPathLabel;
         private System.Windows.Forms.Button OpenDirButton2;
         private System.Windows.Forms.TextBox InstallPathBox;
+        private System.Windows.Forms.CheckBox AutoInstallBox;
+        private System.Windows.Forms.CheckBox RmPackageBox;
+        private System.Windows.Forms.CheckBox OverwriteDirsBox;
     }
 }

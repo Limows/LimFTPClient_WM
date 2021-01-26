@@ -23,6 +23,9 @@ namespace LimFTPClient
         static public bool IsThreadAlive;
         static public bool IsThreadError;
         static public Exception ThreadException;
+        static public bool IsAutoInstall;
+        static public bool IsRmPackage;
+        static public bool IsOverwrite;
         
         /*
         public enum OSVersions

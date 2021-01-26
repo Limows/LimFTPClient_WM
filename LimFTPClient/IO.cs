@@ -70,6 +70,8 @@ namespace LimFTPClient
             ZipArc.CreateEmptyDirectories = true;
 
             ZipArc.ExtractZip(CompressedFilePath, ExtractedFilePath, null);
+
+            Archive.Close();
         }
 
         static public void LoadParameters()

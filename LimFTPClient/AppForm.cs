@@ -50,19 +50,7 @@ namespace LimFTPClient
 
                             if (!String.IsNullOrEmpty(ParamsHelper.InstallPath))
                             {
-
-                                string[] Cabs = Directory.GetFiles(ParamsHelper.DownloadPath + "\\" + AppName, "*.cab");
-
-                                if (Cabs.Length == 0) MessageBox.Show("Кабов нет");
-                                {
-
-                                    foreach (string cab in Cabs)
-                                    {
-                                        Sys.AppInstall(cab, AppName);
-                                    }
-
-                                    IsInstalled = true;
-                                }
+                                IsInstalled = Sys.AppInstall(ParamsHelper.DownloadPath + "\\" + AppName, AppName, ParamsHelper.IsOverwrite);
                             }
                             else
                             {
@@ -98,10 +86,10 @@ namespace LimFTPClient
                 }
                 finally
                 {
-                    if (IsDownloaded) StatusLabel.Text = "Успешно загружено";
+                    if (IsDownloaded && IsInstalled) StatusLabel.Text = "Успешно установлено";
                     else
                     {
-                        if (IsInstalled) StatusLabel.Text = "Успешно установлено";
+                        if (IsDownloaded) StatusLabel.Text = "Успешно загружено";
                         else StatusLabel.Text = "Загрузка не удалась";
                     }
                 }

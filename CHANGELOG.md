@@ -1,5 +1,19 @@
 # Changelog
 
+## [v0.4.2] - (26.01.21)
+
+### Added
+
+ - Installing for non-cab packages
+
+### Changed
+
+ - Installed app info gathering
+
+### Fixed
+
+ - Save install folder parameter fix
+
 ## [v0.3.10] - (25.01.21)
 
 ### Added
