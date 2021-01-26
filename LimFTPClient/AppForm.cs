@@ -53,12 +53,16 @@ namespace LimFTPClient
 
                                 string[] Cabs = Directory.GetFiles(ParamsHelper.DownloadPath + "\\" + AppName, "*.cab");
 
-                                foreach (string cab in Cabs)
+                                if (Cabs.Length == 0) MessageBox.Show("Кабов нет");
                                 {
-                                    Sys.AppInstall(cab, AppName);
-                                }
 
-                                IsInstalled = true;
+                                    foreach (string cab in Cabs)
+                                    {
+                                        Sys.AppInstall(cab, AppName);
+                                    }
+
+                                    IsInstalled = true;
+                                }
                             }
                             else
                             {

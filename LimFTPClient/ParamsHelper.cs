@@ -23,7 +23,6 @@ namespace LimFTPClient
         static public bool IsThreadAlive;
         static public bool IsThreadError;
         static public Exception ThreadException;
-        static public string ArcFile; 
         
         /*
         public enum OSVersions

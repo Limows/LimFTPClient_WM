@@ -41,32 +41,35 @@ namespace LimFTPClient
             else return 0;
         }
 
-        [DllImport("zlib.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        static extern int uncompress(byte[] destBuffer, ref ulong destLen, byte[] sourceBuffer, ulong sourceLen);
-        //static extern int uncompress (byte dest, ulong destLen, byte source, ulong sourceLen);
-
-        //[DllImport("7zcelib.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        //static extern int ExtractFile(char[] ArchiveName, char[] FileName, char[] OutputDir);
-
+        /// <summary>
+        /// Extract zip archive to directory
+        /// </summary>
+        /// <param name="CompressedFilePath"></param>
+        /// <param name="ExtractedFilePath"></param>
+        /// <returns>Current storage space</returns> 
         public static void ExtractToDirectory(string CompressedFilePath, string ExtractedFilePath)
-        {
-            //ZipFile Archive = new ZipFile(CompressedFilePath);
+        {   
+            bool IsDirectory = false;
+
+            ZipFile Archive = new ZipFile(CompressedFilePath);
+
+            foreach (ZipEntry entry in Archive)
+            {
+                if (entry.IsDirectory)
+                {
+                    IsDirectory = true;
+                }
+            }
+
+            if (IsDirectory)
+            {
+                ExtractedFilePath = ExtractedFilePath.Remove(ExtractedFilePath.LastIndexOf("\\"), ExtractedFilePath.Length - ExtractedFilePath.LastIndexOf("\\"));
+            }
 
             FastZip ZipArc = new FastZip();
             ZipArc.CreateEmptyDirectories = true;
+
             ZipArc.ExtractZip(CompressedFilePath, ExtractedFilePath, null);
-        }
-
-        private static void CopyTo(Stream source, Stream destination, int bufferSize)
-        {
-            byte[] bytes = new byte[4096];
-
-            int cnt;
-
-            while ((cnt = source.Read(bytes, 0, bytes.Length)) != 0)
-            {
-                destination.Write(bytes, 0, cnt);
-            }
         }
 
         static public void LoadParameters()
@@ -81,6 +84,7 @@ namespace LimFTPClient
             BinaryReader Reader = new BinaryReader(ConfigFile.OpenRead());
 
             ParamsHelper.DownloadPath = Reader.ReadString();
+            ParamsHelper.InstallPath = Reader.ReadString();
 
             Reader.Close();
         }
@@ -108,7 +112,7 @@ namespace LimFTPClient
 
             FileInfo ConfigFile = new FileInfo(ParamsHelper.ConfigPath);
 
-            if (!String.IsNullOrEmpty(ParamsHelper.DownloadPath))
+            if (!String.IsNullOrEmpty(ParamsHelper.DownloadPath) && !String.IsNullOrEmpty(ParamsHelper.InstallPath))
             {
                 BinaryWriter Writer;
 
@@ -119,6 +123,7 @@ namespace LimFTPClient
                 else Writer = new BinaryWriter(ConfigFile.Open(FileMode.Open));
 
                 Writer.Write(ParamsHelper.DownloadPath);
+                Writer.Write(ParamsHelper.InstallPath);
 
                 Writer.Close();
             }
