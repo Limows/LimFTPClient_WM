@@ -22,7 +22,9 @@ namespace LimFTPClient
         static public EventWaitHandle ThreadEvent;
         static public bool IsThreadAlive;
         static public bool IsThreadError;
+        static public bool IsThreadWaiting;
         static public Exception ThreadException;
+        static public string ThreadMessage;
         static public bool IsAutoInstall;
         static public bool IsRmPackage;
         static public bool IsOverwrite;

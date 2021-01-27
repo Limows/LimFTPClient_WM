@@ -36,6 +36,7 @@
             this.DownloadButton = new System.Windows.Forms.Button();
             this.AboutAppBox = new System.Windows.Forms.TextBox();
             this.StatusLabel = new System.Windows.Forms.Label();
+            this.DownloadingTimer = new System.Windows.Forms.Timer();
             this.SuspendLayout();
             // 
             // LogoBox
@@ -44,6 +45,7 @@
             this.LogoBox.Location = new System.Drawing.Point(12, 14);
             this.LogoBox.Name = "LogoBox";
             this.LogoBox.Size = new System.Drawing.Size(50, 50);
+            this.LogoBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             // 
             // NameLabel
             // 
@@ -92,6 +94,10 @@
             this.StatusLabel.Size = new System.Drawing.Size(142, 20);
             this.StatusLabel.Text = "Статус";
             // 
+            // DownloadingTimer
+            // 
+            this.DownloadingTimer.Tick += new System.EventHandler(this.DownloadingTimer_Tick);
+            // 
             // AppForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -123,5 +129,6 @@
         private System.Windows.Forms.Button DownloadButton;
         private System.Windows.Forms.TextBox AboutAppBox;
         private System.Windows.Forms.Label StatusLabel;
+        private System.Windows.Forms.Timer DownloadingTimer;
     }
 }

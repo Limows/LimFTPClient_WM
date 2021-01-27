@@ -33,7 +33,6 @@
             this.labelCompanyName = new System.Windows.Forms.Label();
             this.textBoxInstallPath = new System.Windows.Forms.TextBox();
             this.OKButton = new System.Windows.Forms.Button();
-            this.MainMenu = new System.Windows.Forms.MainMenu();
             this.labelInstallDate = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -93,14 +92,13 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
-            this.ClientSize = new System.Drawing.Size(240, 268);
+            this.ClientSize = new System.Drawing.Size(240, 294);
             this.Controls.Add(this.labelInstallDate);
             this.Controls.Add(this.OKButton);
             this.Controls.Add(this.textBoxInstallPath);
             this.Controls.Add(this.labelCompanyName);
             this.Controls.Add(this.labelVersion);
             this.Controls.Add(this.labelProductName);
-            this.Menu = this.MainMenu;
             this.Name = "AboutAppBox";
             this.Text = "О программе";
             this.ResumeLayout(false);
@@ -114,7 +112,6 @@
         private System.Windows.Forms.Label labelCompanyName;
         private System.Windows.Forms.TextBox textBoxInstallPath;
         private System.Windows.Forms.Button OKButton;
-        private System.Windows.Forms.MainMenu MainMenu;
         private System.Windows.Forms.Label labelInstallDate;
     }
 }

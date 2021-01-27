@@ -122,8 +122,14 @@ namespace LimFTPClient
             ParamsHelper.AppURI = new Uri(ParamsHelper.CurrentURI.ToString() + "/" + AppName);
             ParamsHelper.CurrentURI = ParamsHelper.AppURI;
             //MessageBox.Show(Parameters.CurrentURI.ToString());
+
+            Cursor.Current = Cursors.WaitCursor;
+
             AppForm NewAppForm = new AppForm(AppName);
             NewAppForm.ShowDialog();
+
+            Cursor.Current = Cursors.Default;
+
         }
 
         private void DeleteButton_Click(object sender, EventArgs e)

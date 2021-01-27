@@ -44,6 +44,7 @@ You need the following stuff to install this program:
  - HTC Cruise
  - HP iPaq H2200
  - Asus MyPal A639
+ - Dell Axim 51v (Minor UI problems in VGA screen)
 
 ## Contributing
 

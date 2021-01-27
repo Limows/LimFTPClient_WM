@@ -50,11 +50,11 @@ namespace LimFTPClient
             return InstallDir;
         }
 
-        static public bool AppInstall(string AppPath, string AppName, bool Overwrite)
+        static public bool AppInstall(string AppPath, string InstallPath, string AppName, bool Overwrite)
         {
             AppName = AppName.Replace('_', ' ');
 
-            string InstallPath = ParamsHelper.InstallPath + "\\" + AppName;
+            InstallPath = InstallPath + "\\" + AppName;
             bool IsInstalled = false;
 
             string[] Cabs = Directory.GetFiles(AppPath, "*.cab");

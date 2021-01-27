@@ -1,5 +1,19 @@
 # Changelog
 
+## [v0.5.0] - (27.01.21)
+
+### Added
+
+ - Full async in operations
+
+### Changed
+
+ - More messages during installation
+
+### Fixed
+
+ - Some code fixes
+
 ## [v0.4.3] - (27.01.21)
 
 ### Added
@@ -81,6 +95,7 @@
 
  - Ported from Windows version of LimFTPClient
 
+[v0.5.0]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.5.0 
 [v0.4.3]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.4.3 
 [v0.4.2]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.4.2
 [v0.3.10]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.3.10
