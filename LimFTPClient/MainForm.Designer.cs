@@ -51,6 +51,7 @@
             this.FreeMemLabel = new System.Windows.Forms.Label();
             this.InstalledBox = new System.Windows.Forms.ListBox();
             this.ListingThreadTimer = new System.Windows.Forms.Timer();
+            this.UpdateSysMenuItem = new System.Windows.Forms.MenuItem();
             this.TabControl.SuspendLayout();
             this.NewPage.SuspendLayout();
             this.InstalledPage.SuspendLayout();
@@ -87,6 +88,7 @@
             // 
             this.RefMenu.MenuItems.Add(this.HelpMenuItem);
             this.RefMenu.MenuItems.Add(this.AboutMenuItem);
+            this.RefMenu.MenuItems.Add(this.UpdateSysMenuItem);
             this.RefMenu.Text = "Справка";
             // 
             // HelpMenuItem
@@ -212,6 +214,11 @@
             // 
             this.ListingThreadTimer.Tick += new System.EventHandler(this.ListingThreadTimer_Tick);
             // 
+            // UpdateSysMenuItem
+            // 
+            this.UpdateSysMenuItem.Text = "Обновления";
+            this.UpdateSysMenuItem.Click += new System.EventHandler(this.UpdateSysMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -257,6 +264,7 @@
         private System.Windows.Forms.Label InstalledLabel;
         private System.Windows.Forms.MenuItem RegisterMenuItem;
         private System.Windows.Forms.Timer ListingThreadTimer;
+        private System.Windows.Forms.MenuItem UpdateSysMenuItem;
     }
 }
 

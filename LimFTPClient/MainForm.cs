@@ -218,5 +218,31 @@ namespace LimFTPClient
 
         }
 
+        private void UpdateSysMenuItem_Click(object sender, EventArgs e)
+        {
+            string Version = FTPHelper.CheckUpdates();
+            string CurrentVersion = Sys.GetAssemblyVersion();
+
+            MessageBox.Show("Последняя версия: " + Version, "Сообщение");
+
+            /*
+
+            if (CurrentVersion != Version)
+            {
+                DialogResult Result = MessageBox.Show("Версия: " + Version, "Обновить?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+
+                if (Result == DialogResult.Yes)
+                {
+                    Version = Version.Remove(Version.LastIndexOf('.'), 2);
+                    string Response = FTPHelper.GetUpdates(Version);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Последняя версия", "Сообщение");   
+            }
+             */
+        }
+
     }
 }

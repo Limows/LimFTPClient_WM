@@ -6,6 +6,7 @@ using Microsoft.Win32;
 using System.IO;
 using System.Threading;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace LimFTPClient
 {
@@ -176,6 +177,11 @@ namespace LimFTPClient
                     AppKey.SetValue("InstlDir", InstallPath);
                 }
             }
+        }
+
+        public static string GetAssemblyVersion()
+        {
+            return Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
     }
 }

@@ -147,6 +147,39 @@ namespace LimFTPClient
 
             ParamsHelper.IsThreadAlive = false;
 
-        }       
+        }
+
+        static public string CheckUpdates()
+        {
+            Uri URI = new Uri("http://limowski.xyz:80/LimFTPClientVersion.txt");
+            HttpWebRequest Request = (HttpWebRequest)WebRequest.Create(URI);
+            HttpWebResponse Response = (HttpWebResponse)Request.GetResponse();
+            string ResponseMessage;
+
+            using (StreamReader stream = new StreamReader(Response.GetResponseStream(), Encoding.UTF8))
+            {
+                ResponseMessage = stream.ReadToEnd();
+                ResponseMessage = ResponseMessage.Replace("\n", "");
+            }
+
+            return ResponseMessage;
+        }
+
+        static public string GetUpdates(string Version)
+        {   
+            Uri URI = new Uri("https://github.com/Limows/LimFTPClient_WM/releases/download/v" + Version + "/LimFTPClient.cab");
+            HttpWebRequest Request = (HttpWebRequest)WebRequest.Create(URI);
+            HttpWebResponse Response = (HttpWebResponse)Request.GetResponse();
+            string ResponseMessage;
+
+            using (StreamReader stream = new StreamReader(Response.GetResponseStream(), Encoding.UTF8))
+            {
+                ResponseMessage = stream.ReadToEnd();
+                ResponseMessage = ResponseMessage.Replace("\n", "");
+            }
+
+            return ResponseMessage;
+        }
+
     }
 }
