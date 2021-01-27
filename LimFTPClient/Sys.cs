@@ -52,6 +52,8 @@ namespace LimFTPClient
 
         static public bool AppInstall(string AppPath, string AppName, bool Overwrite)
         {
+            AppName = AppName.Replace('_', ' ');
+
             string InstallPath = ParamsHelper.InstallPath + "\\" + AppName;
             bool IsInstalled = false;
 
@@ -70,7 +72,7 @@ namespace LimFTPClient
                 }
             }
 
-            return true;
+            return IsInstalled;
         }
 
         static public bool CabInstall(string CabPath, string InstallPath)

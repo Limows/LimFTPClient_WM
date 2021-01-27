@@ -46,11 +46,11 @@ namespace LimFTPClient
                     {
                         try
                         {
-                            IO.ExtractToDirectory(ParamsHelper.DownloadPath + "\\" + FileName, ParamsHelper.DownloadPath + "\\" + AppName);
+                            string ExtractedPath = IO.ExtractToDirectory(ParamsHelper.DownloadPath + "\\" + FileName, ParamsHelper.DownloadPath + "\\" + AppName);
 
                             if (!String.IsNullOrEmpty(ParamsHelper.InstallPath))
                             {
-                                IsInstalled = Sys.AppInstall(ParamsHelper.DownloadPath + "\\" + AppName, AppName, ParamsHelper.IsOverwrite);
+                                IsInstalled = Sys.AppInstall(ExtractedPath, AppName, ParamsHelper.IsOverwrite);
                             }
                             else
                             {

@@ -39,6 +39,12 @@ You need the following stuff to install this program:
  - OpenNetCF.Net.FTP library
  - ICSharpCode.SharpZipLib library
 
+## Tested devices
+
+ - HTC Cruise
+ - HP iPaq H2200
+ - Asus MyPal A639
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/Limows/LimowsFTPClient_WM.

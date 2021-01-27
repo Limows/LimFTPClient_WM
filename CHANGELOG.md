@@ -1,5 +1,16 @@
 # Changelog
 
+## [v0.4.3] - (27.01.21)
+
+### Added
+
+### Changed
+
+### Fixed
+
+ - IOException on startup
+ - Critical installation errors
+
 ## [v0.4.2] - (26.01.21)
 
 ### Added

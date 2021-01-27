@@ -47,7 +47,7 @@ namespace LimFTPClient
         /// <param name="CompressedFilePath"></param>
         /// <param name="ExtractedFilePath"></param>
         /// <returns>Current storage space</returns> 
-        public static void ExtractToDirectory(string CompressedFilePath, string ExtractedFilePath)
+        public static string ExtractToDirectory(string CompressedFilePath, string ExtractedFilePath)
         {   
             bool IsDirectory = false;
 
@@ -58,12 +58,8 @@ namespace LimFTPClient
                 if (entry.IsDirectory)
                 {
                     IsDirectory = true;
+                    break;
                 }
-            }
-
-            if (IsDirectory)
-            {
-                ExtractedFilePath = ExtractedFilePath.Remove(ExtractedFilePath.LastIndexOf("\\"), ExtractedFilePath.Length - ExtractedFilePath.LastIndexOf("\\"));
             }
 
             FastZip ZipArc = new FastZip();
@@ -72,6 +68,14 @@ namespace LimFTPClient
             ZipArc.ExtractZip(CompressedFilePath, ExtractedFilePath, null);
 
             Archive.Close();
+
+            if (IsDirectory)
+            {   
+                string [] Dirs = Directory.GetDirectories(ExtractedFilePath);
+                return Dirs[0];
+            }
+
+            return ExtractedFilePath;
         }
 
         static public void LoadParameters()
@@ -83,12 +87,14 @@ namespace LimFTPClient
 
             FileInfo ConfigFile = new FileInfo(ParamsHelper.ConfigPath);
 
-            BinaryReader Reader = new BinaryReader(ConfigFile.OpenRead());
-
-            ParamsHelper.DownloadPath = Reader.ReadString();
-            ParamsHelper.InstallPath = Reader.ReadString();
-
-            Reader.Close();
+            using (BinaryReader Reader = new BinaryReader(ConfigFile.OpenRead()))
+            {
+                ParamsHelper.IsOverwrite = Reader.ReadBoolean();
+                ParamsHelper.IsRmPackage = Reader.ReadBoolean();
+                ParamsHelper.IsAutoInstall = Reader.ReadBoolean();
+                ParamsHelper.DownloadPath = Reader.ReadString();
+                ParamsHelper.InstallPath = Reader.ReadString();
+            }
         }
 
         static private string GetConfigPath()
@@ -116,18 +122,16 @@ namespace LimFTPClient
 
             if (!String.IsNullOrEmpty(ParamsHelper.DownloadPath) && !String.IsNullOrEmpty(ParamsHelper.InstallPath))
             {
-                BinaryWriter Writer;
+                RemoveParameters();
 
-                if (!File.Exists(ParamsHelper.ConfigPath))
+                using (BinaryWriter Writer = new BinaryWriter(ConfigFile.Open(FileMode.Create)))
                 {
-                    Writer = new BinaryWriter(ConfigFile.Open(FileMode.Create));
+                    Writer.Write(ParamsHelper.IsOverwrite);
+                    Writer.Write(ParamsHelper.IsRmPackage);
+                    Writer.Write(ParamsHelper.IsAutoInstall);
+                    Writer.Write(ParamsHelper.DownloadPath);
+                    Writer.Write(ParamsHelper.InstallPath);
                 }
-                else Writer = new BinaryWriter(ConfigFile.Open(FileMode.Open));
-
-                Writer.Write(ParamsHelper.DownloadPath);
-                Writer.Write(ParamsHelper.InstallPath);
-
-                Writer.Close();
             }
         }
 
