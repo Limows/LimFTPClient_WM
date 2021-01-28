@@ -33,6 +33,7 @@ You need the following stuff to install this program:
  - Windows Mobile 5
  - Windows Mobile 6
  - Windows Mobile 6.1
+ - Windows Mobile 6.5
  
 ## Used projects
 
@@ -44,7 +45,7 @@ You need the following stuff to install this program:
  - HTC Cruise
  - HP iPaq H2200
  - Asus MyPal A639
- - Dell Axim 51v (Minor UI problems in VGA screen)
+ - Dell Axim x51v (Minor UI problems on VGA screen)
 
 ## Contributing
 
