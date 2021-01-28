@@ -1,4 +1,4 @@
-﻿namespace LimFTPClient
+﻿namespace WinMobileNetCFExt.IO
 {
     partial class FolderBrowserDialog
     {

@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Net;
 using System.Threading;
+using WinMobileNetCFExt.About;
 
 namespace LimFTPClient
 {

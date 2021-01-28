@@ -4,21 +4,20 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2A4A2E09-829F-475C-9146-0AF2693BD8F3}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <ProjectGuid>{80729D09-C701-483C-99AA-0128C29E0AB3}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LimFTPClient</RootNamespace>
-    <AssemblyName>LimFTPClient</AssemblyName>
+    <RootNamespace>WinMobileNetCFExt</RootNamespace>
+    <AssemblyName>WinMobileNetCFExt</AssemblyName>
     <ProjectTypeGuids>{4D628B5B-2FBC-4AA6-8C16-197242AEB884};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PlatformFamilyName>PocketPC</PlatformFamilyName>
     <PlatformID>3C41C503-53EF-4c2a-8DD4-A8217CAD115E</PlatformID>
     <OSVersion>4.20</OSVersion>
-    <DeployDirSuffix>LimFTPClient</DeployDirSuffix>
+    <DeployDirSuffix>WinMobileIO</DeployDirSuffix>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <NativePlatformName>Pocket PC 2003</NativePlatformName>
     <FormFactorID>
     </FormFactorID>
-    <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,85 +45,40 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.5.452, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="WinMobileNetCFExt, Version=1.0.7698.40100, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\WinMobileNetCFExt\bin\Release\WinMobileNetCFExt.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppForm.cs">
+    <Compile Include="AboutBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AppForm.Designer.cs">
-      <DependentUpon>AppForm.cs</DependentUpon>
+    <Compile Include="AboutBox.designer.cs">
+      <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="AboutAppBox.cs">
+    <Compile Include="FolderBrowserDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AboutAppBox.Designer.cs">
-      <DependentUpon>AboutAppBox.cs</DependentUpon>
+    <Compile Include="FolderBrowserDialog.designer.cs">
+      <DependentUpon>FolderBrowserDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="FTP.cs" />
-    <Compile Include="FTPException.cs" />
-    <Compile Include="ParamsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ParamsForm.Designer.cs">
-      <DependentUpon>ParamsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FTPHelper.cs" />
-    <Compile Include="IO.cs" />
-    <Compile Include="MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ParamsHelper.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="AppForm.resx">
-      <DependentUpon>AppForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AboutAppBox.resx">
-      <DependentUpon>AboutAppBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ParamsForm.resx">
-      <DependentUpon>ParamsForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Sys.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="logo.ico" />
+    <EmbeddedResource Include="AboutBox.resx">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FolderBrowserDialog.resx">
+      <DependentUpon>FolderBrowserDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>

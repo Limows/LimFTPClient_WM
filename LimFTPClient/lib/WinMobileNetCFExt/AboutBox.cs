@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.IO;
 
-namespace LimFTPClient
+namespace WinMobileNetCFExt.About
 {
     public partial class AboutBox : Form
     {

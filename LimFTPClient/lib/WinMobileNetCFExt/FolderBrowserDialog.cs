@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
-namespace LimFTPClient
+namespace WinMobileNetCFExt.IO
 {
     public partial class FolderBrowserDialog : Form
     {
