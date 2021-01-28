@@ -68,7 +68,7 @@
             this.textBoxInstallPath.ReadOnly = true;
             this.textBoxInstallPath.Size = new System.Drawing.Size(224, 142);
             this.textBoxInstallPath.TabIndex = 7;
-            this.textBoxInstallPath.Text = "Путь установки: ";
+            this.textBoxInstallPath.Text = "Путь установки ";
             // 
             // OKButton
             // 

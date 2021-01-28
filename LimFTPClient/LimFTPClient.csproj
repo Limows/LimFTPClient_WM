@@ -85,7 +85,7 @@
     <Compile Include="ParamsForm.Designer.cs">
       <DependentUpon>ParamsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="FTPHelper.cs" />
+    <Compile Include="NetHelper.cs" />
     <Compile Include="IO.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

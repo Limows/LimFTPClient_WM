@@ -12,7 +12,7 @@ using System.Net.Sockets;
 
 namespace LimFTPClient
 {
-    class FTPHelper
+    class NetHelper
     {
         /// <summary>
         /// Retrieves a file from the FTP server

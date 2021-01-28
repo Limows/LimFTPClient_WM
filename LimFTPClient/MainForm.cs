@@ -70,7 +70,7 @@ namespace LimFTPClient
         {
             ParamsHelper.CurrentURI = ParamsHelper.SystemURI;
             ParamsHelper.ThreadEvent = new AutoResetEvent(false);
-            ThreadStart ListingStarter = delegate { FTPHelper.ReadListing(ParamsHelper.CurrentURI); };
+            ThreadStart ListingStarter = delegate { NetHelper.ReadListing(ParamsHelper.CurrentURI); };
             Thread ListingThread = new Thread(ListingStarter);
             ParamsHelper.IsThreadAlive = true;
             ParamsHelper.IsThreadError = false;
@@ -226,7 +226,7 @@ namespace LimFTPClient
         private void UpdateSysMenuItem_Click(object sender, EventArgs e)
         {
             AboutBox NewAboutBox = new AboutBox();
-            string Version = FTPHelper.CheckUpdates();
+            string Version = NetHelper.CheckUpdates();
             string CurrentVersion = NewAboutBox.AssemblyVersion;
 
             MessageBox.Show("Последняя версия: " + Version, "Сообщение");

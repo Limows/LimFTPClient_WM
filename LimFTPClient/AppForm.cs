@@ -74,7 +74,7 @@ namespace LimFTPClient
             try
             {
                 //AboutAppBox.Text = FTPHelper.LoadInfo(ParamsHelper.CurrentURI);
-                SizeLabel.Text = FTPHelper.LoadInfo(ParamsHelper.CurrentURI, AppName);
+                SizeLabel.Text = NetHelper.LoadInfo(ParamsHelper.CurrentURI, AppName);
             }
             catch
             {
@@ -102,7 +102,7 @@ namespace LimFTPClient
 
             try
             {
-                FTPHelper.DownloadFile(CurrentURI, DownloadPath, FileName);
+                NetHelper.DownloadFile(CurrentURI, DownloadPath, FileName);
             }
             catch(Exception NewEx)
             {
