@@ -1,5 +1,6 @@
-# LimFTPClient
-Small client app for my FTP server (Windows Mobile version) written in C# with NetCF 3.5
+# Limowski App Manager
+
+Small Application Manager for legacy devices (Windows Mobile version) written in C# with NetCF 3.5
 
 ## Assembly
 
