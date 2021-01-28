@@ -134,7 +134,7 @@ namespace LimFTPClient
             }
             else 
             {
-                CreateShortcut(ShortcutName, Execs[0]);
+                CreateShortcut(ShortcutName, Execs[0], Overwrite);
             }
 
             AddToRegistry(AppName, InstallPath);
@@ -143,9 +143,10 @@ namespace LimFTPClient
 
         }
 
-        static public void CreateShortcut(string ShortcutName, string TargetName)
+        static public void CreateShortcut(string ShortcutName, string TargetName, bool Overwrite)
         {   
             FileInfo Shortcut = new FileInfo(ShortcutName);
+
             TextWriter Writer;
 
             if (!File.Exists(ShortcutName))
@@ -154,8 +155,15 @@ namespace LimFTPClient
             }
             else
             {
-                File.Delete(ShortcutName);
-                Writer = new StreamWriter(Shortcut.Open(FileMode.Create)); 
+                if (Overwrite)
+                {
+                    File.Delete(ShortcutName);
+                    Writer = new StreamWriter(Shortcut.Open(FileMode.Create));
+                }
+                else
+                {
+                    return;
+                }
             }
 
             Writer.Write(TargetName.Length + "#");
@@ -177,11 +185,6 @@ namespace LimFTPClient
                     AppKey.SetValue("InstlDir", InstallPath);
                 }
             }
-        }
-
-        public static string GetAssemblyVersion()
-        {
-            return Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
     }
 }

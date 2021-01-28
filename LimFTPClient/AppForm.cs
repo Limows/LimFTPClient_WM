@@ -232,9 +232,16 @@ namespace LimFTPClient
                 if (ParamsHelper.IsThreadWaiting)
                 {
                     DownloadingTimer.Enabled = false;
-                    DialogResult Result = MessageBox.Show("Установить?", "Сообщение", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                    if (!ParamsHelper.IsAutoInstall)
+                    {
+                        DialogResult Result = MessageBox.Show("Установить?", "Сообщение", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
 
-                    if (Result == DialogResult.Yes)
+                        if (Result == DialogResult.Yes)
+                        {
+                            ParamsHelper.ThreadMessage = "Yes";
+                        }
+                    }
+                    else
                     {
                         ParamsHelper.ThreadMessage = "Yes";
                     }

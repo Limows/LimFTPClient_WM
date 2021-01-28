@@ -19,12 +19,25 @@ namespace LimFTPClient
         private void SaveButton_Click(object sender, EventArgs e)
         {
             ParamsHelper.DownloadPath = CheckDirectory(DownloadPathBox.Text);
-            ParamsHelper.InstallPath = CheckDirectory(InstallPathBox.Text);
             ParamsHelper.IsAutoInstall = AutoInstallBox.Checked;
             ParamsHelper.IsRmPackage = RmPackageBox.Checked;
             ParamsHelper.IsOverwrite = OverwriteDirsBox.Checked;
 
-            if (String.IsNullOrEmpty(ParamsHelper.DownloadPath) || String.IsNullOrEmpty(ParamsHelper.InstallPath))
+            if (DeviceInstallButton.Checked)
+            {
+                ParamsHelper.InstallPath = "\\Program Files";
+            }
+            else
+            {
+                ParamsHelper.InstallPath = "\\" + IO.GetRemovableStorageDirectory() + "\\Program Files";
+            }
+
+            if (!Directory.Exists(ParamsHelper.InstallPath))
+            {
+                Directory.CreateDirectory(ParamsHelper.InstallPath);
+            }
+
+            if (String.IsNullOrEmpty(ParamsHelper.DownloadPath))
             {
                 MessageBox.Show("Путь не может быть пустым", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
             }
@@ -77,19 +90,21 @@ namespace LimFTPClient
         private void ParamsBox_Load(object sender, EventArgs e)
         {
             DownloadPathBox.Text = ParamsHelper.DownloadPath;
-            InstallPathBox.Text = ParamsHelper.InstallPath;
-            AutoInstallBox.Checked = false;
-            AutoInstallBox.Enabled = false;
+            OverwriteDirsBox.Checked = ParamsHelper.IsOverwrite;
+            AutoInstallBox.Checked = ParamsHelper.IsAutoInstall;
+
+            if (ParamsHelper.InstallPath == "\\Program Files")
+            {
+                DeviceInstallButton.Checked = true;
+            }
+            else
+            {
+                CardInstallButton.Checked = true;
+            }
+
             RmPackageBox.Checked = false;
             RmPackageBox.Enabled = false;
-            OverwriteDirsBox.Checked = true;
-            OverwriteDirsBox.Enabled = false;
 
-        }
-
-        private void OpenDirButton2_Click(object sender, EventArgs e)
-        {
-            InstallPathBox.Text = OpenDirDialog();
         }
     }
 }

@@ -45,7 +45,7 @@
             this.LogoBox.Location = new System.Drawing.Point(12, 14);
             this.LogoBox.Name = "LogoBox";
             this.LogoBox.Size = new System.Drawing.Size(50, 50);
-            this.LogoBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.LogoBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             // 
             // NameLabel
             // 

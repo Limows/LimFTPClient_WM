@@ -35,11 +35,11 @@
             this.OpenDirButton1 = new System.Windows.Forms.Button();
             this.DownloadPathBox = new System.Windows.Forms.TextBox();
             this.InstallPathLabel = new System.Windows.Forms.Label();
-            this.OpenDirButton2 = new System.Windows.Forms.Button();
-            this.InstallPathBox = new System.Windows.Forms.TextBox();
             this.AutoInstallBox = new System.Windows.Forms.CheckBox();
             this.RmPackageBox = new System.Windows.Forms.CheckBox();
             this.OverwriteDirsBox = new System.Windows.Forms.CheckBox();
+            this.DeviceInstallButton = new System.Windows.Forms.RadioButton();
+            this.CardInstallButton = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
             // 
             // SaveButton
@@ -79,23 +79,7 @@
             this.InstallPathLabel.Location = new System.Drawing.Point(5, 98);
             this.InstallPathLabel.Name = "InstallPathLabel";
             this.InstallPathLabel.Size = new System.Drawing.Size(100, 20);
-            this.InstallPathLabel.Text = "Путь установки";
-            // 
-            // OpenDirButton2
-            // 
-            this.OpenDirButton2.Location = new System.Drawing.Point(178, 120);
-            this.OpenDirButton2.Name = "OpenDirButton2";
-            this.OpenDirButton2.Size = new System.Drawing.Size(57, 21);
-            this.OpenDirButton2.TabIndex = 11;
-            this.OpenDirButton2.Text = "Обзор";
-            this.OpenDirButton2.Click += new System.EventHandler(this.OpenDirButton2_Click);
-            // 
-            // InstallPathBox
-            // 
-            this.InstallPathBox.Location = new System.Drawing.Point(5, 120);
-            this.InstallPathBox.Name = "InstallPathBox";
-            this.InstallPathBox.Size = new System.Drawing.Size(167, 21);
-            this.InstallPathBox.TabIndex = 10;
+            this.InstallPathLabel.Text = "Место установки";
             // 
             // AutoInstallBox
             // 
@@ -121,6 +105,22 @@
             this.OverwriteDirsBox.TabIndex = 15;
             this.OverwriteDirsBox.Text = "Перезаписывать файлы";
             // 
+            // DeviceInstallButton
+            // 
+            this.DeviceInstallButton.Location = new System.Drawing.Point(5, 121);
+            this.DeviceInstallButton.Name = "DeviceInstallButton";
+            this.DeviceInstallButton.Size = new System.Drawing.Size(100, 20);
+            this.DeviceInstallButton.TabIndex = 16;
+            this.DeviceInstallButton.Text = "Устройство";
+            // 
+            // CardInstallButton
+            // 
+            this.CardInstallButton.Location = new System.Drawing.Point(111, 121);
+            this.CardInstallButton.Name = "CardInstallButton";
+            this.CardInstallButton.Size = new System.Drawing.Size(100, 20);
+            this.CardInstallButton.TabIndex = 17;
+            this.CardInstallButton.Text = "SD Card";
+            // 
             // ParamsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -129,12 +129,12 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
             this.ClientSize = new System.Drawing.Size(240, 268);
             this.ControlBox = false;
+            this.Controls.Add(this.CardInstallButton);
+            this.Controls.Add(this.DeviceInstallButton);
             this.Controls.Add(this.OverwriteDirsBox);
             this.Controls.Add(this.RmPackageBox);
             this.Controls.Add(this.AutoInstallBox);
             this.Controls.Add(this.InstallPathLabel);
-            this.Controls.Add(this.OpenDirButton2);
-            this.Controls.Add(this.InstallPathBox);
             this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.DownloadPathLabel);
             this.Controls.Add(this.OpenDirButton1);
@@ -154,10 +154,10 @@
         private System.Windows.Forms.Button OpenDirButton1;
         private System.Windows.Forms.TextBox DownloadPathBox;
         private System.Windows.Forms.Label InstallPathLabel;
-        private System.Windows.Forms.Button OpenDirButton2;
-        private System.Windows.Forms.TextBox InstallPathBox;
         private System.Windows.Forms.CheckBox AutoInstallBox;
         private System.Windows.Forms.CheckBox RmPackageBox;
         private System.Windows.Forms.CheckBox OverwriteDirsBox;
+        private System.Windows.Forms.RadioButton DeviceInstallButton;
+        private System.Windows.Forms.RadioButton CardInstallButton;
     }
 }

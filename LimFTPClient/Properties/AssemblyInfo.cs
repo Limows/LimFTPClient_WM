@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("LimFTPClient")]
-[assembly: AssemblyDescription("Small client for Limows' FTP server")]
+[assembly: AssemblyTitle("App Manager")]
+[assembly: AssemblyDescription("Small Application Manager for WinMobile")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Limows")]
-[assembly: AssemblyProduct("LimFTPClient")]
+[assembly: AssemblyCompany("LimSoft")]
+[assembly: AssemblyProduct("Limowski App Manager")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyTrademark("LimSoft")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible

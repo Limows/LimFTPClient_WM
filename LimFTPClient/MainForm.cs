@@ -30,6 +30,10 @@ namespace LimFTPClient
             DeleteButton.Enabled = false;
             ListingThreadTimer.Enabled = false;
             ListingThreadTimer.Interval = 10;
+
+            AboutBox NewAboutBox = new AboutBox();
+
+            this.Text = NewAboutBox.AssemblyTitle;
         }
 
         private void HelpMenuItem_Click(object sender, EventArgs e)
@@ -220,8 +224,9 @@ namespace LimFTPClient
 
         private void UpdateSysMenuItem_Click(object sender, EventArgs e)
         {
+            AboutBox NewAboutBox = new AboutBox();
             string Version = FTPHelper.CheckUpdates();
-            string CurrentVersion = Sys.GetAssemblyVersion();
+            string CurrentVersion = NewAboutBox.AssemblyVersion;
 
             MessageBox.Show("Последняя версия: " + Version, "Сообщение");
 
