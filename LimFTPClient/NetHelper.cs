@@ -25,18 +25,8 @@ namespace LimFTPClient
             FTP Ftp = new FTP(URI.Host, URI.Port);
 
             Ftp.BeginConnect(URI.UserInfo, "");
-
-            try
-            {
-                Ftp.ChangeDirectory(URI.AbsolutePath);
-
-                Ftp.GetFile(FileName, DownloadDir + "\\" + FileName, true);
-            }
-            catch
-            {
-                Ftp.Disconnect();
-                throw;
-            }
+            Ftp.ChangeDirectory(URI.AbsolutePath);
+            Ftp.GetFile(FileName, DownloadDir + "\\" + FileName, true);
 
             Ftp.Disconnect();
         }
@@ -75,18 +65,9 @@ namespace LimFTPClient
 
             Ftp.BeginConnect(URI.UserInfo, "");
 
-            try
-            {
-                Ftp.ChangeDirectory(URI.AbsolutePath);
-
-                FileSize = Ftp.GetFileSize(FileName);
-                FileSize = ParamsHelper.BytesToMegs((ulong)Convert.ToInt64(FileSize)).ToString("0.##") + " МБ";
-            }
-            catch
-            {
-                Ftp.Disconnect();
-                throw;
-            }
+            Ftp.ChangeDirectory(URI.AbsolutePath);
+            FileSize = Ftp.GetFileSize(FileName);
+            FileSize = ParamsHelper.BytesToMegs((ulong)Convert.ToInt64(FileSize)).ToString("0.##") + " МБ";
 
             Ftp.Disconnect();
 
@@ -114,7 +95,6 @@ namespace LimFTPClient
             catch(Exception NewEx)
             {
                 Listing = "";
-                Ftp.Disconnect();
                 ParamsHelper.IsThreadAlive = false;
                 ParamsHelper.IsThreadError = true;
                 ParamsHelper.ThreadException = NewEx;
@@ -133,11 +113,10 @@ namespace LimFTPClient
 
             if (ParamsHelper.AppsList.Count == 0)
             {
-                ParamsHelper.CurrentURI = ParamsHelper.ServerURI;
                 Ftp.Disconnect();
                 ParamsHelper.IsThreadAlive = false;
                 ParamsHelper.IsThreadError = true;
-                ParamsHelper.ThreadException = new Exception("Repo is empty");
+                ParamsHelper.ThreadException = new OpenNETCF.Net.Ftp.FTPException("Repository is empty");
                 return;
             }
 

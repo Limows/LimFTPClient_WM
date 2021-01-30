@@ -86,7 +86,7 @@
       <DependentUpon>FolderBrowserDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="FTP.cs" />
-    <Compile Include="FTPException.cs" />
+    <Compile Include="Exceptions.cs" />
     <Compile Include="ParamsForm.cs">
       <SubType>Form</SubType>
     </Compile>

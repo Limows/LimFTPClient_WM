@@ -184,7 +184,7 @@ namespace LimFTPClient
                     {
                         throw ParamsHelper.ThreadException;
                     }
-                    catch
+                    catch(Exception NewEx)
                     {
                         ListingThreadTimer.Enabled = false;
                         Cursor.Current = Cursors.Default;

@@ -189,7 +189,7 @@ namespace OpenNETCF.Net.Ftp
             FileActionPendingInfo = 350
         }
 
-		private static int BUFFER_SIZE = 512;
+		private static int BUFFER_SIZE = 2048;
         private static int DEFAULT_PORT = 21;
 
 		private bool				m_connected		= false;
@@ -205,6 +205,7 @@ namespace OpenNETCF.Net.Ftp
 		private FTPServerType		m_server		= FTPServerType.Unknown;
 		private int					m_timeout		= 5000;
         private FTPResponse         m_response      = new FTPResponse();
+        private StringBuilder       dirInfo         = new StringBuilder(BUFFER_SIZE);
 
 		/// <summary>
 		/// Event raised when the FTP server sends a response
@@ -432,10 +433,6 @@ namespace OpenNETCF.Net.Ftp
                             break;
                         }
                     }
-                    if (socket.Connected)
-                    {
-                        socket.Close();
-                    }
                 }
 
                 ReadResponse();
@@ -472,49 +469,40 @@ namespace OpenNETCF.Net.Ftp
 			FTPResponse		response;
 			byte[]			buffer = new byte[1024];
 
-			Socket socket = OpenDataSocket();
+            using (Socket m_datasocket = OpenDataSocket())
+            {
+                if (Detailed)
+                {
+                    response = SendCommand("LIST");
+                }
+                else
+                {
+                    response = SendCommand("NLST");
+                }
 
-            //ReadResponse();
+                if (!((response.ID == StatusCode.FileStatusOK) || (response.ID == StatusCode.ConnectionAlreadyOpen)))
+                {
+                    if (!m_exceptions)
+                    {
+                        return "";
+                    }
+                    else
+                    {
+                        throw new IOException(response.Text);
+                    }
+                }
 
-            //response = m_response;
+                try
+                {
+                    LimFTPClient.ParamsHelper.EndResponseEvent = new AutoResetEvent(false);
+                    m_datasocket.BeginReceive(m_buffer, 0, m_buffer.Length, 0, EndDataResponse, m_datasocket);
+                    LimFTPClient.ParamsHelper.EndResponseEvent.WaitOne();
+                }
+                catch
+                {
 
-			if(Detailed)
-			{
-				response = SendCommand("LIST");
-			}
-			else
-			{
-				response = SendCommand("NLST");
-			}
-
-            if (!((response.ID == StatusCode.FileStatusOK) || (response.ID == StatusCode.ConnectionAlreadyOpen)))
-			{
-				if(!m_exceptions)
-				{
-					return "";
-				}
-				else
-				{
-					throw new IOException(response.Text);
-				}
-			}
-
-			StringBuilder dirInfo = new StringBuilder(buffer.Length);
-
-			// get the data
-			for( ; socket.Available > 0 ; )
-			{
-				int bytesrecvd = socket.Receive(buffer, buffer.Length, SocketFlags.None);
-
-				dirInfo.Append(Encoding.ASCII.GetString(buffer, 0, bytesrecvd));
-				
-				buffer.Initialize();
-			}
-
-			if(socket.Connected)
-			{
-				socket.Close();
-			}
+                }
+            }
 
 			return dirInfo.ToString();
 		}
@@ -606,22 +594,19 @@ namespace OpenNETCF.Net.Ftp
 
         private void ReadResponse()
         {
-            //lock (m_cmdsocket)
-            //{
-                try
-                {
-                    LimFTPClient.ParamsHelper.EndResponseEvent = new AutoResetEvent(false);
-                    m_cmdsocket.BeginReceive(m_buffer, 0, m_buffer.Length, 0, EndResponse, m_cmdsocket);
-                    LimFTPClient.ParamsHelper.EndResponseEvent.WaitOne();
-                }
-                catch
-                {
-
-                }
-            //}
+            try
+            {
+                LimFTPClient.ParamsHelper.EndResponseEvent = new AutoResetEvent(false);
+                m_cmdsocket.BeginReceive(m_buffer, 0, m_buffer.Length, 0, EndCommandResponse, m_cmdsocket);
+                LimFTPClient.ParamsHelper.EndResponseEvent.WaitOne();
+            }
+            catch
+            {
+                return;
+            }
         }
 
-        private void EndResponse(IAsyncResult state)
+        private void EndCommandResponse(IAsyncResult state)
 		{   
             FTPResponse response = new FTPResponse();
             string responsetext = "";
@@ -686,7 +671,7 @@ namespace OpenNETCF.Net.Ftp
                                 catch(Exception ex)
                                 {
                                     System.Diagnostics.Debug.WriteLine(string.Format("FTPResponseHandler threw {0}\r\n{1}", ex.GetType().Name, ex.Message));
-                                        // if any event handler fails, we ignore it
+                                    // if any event handler fails, we ignore it
                                 }
                             }
                         }
@@ -707,11 +692,36 @@ namespace OpenNETCF.Net.Ftp
                 return;
             }
 
-                // return the first response received
+            // return the first response received
             m_response = response;
             LimFTPClient.ParamsHelper.EndResponseEvent.Set();
             return;
 		}
+
+        private void EndDataResponse(IAsyncResult state)
+        {
+            int recievedBytes = 0;
+            Socket socket = (Socket)state.AsyncState;
+            
+            try
+            {
+                recievedBytes = socket.EndReceive(state);
+            }
+            catch
+            {
+                LimFTPClient.ParamsHelper.EndResponseEvent.Set();
+                return;
+            }
+
+            dirInfo.Append(Encoding.ASCII.GetString(m_buffer, 0, recievedBytes));
+
+            if (String.IsNullOrEmpty(dirInfo.ToString()))
+            {
+                throw new Exception("WTF");
+            }
+
+            LimFTPClient.ParamsHelper.EndResponseEvent.Set();
+        }
 
 		private void CheckConnect()
 		{
@@ -781,7 +791,6 @@ namespace OpenNETCF.Net.Ftp
 			}
 			else
 			{
-				//IPHostEntry ipHost = Dns.GetHostByName(Dns.GetHostName());
                 IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
 
 				long ip = ipHost.AddressList[0].Address;
@@ -819,8 +828,6 @@ namespace OpenNETCF.Net.Ftp
 			{
 				throw new FTPException("Can't connect to remote server");
 			}
-
-			System.Threading.Thread.Sleep(500);
 
 			return socket;
 		}
@@ -865,19 +872,7 @@ namespace OpenNETCF.Net.Ftp
 				return m_connected;
 			}
 		}
-/*
-		public FTPMode Mode 
-		{
-			get
-			{
-				return m_mode;
-			}
-			set
-			{
-				m_mode = value;		
-			}
-		}
-*/
+
 		/// <summary>
 		/// The port on which to connect
 		/// </summary>

@@ -1,5 +1,15 @@
 # Changelog
 
+## [v0.5.6] - (30.01.21)
+
+### Added
+
+### Changed
+
+### Fixed
+
+ - Network unstability
+
 ## [v0.5.5] - (30.01.21)
 
 ### Added
@@ -125,6 +135,7 @@
 
  - Ported from Windows version of LimFTPClient
 
+[v0.5.6]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.5.6
 [v0.5.5]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.5.5
 [v0.5.1]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.5.1 
 [v0.5.0]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.5.0 
