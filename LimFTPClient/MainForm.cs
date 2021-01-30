@@ -250,5 +250,10 @@ namespace LimFTPClient
              */
         }
 
+        private void SearchBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

@@ -33,11 +33,12 @@
             this.MainMenu = new System.Windows.Forms.MainMenu();
             this.ActionsMenuItem = new System.Windows.Forms.MenuItem();
             this.ParamsMenuItem = new System.Windows.Forms.MenuItem();
-            this.UpdateMenuItem = new System.Windows.Forms.MenuItem();
+            this.RefreshMenuItem = new System.Windows.Forms.MenuItem();
             this.RegisterMenuItem = new System.Windows.Forms.MenuItem();
             this.RefMenu = new System.Windows.Forms.MenuItem();
             this.HelpMenuItem = new System.Windows.Forms.MenuItem();
             this.AboutMenuItem = new System.Windows.Forms.MenuItem();
+            this.UpdateMenuItem = new System.Windows.Forms.MenuItem();
             this.TabControl = new System.Windows.Forms.TabControl();
             this.NewPage = new System.Windows.Forms.TabPage();
             this.AppsBox = new System.Windows.Forms.ListBox();
@@ -51,7 +52,6 @@
             this.FreeMemLabel = new System.Windows.Forms.Label();
             this.InstalledBox = new System.Windows.Forms.ListBox();
             this.ListingThreadTimer = new System.Windows.Forms.Timer();
-            this.UpdateSysMenuItem = new System.Windows.Forms.MenuItem();
             this.TabControl.SuspendLayout();
             this.NewPage.SuspendLayout();
             this.InstalledPage.SuspendLayout();
@@ -65,7 +65,7 @@
             // ActionsMenuItem
             // 
             this.ActionsMenuItem.MenuItems.Add(this.ParamsMenuItem);
-            this.ActionsMenuItem.MenuItems.Add(this.UpdateMenuItem);
+            this.ActionsMenuItem.MenuItems.Add(this.RefreshMenuItem);
             this.ActionsMenuItem.MenuItems.Add(this.RegisterMenuItem);
             this.ActionsMenuItem.Text = "Действия";
             // 
@@ -74,10 +74,10 @@
             this.ParamsMenuItem.Text = "Параметры";
             this.ParamsMenuItem.Click += new System.EventHandler(this.ParamsMenuItem_Click);
             // 
-            // UpdateMenuItem
+            // RefreshMenuItem
             // 
-            this.UpdateMenuItem.Text = "Обновить";
-            this.UpdateMenuItem.Click += new System.EventHandler(this.BackMenuItem_Click);
+            this.RefreshMenuItem.Text = "Обновить";
+            this.RefreshMenuItem.Click += new System.EventHandler(this.BackMenuItem_Click);
             // 
             // RegisterMenuItem
             // 
@@ -88,7 +88,7 @@
             // 
             this.RefMenu.MenuItems.Add(this.HelpMenuItem);
             this.RefMenu.MenuItems.Add(this.AboutMenuItem);
-            this.RefMenu.MenuItems.Add(this.UpdateSysMenuItem);
+            this.RefMenu.MenuItems.Add(this.UpdateMenuItem);
             this.RefMenu.Text = "Справка";
             // 
             // HelpMenuItem
@@ -100,6 +100,11 @@
             // 
             this.AboutMenuItem.Text = "О программе";
             this.AboutMenuItem.Click += new System.EventHandler(this.AboutMenuItem_Click);
+            // 
+            // UpdateMenuItem
+            // 
+            this.UpdateMenuItem.Text = "Обновления";
+            this.UpdateMenuItem.Click += new System.EventHandler(this.UpdateSysMenuItem_Click);
             // 
             // TabControl
             // 
@@ -138,6 +143,7 @@
             this.SearchBox.Size = new System.Drawing.Size(233, 21);
             this.SearchBox.TabIndex = 3;
             this.SearchBox.Text = "Поиск";
+            this.SearchBox.TextChanged += new System.EventHandler(this.SearchBox_TextChanged);
             // 
             // label1
             // 
@@ -214,11 +220,6 @@
             // 
             this.ListingThreadTimer.Tick += new System.EventHandler(this.ListingThreadTimer_Tick);
             // 
-            // UpdateSysMenuItem
-            // 
-            this.UpdateSysMenuItem.Text = "Обновления";
-            this.UpdateSysMenuItem.Click += new System.EventHandler(this.UpdateSysMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -247,7 +248,7 @@
         private System.Windows.Forms.MenuItem ActionsMenuItem;
         private System.Windows.Forms.MenuItem RefMenu;
         private System.Windows.Forms.MenuItem ParamsMenuItem;
-        private System.Windows.Forms.MenuItem UpdateMenuItem;
+        private System.Windows.Forms.MenuItem RefreshMenuItem;
         private System.Windows.Forms.MenuItem HelpMenuItem;
         private System.Windows.Forms.MenuItem AboutMenuItem;
         private System.Windows.Forms.TabControl TabControl;
@@ -264,7 +265,7 @@
         private System.Windows.Forms.Label InstalledLabel;
         private System.Windows.Forms.MenuItem RegisterMenuItem;
         private System.Windows.Forms.Timer ListingThreadTimer;
-        private System.Windows.Forms.MenuItem UpdateSysMenuItem;
+        private System.Windows.Forms.MenuItem UpdateMenuItem;
     }
 }
 

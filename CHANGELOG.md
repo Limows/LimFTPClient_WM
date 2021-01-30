@@ -1,5 +1,23 @@
 # Changelog
 
+## [v0.5.1] - (30.01.21)
+
+### Added
+
+ - CheckUpdate function
+ - New parameters
+
+### Changed
+
+ - New app name
+ - Using WinMobileNetCFExt lib
+ - Update AboutAppBox
+
+### Fixed
+
+ - Exception in AboutAppBox
+ - UI fixes for VGA screen
+
 ## [v0.5.0] - (27.01.21)
 
 ### Added
@@ -95,6 +113,7 @@
 
  - Ported from Windows version of LimFTPClient
 
+[v0.5.1]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.5.1 
 [v0.5.0]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.5.0 
 [v0.4.3]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.4.3 
 [v0.4.2]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.4.2

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Win32;
@@ -28,7 +27,6 @@ namespace LimFTPClient
                 {
                     if (appname != "Shared" && appname != "Microsoft Application Installer" && appname != "Customization Tools")
                     {
-                        //InstalledBox.Items.Add(appname);
                         AppsList.Add(appname);
                     }
                 }
@@ -40,7 +38,6 @@ namespace LimFTPClient
         public static string GetInstallDir(string AppName)
         {
             string SoftwareKey = "Software\\Apps\\" + AppName;
-            //List<string> AppsList = new List<string>();
             string InstallDir;
 
             using (RegistryKey RegKey = Registry.LocalMachine.OpenSubKey(SoftwareKey))
@@ -87,8 +84,6 @@ namespace LimFTPClient
                 {
                     InstallKey.SetValue(CabPath, InstallPath);
 
-                    //Directory.CreateDirectory(InstallPath);
-
                     Process InstallProc = new Process();
                     InstallProc.StartInfo.FileName = "\\windows\\wceload.exe";
 
@@ -128,13 +123,9 @@ namespace LimFTPClient
 
             string[] Execs = Directory.GetFiles(InstallPath, "*.exe");
 
-            if (Execs.Length != 1)
+            if (Execs.Length == 1)
             {
-                   
-            }
-            else 
-            {
-                CreateShortcut(ShortcutName, Execs[0], Overwrite);
+                CreateShortcut(ShortcutName, Execs[0], Overwrite);   
             }
 
             AddToRegistry(AppName, InstallPath);
