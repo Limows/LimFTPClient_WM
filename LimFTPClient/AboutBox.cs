@@ -36,7 +36,7 @@ namespace WinMobileNetCFExt.About
                         return titleAttribute.Title;
                     }
                 }
-                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetCallingAssembly().GetName().CodeBase);
+                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().GetName().CodeBase);
             }
         }
 
@@ -44,7 +44,7 @@ namespace WinMobileNetCFExt.About
         {
             get
             {
-                return Assembly.GetCallingAssembly().GetName().Version.ToString();
+                return Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
         }
 
@@ -98,7 +98,7 @@ namespace WinMobileNetCFExt.About
         {
             get
             {
-                object[] attributes = Assembly.GetCallingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
+                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
                 if (attributes.Length == 0)
                 {
                     return "";

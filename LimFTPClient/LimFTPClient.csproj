@@ -59,12 +59,14 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="WinMobileNetCFExt, Version=1.0.7698.40100, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\WinMobileNetCFExt\bin\Release\WinMobileNetCFExt.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox.designer.cs">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="AppForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,6 +78,12 @@
     </Compile>
     <Compile Include="AboutAppBox.Designer.cs">
       <DependentUpon>AboutAppBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FolderBrowserDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FolderBrowserDialog.designer.cs">
+      <DependentUpon>FolderBrowserDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="FTP.cs" />
     <Compile Include="FTPException.cs" />
@@ -96,12 +104,20 @@
     <Compile Include="ParamsHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AboutBox.resx">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="AppForm.resx">
       <DependentUpon>AppForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="AboutAppBox.resx">
       <DependentUpon>AboutAppBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FolderBrowserDialog.resx">
+      <DependentUpon>FolderBrowserDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ParamsForm.resx">

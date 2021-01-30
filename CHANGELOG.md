@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.5.5] - (30.01.21)
+
+### Added
+
+### Changed
+
+ - Using of the WinMobileNetCFExt lib has been temporarily droped due to an error in it
+
+### Fixed
+
+ - Network loading speed became much faster
+
 ## [v0.5.1] - (30.01.21)
 
 ### Added
@@ -113,6 +125,7 @@
 
  - Ported from Windows version of LimFTPClient
 
+[v0.5.5]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.5.5
 [v0.5.1]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.5.1 
 [v0.5.0]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.5.0 
 [v0.4.3]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.4.3 

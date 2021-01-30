@@ -69,7 +69,6 @@ namespace LimFTPClient
         private void Connect()
         {
             ParamsHelper.CurrentURI = ParamsHelper.SystemURI;
-            ParamsHelper.ThreadEvent = new AutoResetEvent(false);
             ThreadStart ListingStarter = delegate { NetHelper.ReadListing(ParamsHelper.CurrentURI); };
             Thread ListingThread = new Thread(ListingStarter);
             ParamsHelper.IsThreadAlive = true;

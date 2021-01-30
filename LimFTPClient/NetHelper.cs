@@ -143,8 +143,6 @@ namespace LimFTPClient
 
             Ftp.Disconnect();
 
-            ParamsHelper.ThreadEvent.Set();
-
             ParamsHelper.IsThreadAlive = false;
 
         }

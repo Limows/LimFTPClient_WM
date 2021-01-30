@@ -204,6 +204,7 @@ namespace OpenNETCF.Net.Ftp
 		private byte[]				m_buffer		= new byte[BUFFER_SIZE];
 		private FTPServerType		m_server		= FTPServerType.Unknown;
 		private int					m_timeout		= 5000;
+        private FTPResponse         m_response      = new FTPResponse();
 
 		/// <summary>
 		/// Event raised when the FTP server sends a response
@@ -307,7 +308,9 @@ namespace OpenNETCF.Net.Ftp
                 }
 
                 // check the result
-                response = ReadResponse();
+                ReadResponse();
+
+                response = m_response;
 
                 if (response.ID != StatusCode.ServiceReady)
                 {
@@ -435,7 +438,9 @@ namespace OpenNETCF.Net.Ftp
                     }
                 }
 
-                response = ReadResponse();
+                ReadResponse();
+
+                response = m_response;
 
                 if (response.ID == 0)
                 {
@@ -469,7 +474,9 @@ namespace OpenNETCF.Net.Ftp
 
 			Socket socket = OpenDataSocket();
 
-			response = ReadResponse();
+            //ReadResponse();
+
+            //response = m_response;
 
 			if(Detailed)
 			{
@@ -580,8 +587,10 @@ namespace OpenNETCF.Net.Ftp
 					ch(this, command);
 				}
 			}
-			
-			return ReadResponse();
+
+            ReadResponse();
+
+            return m_response;
 		}
 
 		/// <summary>
@@ -595,90 +604,113 @@ namespace OpenNETCF.Net.Ftp
 			return SendCommand(command, true);
 		}
 
-		private FTPResponse ReadResponse()
-		{
-            lock (m_cmdsocket)
+        private void ReadResponse()
+        {
+            //lock (m_cmdsocket)
+            //{
+                try
+                {
+                    LimFTPClient.ParamsHelper.EndResponseEvent = new AutoResetEvent(false);
+                    m_cmdsocket.BeginReceive(m_buffer, 0, m_buffer.Length, 0, EndResponse, m_cmdsocket);
+                    LimFTPClient.ParamsHelper.EndResponseEvent.WaitOne();
+                }
+                catch
+                {
+
+                }
+            //}
+        }
+
+        private void EndResponse(IAsyncResult state)
+		{   
+            FTPResponse response = new FTPResponse();
+            string responsetext = "";
+            int recievedBytes = 0;
+
+            try
+            {   
+                recievedBytes = m_cmdsocket.EndReceive(state);
+            }
+            catch
             {
+                LimFTPClient.ParamsHelper.EndResponseEvent.Set();
+                return;
+            }
 
-                FTPResponse response = new FTPResponse();
-                string responsetext = "";
-                int bytesrecvd = 0;
+            responsetext += Encoding.ASCII.GetString(m_buffer, 0, recievedBytes);
 
-                // make sure any command sent has enough time to respond
-                Thread.Sleep(700);
+            if (String.IsNullOrEmpty(responsetext))
+            {
+                response.ID = 0;
+                response.Text = "";
+                m_response = response;
+                LimFTPClient.ParamsHelper.EndResponseEvent.Set();
+                return;
+            }
 
-                for (; m_cmdsocket.Available > 0; )
+            string[] message = responsetext.Replace("\r", "").Split('\n');
+
+            // we may have multiple responses, 
+            // particularly if retriving small amounts of data like directory listings
+            // such as the command sent and transfer complete together
+            // a response may also have multiple lines
+            for (int m = 0; m < message.Length; m++)
+            {
+                try
                 {
-                    bytesrecvd = m_cmdsocket.Receive(m_buffer, m_buffer.Length, 0);
-                    responsetext += Encoding.ASCII.GetString(m_buffer, 0, bytesrecvd);
-                }
+                    // is the first line a response?  If so, the first 3 characters
+                    // are the response ID number
+                    FTPResponse resp = new FTPResponse();
 
-                if (responsetext.Length == 0)
-                {
-                    response.ID = 0;
-                    response.Text = "";
-                    return response;
-                }
-
-                string[] message = responsetext.Replace("\r", "").Split('\n');
-
-                // we may have multiple responses, 
-                // particularly if retriving small amounts of data like directory listings
-                // such as the command sent and transfer complete together
-                // a response may also have multiple lines
-                for (int m = 0; m < message.Length; m++)
-                {
-                    try
+                    if (message[m].Length > 0)
                     {
-                        // is the first line a response?  If so, the first 3 characters
-                        // are the response ID number
-                        FTPResponse resp = new FTPResponse();
-                        if (message[m].Length > 0)
+                        try
                         {
-                            try
-                            {
-                                resp.ID = (StatusCode)int.Parse(message[m].Substring(0, 3));
-                            }
-                            catch (Exception)
-                            {
-                                resp.ID = 0;
-                            }
+                            resp.ID = (StatusCode)int.Parse(message[m].Substring(0, 3));
+                        }
+                        catch (Exception)
+                        {
+                            resp.ID = 0;
+                        }
 
-                            resp.Text = message[m].Substring(4);
+                        resp.Text = message[m].Substring(4);
 
-                            if (ResponseReceived != null)
+                        if (ResponseReceived != null)
+                        {
+                            foreach (FTPResponseHandler rh in ResponseReceived.GetInvocationList())
                             {
-                                foreach (FTPResponseHandler rh in ResponseReceived.GetInvocationList())
+                                try
                                 {
-                                    try
-                                    {
-                                        rh(this, resp);
-                                    }
-                                    catch(Exception ex)
-                                    {
-                                        System.Diagnostics.Debug.WriteLine(string.Format("FTPResponseHandler threw {0}\r\n{1}", ex.GetType().Name, ex.Message));
+                                    rh(this, resp);
+                                }
+                                catch(Exception ex)
+                                {
+                                    System.Diagnostics.Debug.WriteLine(string.Format("FTPResponseHandler threw {0}\r\n{1}", ex.GetType().Name, ex.Message));
                                         // if any event handler fails, we ignore it
-                                    }
                                 }
                             }
+                        }
 
-                            if (m == 0)
-                            {
-                                response = resp;
-                            }
+                        if (m == 0)
+                        {
+                            response = resp;
                         }
                     }
-                    catch (Exception)
-                    {
-                        continue;
-                    }
-
-                    return response;
                 }
+                catch (Exception)
+                {
+                    continue;
+                }
+    
+                m_response = response;
+                LimFTPClient.ParamsHelper.EndResponseEvent.Set();
+                return;
+            }
 
                 // return the first response received
-                return response;
-            }
+            m_response = response;
+            LimFTPClient.ParamsHelper.EndResponseEvent.Set();
+            return;
 		}
 
 		private void CheckConnect()
