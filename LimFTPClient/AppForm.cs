@@ -195,7 +195,7 @@ namespace LimFTPClient
                     {
                         MessageBox.Show("Невозможно сохранить в " + ParamsHelper.DownloadPath + "\nВозможно программа должна быть\nзапущена от имени администратора", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
                     }
-                    catch (OpenNETCF.Net.Ftp.FTPException NewEx)
+                    catch (NetCFLibFTP.FTPException NewEx)
                     {
                         if (NewEx.Message == "Method only valid with an open connection")
                         {

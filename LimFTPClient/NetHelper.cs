@@ -5,7 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using OpenNETCF.Net.Ftp;
+using NetCFLibFTP;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -24,7 +24,7 @@ namespace LimFTPClient
         {
             FTP Ftp = new FTP(URI.Host, URI.Port);
 
-            Ftp.BeginConnect(URI.UserInfo, "");
+            Ftp.Connect(URI.UserInfo, "");
             Ftp.ChangeDirectory(URI.AbsolutePath);
             Ftp.GetFile(FileName, DownloadDir + "\\" + FileName, true);
 
@@ -63,7 +63,7 @@ namespace LimFTPClient
             string FileName = AppName + ".zip";
             string FileSize;
 
-            Ftp.BeginConnect(URI.UserInfo, "");
+            Ftp.Connect(URI.UserInfo, "");
 
             Ftp.ChangeDirectory(URI.AbsolutePath);
             FileSize = Ftp.GetFileSize(FileName);
@@ -85,7 +85,7 @@ namespace LimFTPClient
             ParamsHelper.AppsList = new List<string>();
             string Listing;
 
-            Ftp.BeginConnect(URI.UserInfo, "");
+            Ftp.Connect(URI.UserInfo, "");
 
             try
             {
@@ -116,7 +116,7 @@ namespace LimFTPClient
                 Ftp.Disconnect();
                 ParamsHelper.IsThreadAlive = false;
                 ParamsHelper.IsThreadError = true;
-                ParamsHelper.ThreadException = new OpenNETCF.Net.Ftp.FTPException("Repository is empty");
+                ParamsHelper.ThreadException = new NetCFLibFTP.FTPException("Repository is empty");
                 return;
             }
 

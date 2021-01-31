@@ -1,24 +1,3 @@
-/*=======================================================================================
-    OpenNETCF.Net.FTP
-    Copyright (c) 2006-2010 OpenNETCF Consulting, LLC
-
-    Permission is hereby granted, free of charge, to any person obtaining a copy of this 
-    software and associated documentation files (the "Software"), to deal in the Software 
-    without restriction, including without limitation the rights to use, copy, modify, 
-    merge, publish, distribute, sublicense, and/or sell copies of the Software, and to 
-    permit persons to whom the Software is furnished to do so, subject to the following 
-    conditions:
-
-    The above copyright notice and this permission notice shall be included in all copies 
-    or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-    INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
-    PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
-    HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION 
-    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
-    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
-=======================================================================================*/
 using System;
 using System.IO;
 using System.Net;
@@ -50,7 +29,7 @@ RMD - remove a remote directory
 RNFR - rename from 
 RNTO - rename to 
 SITE - site-specific commands 
-SIZE - return the size of a file 
+SIZE* - return the size of a file 
 STOR - store a file on the remote host 
 TYPE - set transfer type 
 USER - send username 
@@ -67,7 +46,7 @@ STRU - set file transfer structure
 SYST - return system type 
 */
 
-namespace OpenNETCF.Net.Ftp
+namespace NetCFLibFTP
 {
 	/// <summary>
 	/// This class can be used for FTP operations
@@ -266,7 +245,7 @@ namespace OpenNETCF.Net.Ftp
 		/// </summary>
 		/// <param name="username">Username</param>
 		/// <param name="password">Password</param>
-		public void BeginConnect(string username, string password)
+		public void Connect(string username, string password)
 		{
 			m_uid = username;
 			m_pwd = password;
@@ -494,9 +473,9 @@ namespace OpenNETCF.Net.Ftp
 
                 try
                 {
-                    LimFTPClient.ParamsHelper.EndResponseEvent = new AutoResetEvent(false);
+                    FTPParameters.EndResponseEvent = new AutoResetEvent(false);
                     m_datasocket.BeginReceive(m_buffer, 0, m_buffer.Length, 0, EndDataResponse, m_datasocket);
-                    LimFTPClient.ParamsHelper.EndResponseEvent.WaitOne();
+                    FTPParameters.EndResponseEvent.WaitOne();
                 }
                 catch
                 {
@@ -596,9 +575,9 @@ namespace OpenNETCF.Net.Ftp
         {
             try
             {
-                LimFTPClient.ParamsHelper.EndResponseEvent = new AutoResetEvent(false);
+                FTPParameters.EndResponseEvent = new AutoResetEvent(false);
                 m_cmdsocket.BeginReceive(m_buffer, 0, m_buffer.Length, 0, EndCommandResponse, m_cmdsocket);
-                LimFTPClient.ParamsHelper.EndResponseEvent.WaitOne();
+                FTPParameters.EndResponseEvent.WaitOne();
             }
             catch
             {
@@ -618,7 +597,7 @@ namespace OpenNETCF.Net.Ftp
             }
             catch
             {
-                LimFTPClient.ParamsHelper.EndResponseEvent.Set();
+                FTPParameters.EndResponseEvent.Set();
                 return;
             }
 
@@ -629,7 +608,7 @@ namespace OpenNETCF.Net.Ftp
                 response.ID = 0;
                 response.Text = "";
                 m_response = response;
-                LimFTPClient.ParamsHelper.EndResponseEvent.Set();
+                FTPParameters.EndResponseEvent.Set();
                 return;
             }
 
@@ -688,13 +667,13 @@ namespace OpenNETCF.Net.Ftp
                 }
     
                 m_response = response;
-                LimFTPClient.ParamsHelper.EndResponseEvent.Set();
+                FTPParameters.EndResponseEvent.Set();
                 return;
             }
 
             // return the first response received
             m_response = response;
-            LimFTPClient.ParamsHelper.EndResponseEvent.Set();
+            FTPParameters.EndResponseEvent.Set();
             return;
 		}
 
@@ -709,7 +688,7 @@ namespace OpenNETCF.Net.Ftp
             }
             catch
             {
-                LimFTPClient.ParamsHelper.EndResponseEvent.Set();
+                FTPParameters.EndResponseEvent.Set();
                 return;
             }
 
@@ -720,7 +699,7 @@ namespace OpenNETCF.Net.Ftp
                 throw new Exception("WTF");
             }
 
-            LimFTPClient.ParamsHelper.EndResponseEvent.Set();
+            FTPParameters.EndResponseEvent.Set();
         }
 
 		private void CheckConnect()

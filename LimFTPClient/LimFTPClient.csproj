@@ -51,6 +51,10 @@
       <HintPath>.\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
+    <Reference Include="NetCFLibFTP, Version=1.0.7701.18066, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\NetCFLibFTP\bin\Release\NetCFLibFTP.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -83,8 +87,6 @@
     <Compile Include="AboutAppBox.Designer.cs">
       <DependentUpon>AboutAppBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="FTP.cs" />
-    <Compile Include="Exceptions.cs" />
     <Compile Include="ParamsForm.cs">
       <SubType>Form</SubType>
     </Compile>

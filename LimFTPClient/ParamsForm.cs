@@ -31,7 +31,17 @@ namespace LimFTPClient
             }
             else
             {
-                ParamsHelper.InstallPath = "\\" + IO.GetRemovableStorageDirectory() + "\\Program Files";
+                string RemovableStorageDir = IO.GetRemovableStorageDirectory();
+
+                if (!String.IsNullOrEmpty(RemovableStorageDir))
+                {
+                    ParamsHelper.InstallPath = "\\" + IO.GetRemovableStorageDirectory() + "\\Program Files";
+                }
+                else
+                {
+                    MessageBox.Show("SD Card не найдена", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+                    return;
+                }
             }
 
             if (!Directory.Exists(ParamsHelper.InstallPath))
@@ -42,8 +52,10 @@ namespace LimFTPClient
             if (String.IsNullOrEmpty(ParamsHelper.DownloadPath))
             {
                 MessageBox.Show("Путь не может быть пустым", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+                return;
             }
-            else Close();
+
+            Close();
         }
 
         private string CheckDirectory(string Path)

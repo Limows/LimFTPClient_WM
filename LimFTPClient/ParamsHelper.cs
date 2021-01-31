@@ -19,7 +19,6 @@ namespace LimFTPClient
         static public string ConfigPath;
         static public string OSVersion;
         static public List<string> AppsList;
-        static public AutoResetEvent EndResponseEvent;
         static public bool IsThreadAlive;
         static public bool IsThreadError;
         static public bool IsThreadWaiting;
