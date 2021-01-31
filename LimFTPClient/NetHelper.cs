@@ -160,10 +160,18 @@ namespace LimFTPClient
             HttpWebResponse Response = (HttpWebResponse)Request.GetResponse();
             string ResponseMessage;
 
-            using (StreamReader stream = new StreamReader(Response.GetResponseStream(), Encoding.UTF8))
+            try
             {
-                ResponseMessage = stream.ReadToEnd();
-                ResponseMessage = ResponseMessage.Replace("\n", "");
+
+                using (StreamReader stream = new StreamReader(Response.GetResponseStream(), Encoding.UTF8))
+                {
+                    ResponseMessage = stream.ReadToEnd();
+                    ResponseMessage = ResponseMessage.Replace("\n", "");
+                }
+            }
+            catch(Exception NewEx)
+            {
+                ResponseMessage = NewEx.Message;
             }
 
             return ResponseMessage;
