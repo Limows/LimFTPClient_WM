@@ -31,7 +31,7 @@ You need the following stuff to install this program:
 ### Update manager
 
  Click the update menu item. 
- After verification, the manager will offer to download the new version, if it exists
+ After verification, the manager will offer to download the new version, if it exists.
  After downloading, close the program and run the file "Update.cab" from your Downloading directory
 
 ## Supported functions
