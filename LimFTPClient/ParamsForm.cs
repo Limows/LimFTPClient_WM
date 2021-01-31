@@ -120,5 +120,20 @@ namespace LimFTPClient
             RmPackageBox.Enabled = false;
 
         }
+
+        private void DownloadPathBox_GotFocus(object sender, EventArgs e)
+        {
+            InputPanel.Enabled = true;
+        }
+
+        private void DownloadPathBox_LostFocus(object sender, EventArgs e)
+        {
+            InputPanel.Enabled = false;
+        }
+
+        private void CleanBufferButton_Click(object sender, EventArgs e)
+        {
+            IOHelper.CleanBuffer();
+        }
     }
 }

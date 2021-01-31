@@ -60,28 +60,52 @@ namespace LimFTPClient
         private void AppForm_Load(object sender, EventArgs e)
         {
             this.Text = AppName.Replace("_", " ");
-            //string InfoFileName = AppName + ".info";
             NameLabel.Text = AppName.Replace("_", " ");
             StatusLabel.Text = "";
 
             ParamsHelper.CurrentURI = ParamsHelper.AppURI;
 
-            //ThreadStart AppStarter = delegate { FTPHelper.ReadListing(ParamsHelper.CurrentURI); };
-            //Thread ListingThread = new Thread(ListingStarter);
-            //ListingThread.Start();
-            //ParamsHelper.IsThreadAlive = true;
+            string FileSize;
+            string InfoName;
+            string LogoName;
+            string ScrShotName;
+            string[] AppInfo;
 
-            try
-            {
-                //AboutAppBox.Text = FTPHelper.LoadInfo(ParamsHelper.CurrentURI);
-                SizeLabel.Text = NetHelper.LoadInfo(ParamsHelper.CurrentURI, AppName);
-            }
-            catch
+            AppInfo = NetHelper.LoadInfo(ParamsHelper.CurrentURI, AppName).Split('\n');
+
+            FileSize = AppInfo[0];
+            InfoName = AppInfo[1];
+            LogoName = AppInfo[2];
+            ScrShotName = AppInfo[3];
+
+            if (String.IsNullOrEmpty(FileSize))
             {
                 SizeLabel.Text = "0 МБ";
             }
+            else
+            {
+                SizeLabel.Text = FileSize;
+            }
 
-            AboutAppBox.Text = "Для этого приложения ещё нет описания";
+            if (String.IsNullOrEmpty(InfoName))
+            {
+                AboutAppBox.Text = "Для этого приложения ещё нет описания";
+            }
+            else
+            {   
+                AboutAppBox.Text = IOHelper.ReadTextFile(InfoName);
+            }
+
+            if (String.IsNullOrEmpty(LogoName))
+            {
+
+            }
+            else
+            {   
+                Bitmap LogoBitmap = new Bitmap(LogoName);
+                Image LogoImage = (Image)LogoBitmap;
+                LogoBox.Image = LogoImage;
+            }
 
             ParamsHelper.CurrentURI = ParamsHelper.AppURI;
 

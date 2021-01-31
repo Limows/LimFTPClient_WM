@@ -68,6 +68,21 @@ namespace LimFTPClient
             }
         }
 
+        static public string ReadTextFile(string Path)
+        {
+            FileInfo File = new FileInfo(Path);
+
+            using (TextReader Reader = new StreamReader(File.OpenRead()))
+            {
+                return Reader.ReadToEnd();
+            }
+        }
+
+        static public void CleanBuffer()
+        {
+            Directory.Delete(GetCurrentDirectory() + "\\LocalFiles", true);
+        }
+
         static private string GetConfigPath()
         {
             return GetCurrentDirectory() + "\\Default.cfg";

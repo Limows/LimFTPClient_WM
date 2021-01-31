@@ -165,7 +165,9 @@ namespace NetCFLibFTP
 
             NameAccepted = 331,
             NameRequired = 332,
-            FileActionPendingInfo = 350
+            FileActionPendingInfo = 350,
+
+            FileNotFound = 550
         }
 
 		private static int BUFFER_SIZE = 2048;
@@ -397,7 +399,7 @@ namespace NetCFLibFTP
                         }
                         else
                         {
-                            throw new IOException(response.Text);
+                            throw new FTPException(response.ID.ToString());
                         }
                     }
 
@@ -431,7 +433,7 @@ namespace NetCFLibFTP
                     }
                     else
                     {
-                        throw new FTPException(response.Text);
+                        throw new FTPException(response.ID.ToString());
                     }
                 }
             }

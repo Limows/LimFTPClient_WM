@@ -1,5 +1,21 @@
 # Changelog
 
+## [v0.6.0] - (31.01.21)
+
+### Added
+
+ - App info loading working now
+
+### Changed
+
+ - using new version of WinMobileNetCFExt lib
+ - FTP code moved to separate lib
+
+### Fixed
+
+  - Error if SD Card not found
+ - UI improvements
+
 ## [v0.5.6] - (30.01.21)
 
 ### Added

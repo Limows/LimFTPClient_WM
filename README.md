@@ -25,7 +25,7 @@ You need the following stuff to install this program:
  - Downloading app package
  - Unpacking and installing package
  - Listing installed on device applications
- - Output application properties
+ - Watching application properties
  - Displaying free space in the installation folder
  
 ## OS Support

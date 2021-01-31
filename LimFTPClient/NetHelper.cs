@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using NetCFLibFTP;
+using WinMobileNetCFExt;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -61,17 +62,68 @@ namespace LimFTPClient
 
             FTP Ftp = new FTP(URI.Host, URI.Port);
             string FileName = AppName + ".zip";
+            string InfoName = AppName + ".info";
+            string ScrShotName = AppName + ".png";
+            string LogoName = "Logo.png";
             string FileSize;
+            string BufferPath = IOHelper.GetCurrentDirectory() + "\\LocalFiles\\" + AppName;
+            string AppInfo;
+
+            if (!Directory.Exists(BufferPath)) Directory.CreateDirectory(BufferPath);
 
             Ftp.Connect(URI.UserInfo, "");
 
-            Ftp.ChangeDirectory(URI.AbsolutePath);
-            FileSize = Ftp.GetFileSize(FileName);
-            FileSize = ParamsHelper.BytesToMegs((ulong)Convert.ToInt64(FileSize)).ToString("0.##") + " МБ";
+            try
+            {
+                Ftp.ChangeDirectory(URI.AbsolutePath);
+                FileSize = Ftp.GetFileSize(FileName);
+                FileSize = ParamsHelper.BytesToMegs((ulong)Convert.ToInt64(FileSize)).ToString("0.##") + " МБ";
+            }
+            catch
+            {
+                FileSize = null;
+            }
+
+            try
+            {
+                Ftp.GetFile(InfoName, BufferPath + "\\" + InfoName, true);
+                InfoName = BufferPath + "\\" + InfoName;
+            }
+            catch
+            {
+                //throw new FTPException("Info not found");
+                InfoName = null;
+            }
+
+            try
+            {
+                Ftp.GetFile(LogoName, BufferPath + "\\" + LogoName, true);
+                LogoName = BufferPath + "\\" + LogoName;
+            }
+            catch
+            {
+                //throw new FTPException("Logo not found");
+
+                LogoName = null;
+            }
+
+            try
+            {
+                Ftp.GetFile(ScrShotName, BufferPath + "\\" + ScrShotName, true);
+                ScrShotName = BufferPath + "\\" + ScrShotName;
+            }
+            catch
+            {
+                //throw new FTPException("ScrShot not found");
+
+                ScrShotName = null;
+            }
+
+            AppInfo = FileSize + "\n" + InfoName + "\n" + LogoName + "\n" + ScrShotName;
 
             Ftp.Disconnect();
 
-            return FileSize;
+            return AppInfo;
         }
 
         /// <summary>
