@@ -77,7 +77,7 @@ namespace LimFTPClient
         {
             get
             {
-                return Sys.GetInstallDir(AppName);
+                return SystemHelper.GetInstallDir(AppName);
             }
         }
 
@@ -85,7 +85,7 @@ namespace LimFTPClient
         {
             get
             {
-                string AppProductName = Sys.GetInstallDir(AppName).Split('\\')[Sys.GetInstallDir(AppName).Split('\\').Length - 1];
+                string AppProductName = SystemHelper.GetInstallDir(AppName).Split('\\')[SystemHelper.GetInstallDir(AppName).Split('\\').Length - 1];
 
                 if (String.IsNullOrEmpty(AppProductName)) return "\\";
                 else return AppProductName;

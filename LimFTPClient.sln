@@ -2,6 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LimFTPClient", "LimFTPClient\LimFTPClient.csproj", "{2A4A2E09-829F-475C-9146-0AF2693BD8F3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{80729D09-C701-483C-99AA-0128C29E0AB3} = {80729D09-C701-483C-99AA-0128C29E0AB3}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinMobileNetCFExt", "LimFTPClient\lib\WinMobileNetCFExt\WinMobileNetCFExt.csproj", "{80729D09-C701-483C-99AA-0128C29E0AB3}"
 EndProject

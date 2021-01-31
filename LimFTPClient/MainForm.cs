@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Net;
 using System.Threading;
-using WinMobileNetCFExt.About;
+using WinMobileNetCFExt;
 
 namespace LimFTPClient
 {
@@ -19,11 +19,11 @@ namespace LimFTPClient
 
             try
             {
-                IO.LoadParameters();
+                IOHelper.LoadParameters();
             }
             catch
             {
-                IO.RemoveParameters();
+                IOHelper.RemoveParameters();
             }
 
             RegisterMenuItem.Enabled = false;
@@ -63,7 +63,7 @@ namespace LimFTPClient
 
         private void MainForm_Closing(object sender, CancelEventArgs e)
         {
-            IO.SaveParameters();
+            IOHelper.SaveParameters();
         }
 
         private void Connect()
@@ -107,7 +107,7 @@ namespace LimFTPClient
             try
             {
                 List<string> InstalledList = new List<string>();
-                InstalledList = Sys.GetInstalledApps();
+                InstalledList = SystemHelper.GetInstalledApps();
 
                 foreach (string app in InstalledList)
                 {

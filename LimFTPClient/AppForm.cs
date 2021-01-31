@@ -129,7 +129,7 @@ namespace LimFTPClient
 
                 try
                 {
-                    ExtractedPath = IO.ExtractToDirectory(DownloadPath + "\\" + FileName, DownloadPath + "\\" + AppName);
+                    ExtractedPath = IOHelper.ExtractToDirectory(DownloadPath + "\\" + FileName, DownloadPath + "\\" + AppName);
                 }
                 catch(Exception NewEx)
                 {
@@ -148,7 +148,7 @@ namespace LimFTPClient
 
                     try
                     {
-                        IsInstalled = Sys.AppInstall(ExtractedPath, InstallPath, AppName, ParamsHelper.IsOverwrite);
+                        IsInstalled = SystemHelper.AppInstall(ExtractedPath, InstallPath, AppName, ParamsHelper.IsOverwrite);
                     }
                     catch(Exception NewEx)
                     {

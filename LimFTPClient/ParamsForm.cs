@@ -6,7 +6,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using WinMobileNetCFExt.IO;
+using WinMobileNetCFExt.Forms;
+using WinMobileNetCFExt;
 
 namespace LimFTPClient
 {

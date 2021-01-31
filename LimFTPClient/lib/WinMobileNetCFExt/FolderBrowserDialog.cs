@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
-namespace WinMobileNetCFExt.IO
+namespace WinMobileNetCFExt.Forms
 {
     public partial class FolderBrowserDialog : Form
     {

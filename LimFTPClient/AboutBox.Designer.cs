@@ -1,4 +1,4 @@
-﻿namespace WinMobileNetCFExt.About
+﻿namespace LimFTPClient
 {
     partial class AboutBox
     {

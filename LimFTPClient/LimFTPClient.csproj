@@ -59,6 +59,10 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WinMobileNetCFExt, Version=1.0.7701.15644, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\WinMobileNetCFExt\bin\Release\WinMobileNetCFExt.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AboutBox.cs">
@@ -79,12 +83,6 @@
     <Compile Include="AboutAppBox.Designer.cs">
       <DependentUpon>AboutAppBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="FolderBrowserDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FolderBrowserDialog.designer.cs">
-      <DependentUpon>FolderBrowserDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="FTP.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="ParamsForm.cs">
@@ -94,7 +92,7 @@
       <DependentUpon>ParamsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="NetHelper.cs" />
-    <Compile Include="IO.cs" />
+    <Compile Include="IOHelper.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -116,10 +114,6 @@
       <DependentUpon>AboutAppBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="FolderBrowserDialog.resx">
-      <DependentUpon>FolderBrowserDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="ParamsForm.resx">
       <DependentUpon>ParamsForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -137,7 +131,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Sys.cs" />
+    <Compile Include="SystemHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
