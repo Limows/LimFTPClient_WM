@@ -40,26 +40,6 @@ namespace LimFTPClient
         /// <returns>The file info as a string</returns> 
         static public string LoadInfo(Uri URI, string AppName)
         {   
-            /*
-            Stream FTPReader = CreateDownloadRequest(URI);
-            string AppInfo = "";
-            int bufferSize = 1024;
-            int readCount;
-            byte[] buffer = new byte[bufferSize];
-
-            readCount = FTPReader.Read(buffer, 0, bufferSize);
-            while (readCount > 0)
-            {
-                AppInfo += Encoding.UTF8.GetString(buffer, 0, bufferSize);
-                readCount = FTPReader.Read(buffer, 0, bufferSize);
-            }
-
-            FTPReader.Dispose();
-            FTPReader.Close();
-
-            return AppInfo;
-             */
-
             FTP Ftp = new FTP(URI.Host, URI.Port);
             string FileName = AppName + ".zip";
             string InfoName = AppName + ".info";
@@ -91,7 +71,6 @@ namespace LimFTPClient
             }
             catch
             {
-                //throw new FTPException("Info not found");
                 InfoName = null;
             }
 
@@ -102,20 +81,16 @@ namespace LimFTPClient
             }
             catch
             {
-                //throw new FTPException("Logo not found");
-
                 LogoName = null;
             }
 
             try
-            {
+            {   
                 Ftp.GetFile(ScrShotName, BufferPath + "\\" + ScrShotName, true);
                 ScrShotName = BufferPath + "\\" + ScrShotName;
             }
             catch
             {
-                //throw new FTPException("ScrShot not found");
-
                 ScrShotName = null;
             }
 
