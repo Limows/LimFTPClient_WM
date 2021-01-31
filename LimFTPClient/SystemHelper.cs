@@ -177,5 +177,10 @@ namespace LimFTPClient
                 }
             }
         }
+
+        static public bool AppUninstall(string AppName)
+        {
+            return false;
+        }
     }
 }

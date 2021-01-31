@@ -121,7 +121,7 @@ namespace LimFTPClient
             }
             catch(Exception NewEx)
             {
-                Listing = "";
+                Listing = null;
                 ParamsHelper.IsThreadAlive = false;
                 ParamsHelper.IsThreadError = true;
                 ParamsHelper.ThreadException = NewEx;
@@ -150,7 +150,6 @@ namespace LimFTPClient
             Ftp.Disconnect();
 
             ParamsHelper.IsThreadAlive = false;
-
         }
 
         static public string CheckUpdates()

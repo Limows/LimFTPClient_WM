@@ -34,7 +34,7 @@
             this.ActionsMenuItem = new System.Windows.Forms.MenuItem();
             this.ParamsMenuItem = new System.Windows.Forms.MenuItem();
             this.RefreshMenuItem = new System.Windows.Forms.MenuItem();
-            this.RegisterMenuItem = new System.Windows.Forms.MenuItem();
+            this.ExitMenuItem = new System.Windows.Forms.MenuItem();
             this.RefMenu = new System.Windows.Forms.MenuItem();
             this.HelpMenuItem = new System.Windows.Forms.MenuItem();
             this.AboutMenuItem = new System.Windows.Forms.MenuItem();
@@ -52,7 +52,6 @@
             this.FreeMemLabel = new System.Windows.Forms.Label();
             this.InstalledBox = new System.Windows.Forms.ListBox();
             this.ListingThreadTimer = new System.Windows.Forms.Timer();
-            this.ExitMenuItem = new System.Windows.Forms.MenuItem();
             this.TabControl.SuspendLayout();
             this.NewPage.SuspendLayout();
             this.InstalledPage.SuspendLayout();
@@ -67,7 +66,6 @@
             // 
             this.ActionsMenuItem.MenuItems.Add(this.ParamsMenuItem);
             this.ActionsMenuItem.MenuItems.Add(this.RefreshMenuItem);
-            this.ActionsMenuItem.MenuItems.Add(this.RegisterMenuItem);
             this.ActionsMenuItem.MenuItems.Add(this.ExitMenuItem);
             this.ActionsMenuItem.Text = "Действия";
             // 
@@ -81,10 +79,10 @@
             this.RefreshMenuItem.Text = "Обновить";
             this.RefreshMenuItem.Click += new System.EventHandler(this.BackMenuItem_Click);
             // 
-            // RegisterMenuItem
+            // ExitMenuItem
             // 
-            this.RegisterMenuItem.Text = "Регистрация";
-            this.RegisterMenuItem.Click += new System.EventHandler(this.RegisterMenuItem_Click);
+            this.ExitMenuItem.Text = "Выход";
+            this.ExitMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
             // 
             // RefMenu
             // 
@@ -167,7 +165,7 @@
             this.InstalledPage.Controls.Add(this.InstalledBox);
             this.InstalledPage.Location = new System.Drawing.Point(0, 0);
             this.InstalledPage.Name = "InstalledPage";
-            this.InstalledPage.Size = new System.Drawing.Size(232, 242);
+            this.InstalledPage.Size = new System.Drawing.Size(240, 245);
             this.InstalledPage.Text = "Установленные";
             // 
             // InstalledLabel
@@ -222,11 +220,6 @@
             // 
             this.ListingThreadTimer.Tick += new System.EventHandler(this.ListingThreadTimer_Tick);
             // 
-            // ExitMenuItem
-            // 
-            this.ExitMenuItem.Text = "Выход";
-            this.ExitMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -270,7 +263,6 @@
         private System.Windows.Forms.Button PropButton;
         private System.Windows.Forms.Button DeleteButton;
         private System.Windows.Forms.Label InstalledLabel;
-        private System.Windows.Forms.MenuItem RegisterMenuItem;
         private System.Windows.Forms.Timer ListingThreadTimer;
         private System.Windows.Forms.MenuItem UpdateMenuItem;
         private System.Windows.Forms.MenuItem ExitMenuItem;

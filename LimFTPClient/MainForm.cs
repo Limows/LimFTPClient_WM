@@ -26,9 +26,6 @@ namespace LimFTPClient
                 IOHelper.RemoveParameters();
             }
 
-            RegisterMenuItem.Enabled = false;
-            PropButton.Enabled = false;
-            DeleteButton.Enabled = false;
             ListingThreadTimer.Enabled = false;
             ListingThreadTimer.Interval = 10;
 
@@ -77,11 +74,6 @@ namespace LimFTPClient
             ListingThread.Start();
 
             ListingThreadTimer.Enabled = true;
-
-        }
-
-        private void ConnectionStatusLabel_ParentChanged(object sender, EventArgs e)
-        {
 
         }
 
@@ -137,7 +129,21 @@ namespace LimFTPClient
 
         private void DeleteButton_Click(object sender, EventArgs e)
         {
+            bool IsUninstalled = false;
 
+            if (!String.IsNullOrEmpty(InstalledBox.Text))
+            {
+                IsUninstalled = SystemHelper.AppUninstall(InstalledBox.Text);
+                    
+                if (!IsUninstalled)
+                {
+                    MessageBox.Show("Удаление не удалось");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Приложение не выбрано", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+            }
         }
 
         private void PropButton_Click(object sender, EventArgs e)
@@ -163,13 +169,6 @@ namespace LimFTPClient
             {
                 MemLabel.Text = "0 байт";
             }
-
-            PropButton.Enabled = !PropButton.Enabled;
-            //RegisterMenuItem.Enabled = !RegisterMenuItem.Enabled;
-        }
-
-        private void RegisterMenuItem_Click(object sender, EventArgs e)
-        {
 
         }
 
