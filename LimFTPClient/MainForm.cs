@@ -224,8 +224,18 @@ namespace LimFTPClient
         private void UpdateSysMenuItem_Click(object sender, EventArgs e)
         {
             AboutBox NewAboutBox = new AboutBox();
-            string Version = NetHelper.CheckUpdates();
             string CurrentVersion = NewAboutBox.AssemblyVersion;
+            string Version;
+
+            try
+            {
+                Version = NetHelper.CheckUpdates();
+            }
+            catch
+            {
+                MessageBox.Show("Не удалось проверить наличие обновлений", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
+                return;
+            }
             
             if (CurrentVersion != Version)
             {
@@ -234,9 +244,18 @@ namespace LimFTPClient
                 if (Result == DialogResult.Yes)
                 {
                     Version = Version.Remove(Version.LastIndexOf('.'), 2);
-                    Cursor.Current = Cursors.WaitCursor;
-                    NetHelper.GetUpdates(Version);
-                    Cursor.Current = Cursors.Default;
+
+                    try
+                    {
+                        Cursor.Current = Cursors.WaitCursor;
+                        NetHelper.GetUpdates(Version);
+                        Cursor.Current = Cursors.Default;
+                    }
+                    catch
+                    {
+                        Cursor.Current = Cursors.Default;
+                        MessageBox.Show("Не удалось загрузить обновление", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
+                    }
 
                     //SystemHelper.CabInstall(ParamsHelper.DownloadPath + "\\Update.bat", ParamsHelper.InstallPath + "\\LimFTPClient", true);
                 }
