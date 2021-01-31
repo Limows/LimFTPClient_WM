@@ -18,6 +18,22 @@ You need the following stuff to install this program:
 
 ## Usage
 
+### Choosing app for install
+
+ Click on the application name in the list
+ 
+### Downloading app installation
+
+ Click on the "Download" button and after downloading choose whether to install the application
+ 
+### Deleting installed app
+
+### Update manager
+
+ Click the update menu item. 
+ After verification, the manager will offer to download the new version, if it exists
+ After downloading, close the program and run the file "Update.cab" from your Downloading directory
+
 ## Supported functions
 
  - Listing available for device applications

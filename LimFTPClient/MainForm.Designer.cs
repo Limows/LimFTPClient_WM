@@ -52,6 +52,7 @@
             this.FreeMemLabel = new System.Windows.Forms.Label();
             this.InstalledBox = new System.Windows.Forms.ListBox();
             this.ListingThreadTimer = new System.Windows.Forms.Timer();
+            this.ExitMenuItem = new System.Windows.Forms.MenuItem();
             this.TabControl.SuspendLayout();
             this.NewPage.SuspendLayout();
             this.InstalledPage.SuspendLayout();
@@ -67,6 +68,7 @@
             this.ActionsMenuItem.MenuItems.Add(this.ParamsMenuItem);
             this.ActionsMenuItem.MenuItems.Add(this.RefreshMenuItem);
             this.ActionsMenuItem.MenuItems.Add(this.RegisterMenuItem);
+            this.ActionsMenuItem.MenuItems.Add(this.ExitMenuItem);
             this.ActionsMenuItem.Text = "Действия";
             // 
             // ParamsMenuItem
@@ -220,6 +222,11 @@
             // 
             this.ListingThreadTimer.Tick += new System.EventHandler(this.ListingThreadTimer_Tick);
             // 
+            // ExitMenuItem
+            // 
+            this.ExitMenuItem.Text = "Выход";
+            this.ExitMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -266,6 +273,7 @@
         private System.Windows.Forms.MenuItem RegisterMenuItem;
         private System.Windows.Forms.Timer ListingThreadTimer;
         private System.Windows.Forms.MenuItem UpdateMenuItem;
+        private System.Windows.Forms.MenuItem ExitMenuItem;
     }
 }
 

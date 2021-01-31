@@ -155,7 +155,7 @@ namespace LimFTPClient
 
         static public string CheckUpdates()
         {
-            Uri URI = new Uri("http://limowski.xyz:80/LimFTPClientVersion.txt");
+            Uri URI = new Uri("http://limowski.xyz:80/downloads/LimFTPClient/WinMobile/LimFTPClientVersion.txt");
             HttpWebRequest Request = (HttpWebRequest)WebRequest.Create(URI);
             HttpWebResponse Response = (HttpWebResponse)Request.GetResponse();
             string ResponseMessage;
@@ -169,20 +169,26 @@ namespace LimFTPClient
             return ResponseMessage;
         }
 
-        static public string GetUpdates(string Version)
-        {   
-            Uri URI = new Uri("https://github.com/Limows/LimFTPClient_WM/releases/download/v" + Version + "/LimFTPClient.cab");
+        static public void GetUpdates(string Version)
+        {
+            Uri URI = new Uri("http://limowski.xyz:80/downloads/LimFTPClient/WinMobile/LimFTPClient.cab");
             HttpWebRequest Request = (HttpWebRequest)WebRequest.Create(URI);
             HttpWebResponse Response = (HttpWebResponse)Request.GetResponse();
-            string ResponseMessage;
 
-            using (StreamReader stream = new StreamReader(Response.GetResponseStream(), Encoding.UTF8))
+            using (FileStream UpdateFile = new FileStream(ParamsHelper.DownloadPath + "\\Update.cab", FileMode.Create, FileAccess.Write))
             {
-                ResponseMessage = stream.ReadToEnd();
-                ResponseMessage = ResponseMessage.Replace("\n", "");
-            }
+                using (BinaryReader Reader = new BinaryReader(Response.GetResponseStream()))
+                {
+                    int BufSize = 2048;
+                    byte[] Buffer = new byte[BufSize];
+                    int Count = 0;
 
-            return ResponseMessage;
+                    while ((Count = Reader.Read(Buffer, 0, BufSize)) > 0)
+                    {
+                        UpdateFile.Write(Buffer, 0, Count);
+                    }
+                }
+            }
         }
 
     }

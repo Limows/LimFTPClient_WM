@@ -66,14 +66,14 @@ namespace LimFTPClient
 
                 foreach (string cab in Cabs)
                 {
-                    IsInstalled = CabInstall(cab, InstallPath);
+                    IsInstalled = CabInstall(cab, InstallPath, Overwrite);
                 }
             }
 
             return IsInstalled;
         }
 
-        static public bool CabInstall(string CabPath, string InstallPath)
+        static public bool CabInstall(string CabPath, string InstallPath, bool Overwrite)
         {
             string ConsoleArguments = "/delete 0 /noaskdest ";
             string SoftwareKey = "Software\\Apps\\Microsoft Application Installer";

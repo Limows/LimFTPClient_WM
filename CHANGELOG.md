@@ -1,5 +1,19 @@
 # Changelog
 
+## [v0.6.1] - (31.01.21)
+
+### Added
+
+ - Exit menu item
+ - GetUpdate function
+
+### Changed
+
+ - Slight difference in code
+
+### Fixed
+
+
 ## [v0.6.0] - (31.01.21)
 
 ### Added

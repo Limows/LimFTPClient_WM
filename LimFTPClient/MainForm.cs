@@ -125,7 +125,6 @@ namespace LimFTPClient
             string AppName = AppsBox.Text.Replace(" ", "_");
             ParamsHelper.AppURI = new Uri(ParamsHelper.CurrentURI.ToString() + "/" + AppName);
             ParamsHelper.CurrentURI = ParamsHelper.AppURI;
-            //MessageBox.Show(Parameters.CurrentURI.ToString());
 
             Cursor.Current = Cursors.WaitCursor;
 
@@ -158,7 +157,7 @@ namespace LimFTPClient
         {
             try
             {
-                MemLabel.Text = ParamsHelper.BytesToMegs(IO.GetStorageSpace(ParamsHelper.DownloadPath)).ToString("0.##") + " МБ";
+                MemLabel.Text = ParamsHelper.BytesToMegs(IO.GetStorageSpace(ParamsHelper.InstallPath)).ToString("0.##") + " МБ";
             }
             catch (ArgumentNullException)
             {
@@ -227,11 +226,7 @@ namespace LimFTPClient
             AboutBox NewAboutBox = new AboutBox();
             string Version = NetHelper.CheckUpdates();
             string CurrentVersion = NewAboutBox.AssemblyVersion;
-
-            MessageBox.Show("Последняя версия: " + Version, "Сообщение");
-
-            /*
-
+            
             if (CurrentVersion != Version)
             {
                 DialogResult Result = MessageBox.Show("Версия: " + Version, "Обновить?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
@@ -239,19 +234,27 @@ namespace LimFTPClient
                 if (Result == DialogResult.Yes)
                 {
                     Version = Version.Remove(Version.LastIndexOf('.'), 2);
-                    string Response = FTPHelper.GetUpdates(Version);
+                    Cursor.Current = Cursors.WaitCursor;
+                    NetHelper.GetUpdates(Version);
+                    Cursor.Current = Cursors.Default;
+
+                    //SystemHelper.CabInstall(ParamsHelper.DownloadPath + "\\Update.bat", ParamsHelper.InstallPath + "\\LimFTPClient", true);
                 }
             }
             else
             {
                 MessageBox.Show("Последняя версия", "Сообщение");   
             }
-             */
         }
 
         private void SearchBox_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void ExitMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }
