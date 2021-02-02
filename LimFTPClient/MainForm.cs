@@ -124,7 +124,6 @@ namespace LimFTPClient
             NewAppForm.ShowDialog();
 
             Cursor.Current = Cursors.Default;
-
         }
 
         private void DeleteButton_Click(object sender, EventArgs e)
@@ -132,7 +131,9 @@ namespace LimFTPClient
             bool IsUninstalled = false;
 
             if (!String.IsNullOrEmpty(InstalledBox.Text))
-            {
+            {   
+                //AboutAppBox NewAboutAppBox = new AboutAppBox(InstalledBox.Text);
+                //string AppName = NewAboutAppBox.AppProduct;
                 IsUninstalled = SystemHelper.AppUninstall(InstalledBox.Text);
                     
                 if (!IsUninstalled)
@@ -144,6 +145,8 @@ namespace LimFTPClient
             {
                 MessageBox.Show("Приложение не выбрано", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
             }
+
+            GetAppsList();
         }
 
         private void PropButton_Click(object sender, EventArgs e)

@@ -106,6 +106,7 @@ namespace LimFTPClient
             DownloadPathBox.Text = ParamsHelper.DownloadPath;
             OverwriteDirsBox.Checked = ParamsHelper.IsOverwrite;
             AutoInstallBox.Checked = ParamsHelper.IsAutoInstall;
+            RmPackageBox.Checked = ParamsHelper.IsRmPackage;
 
             if (ParamsHelper.InstallPath == "\\Program Files")
             {
@@ -115,10 +116,6 @@ namespace LimFTPClient
             {
                 CardInstallButton.Checked = true;
             }
-
-            RmPackageBox.Checked = false;
-            RmPackageBox.Enabled = false;
-
         }
 
         private void DownloadPathBox_GotFocus(object sender, EventArgs e)

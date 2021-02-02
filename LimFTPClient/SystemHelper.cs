@@ -74,8 +74,18 @@ namespace LimFTPClient
         }
 
         static public bool CabInstall(string CabPath, string InstallPath, bool Overwrite)
-        {
-            string ConsoleArguments = "/delete 0 /noaskdest ";
+        {   
+            string ConsoleArguments;
+
+            if (ParamsHelper.IsRmPackage)
+            {
+                ConsoleArguments = "/delete 1 /noaskdest ";
+            }
+            else
+            {
+                ConsoleArguments = "/delete 0 /noaskdest ";
+            }
+
             string SoftwareKey = "Software\\Apps\\Microsoft Application Installer";
 
             using (RegistryKey AppInstallerKey = Registry.LocalMachine.OpenSubKey(SoftwareKey, true))
@@ -95,6 +105,13 @@ namespace LimFTPClient
 
                     InstallKey.DeleteValue(CabPath);
                 }
+            }
+
+            if (ParamsHelper.IsRmPackage)
+            {
+                Directory.Delete(Path.GetDirectoryName(CabPath), true);
+
+                //File.Delete
             }
 
             return true;
@@ -128,7 +145,13 @@ namespace LimFTPClient
                 CreateShortcut(ShortcutName, Execs[0], Overwrite);   
             }
 
-            AddToRegistry(AppName, InstallPath);
+            AddToRegistry(AppName, InstallPath, Execs);
+
+            if (ParamsHelper.IsRmPackage)
+            {
+                string Root = DirPath.Remove(DirPath.LastIndexOf("\\"), DirPath.Length - DirPath.LastIndexOf("\\"));
+                Directory.Delete(Root, true);
+            }
 
             return true;
 
@@ -163,7 +186,12 @@ namespace LimFTPClient
             Writer.Close();
         }
 
-        static public void AddToRegistry(string AppName, string InstallPath)
+        static public void DeleteShortcut(string ShortcutName)
+        {
+            File.Delete(ShortcutName);
+        }
+
+        static public void AddToRegistry(string AppName, string InstallPath, string[] ExecFiles)
         {
             string SoftwareKey = "Software\\Apps\\";
 
@@ -176,11 +204,87 @@ namespace LimFTPClient
                     AppKey.SetValue("InstlDir", InstallPath);
                 }
             }
+
+            SoftwareKey = "Security\\AppInstall\\";
+
+            using (RegistryKey RegKey = Registry.LocalMachine.OpenSubKey(SoftwareKey, true))
+            {
+                using (RegistryKey AppKey = RegKey.CreateSubKey(AppName))
+                {   
+                    AppKey.SetValue("InstallDir", InstallPath);
+                    AppKey.SetValue("Role", 24);
+                    //AppKey.SetValue("InstlDir", InstallPath);
+                    using (RegistryKey ExecKey = AppKey.CreateSubKey("ExecutableFiles"))
+                    {
+                        foreach (string exec in ExecFiles)
+                        {
+                            ExecKey.SetValue(exec, "", 0);
+                        }
+                    }
+                }
+            }
+        }
+
+        static public void RemoveFromRegistry(string AppName)
+        {
+            string SoftwareKey = "Software\\Apps\\";
+
+            using (RegistryKey RegKey = Registry.LocalMachine.OpenSubKey(SoftwareKey, true))
+            {
+                RegKey.DeleteSubKey(AppName);
+            }
+
+            SoftwareKey = "Security\\AppInstall\\";
+
+            using (RegistryKey RegKey = Registry.LocalMachine.OpenSubKey(SoftwareKey, true))
+            {
+                    RegKey.DeleteSubKey(AppName);
+            }
+        }
+
+        static public bool IsCabInstalled(string AppName)
+        {
+            string SoftwareKey = "Security\\AppInstall\\";
+
+            using (RegistryKey RegKey = Registry.LocalMachine.OpenSubKey(SoftwareKey, true))
+            {
+                using (RegistryKey AppKey = RegKey.CreateSubKey(AppName))
+                {
+                    string UninstallPath = (string)AppKey.GetValue("Uninstall", String.Empty);
+
+                    if (String.IsNullOrEmpty(UninstallPath)) return false;
+                    else return true;
+                }
+            }
         }
 
         static public bool AppUninstall(string AppName)
         {
-            return false;
+            if (IsCabInstalled(AppName))
+            {
+                return false;
+            }
+            else
+            {
+                try
+                {
+                    string InstallDir = GetInstallDir(AppName);
+
+                    Directory.Delete(InstallDir, true);
+
+                    RemoveFromRegistry(AppName);
+
+                    string ShortcutName = Environment.GetFolderPath(Environment.SpecialFolder.Programs) + "\\" + AppName + ".lnk";
+
+                    DeleteShortcut(ShortcutName);
+
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
         }
     }
 }
