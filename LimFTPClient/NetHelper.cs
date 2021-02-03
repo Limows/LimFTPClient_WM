@@ -71,8 +71,8 @@ namespace LimFTPClient
             }
             catch
             {
-                InfoName = null;
                 File.Delete(BufferPath + "\\" + InfoName);
+                InfoName = null;
             }
 
             try
@@ -82,8 +82,8 @@ namespace LimFTPClient
             }
             catch
             {
-                LogoName = null;
                 File.Delete(BufferPath + "\\" + LogoName);
+                LogoName = null;
             }
 
             try
@@ -93,8 +93,8 @@ namespace LimFTPClient
             }
             catch
             {
-                ScrShotName = null;
                 File.Delete(BufferPath + "\\" + ScrShotName);
+                ScrShotName = null;
             }
 
             AppInfo = FileSize + "\n" + InfoName + "\n" + LogoName + "\n" + ScrShotName;
