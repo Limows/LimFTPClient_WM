@@ -63,11 +63,22 @@ namespace LimFTPClient
             }
             else
             {
-
                 foreach (string cab in Cabs)
                 {
                     IsInstalled = CabInstall(cab, InstallPath, Overwrite);
                 }
+            }
+
+            if (ParamsHelper.IsRmPackage)
+            {
+                try
+                {
+                    AppName = AppName.Replace(' ', '_');
+                    Directory.Delete(ParamsHelper.DownloadPath + "\\" + AppName, true);
+                    File.Delete(ParamsHelper.DownloadPath + "\\" + AppName + ".zip");
+                }
+                catch
+                { }
             }
 
             return IsInstalled;
@@ -75,16 +86,7 @@ namespace LimFTPClient
 
         static public bool CabInstall(string CabPath, string InstallPath, bool Overwrite)
         {   
-            string ConsoleArguments;
-
-            if (ParamsHelper.IsRmPackage)
-            {
-                ConsoleArguments = "/delete 1 /noaskdest ";
-            }
-            else
-            {
-                ConsoleArguments = "/delete 0 /noaskdest ";
-            }
+            string ConsoleArguments = "/delete 0 /noaskdest ";
 
             string SoftwareKey = "Software\\Apps\\Microsoft Application Installer";
 
@@ -105,13 +107,6 @@ namespace LimFTPClient
 
                     InstallKey.DeleteValue(CabPath);
                 }
-            }
-
-            if (ParamsHelper.IsRmPackage)
-            {
-                Directory.Delete(Path.GetDirectoryName(CabPath), true);
-
-                //File.Delete
             }
 
             return true;
@@ -146,12 +141,6 @@ namespace LimFTPClient
             }
 
             AddToRegistry(AppName, InstallPath, Execs);
-
-            if (ParamsHelper.IsRmPackage)
-            {
-                string Root = DirPath.Remove(DirPath.LastIndexOf("\\"), DirPath.Length - DirPath.LastIndexOf("\\"));
-                Directory.Delete(Root, true);
-            }
 
             return true;
 
@@ -238,7 +227,12 @@ namespace LimFTPClient
 
             using (RegistryKey RegKey = Registry.LocalMachine.OpenSubKey(SoftwareKey, true))
             {
-                    RegKey.DeleteSubKey(AppName);
+                using (RegistryKey AppKey = RegKey.CreateSubKey(AppName))
+                {
+                    AppKey.DeleteSubKey("ExecutableFiles");
+                }
+
+                RegKey.DeleteSubKey(AppName);
             }
         }
 

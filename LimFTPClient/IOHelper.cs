@@ -80,7 +80,7 @@ namespace LimFTPClient
 
         static public void CleanBuffer()
         {
-            Directory.Delete(GetCurrentDirectory() + "\\LocalFiles", true);
+            Directory.Delete(GetCurrentDirectory() + "\\Temp", true);
         }
 
         static private string GetConfigPath()

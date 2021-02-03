@@ -42,6 +42,7 @@ You need the following stuff to install this program:
  - Unpacking and installing package
  - Listing installed on device applications
  - Watching application properties
+ - Uninstalling application
  - Displaying free space in the installation folder
  
 ## OS Support

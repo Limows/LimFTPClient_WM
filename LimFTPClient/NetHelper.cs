@@ -46,7 +46,7 @@ namespace LimFTPClient
             string ScrShotName = AppName + ".png";
             string LogoName = "Logo.png";
             string FileSize;
-            string BufferPath = IOHelper.GetCurrentDirectory() + "\\LocalFiles\\" + AppName;
+            string BufferPath = IOHelper.GetCurrentDirectory() + "\\Temp\\" + AppName;
             string AppInfo;
 
             if (!Directory.Exists(BufferPath)) Directory.CreateDirectory(BufferPath);
@@ -72,6 +72,7 @@ namespace LimFTPClient
             catch
             {
                 InfoName = null;
+                File.Delete(BufferPath + "\\" + InfoName);
             }
 
             try
@@ -82,6 +83,7 @@ namespace LimFTPClient
             catch
             {
                 LogoName = null;
+                File.Delete(BufferPath + "\\" + LogoName);
             }
 
             try
@@ -92,6 +94,7 @@ namespace LimFTPClient
             catch
             {
                 ScrShotName = null;
+                File.Delete(BufferPath + "\\" + ScrShotName);
             }
 
             AppInfo = FileSize + "\n" + InfoName + "\n" + LogoName + "\n" + ScrShotName;

@@ -1,5 +1,20 @@
 # Changelog
 
+## [v0.6.2] - (03.01.21)
+
+### Added
+
+ - Uninstall function
+
+### Changed
+
+ - Install function updated
+
+### Fixed
+
+ - Stability fixes
+ - Less garbage in memory
+
 ## [v0.6.1] - (31.01.21)
 
 ### Added
@@ -12,6 +27,7 @@
  - Slight difference in code
 
 ### Fixed
+
 
 ## [v0.6.0] - (31.01.21)
 
@@ -164,6 +180,7 @@
 
  - Ported from Windows version of LimFTPClient
 
+[v0.6.2]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.6.2
 [v0.6.1]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.6.1
 [v0.6.0]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.6.0
 [v0.5.6]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.5.6

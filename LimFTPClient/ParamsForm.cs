@@ -130,7 +130,14 @@ namespace LimFTPClient
 
         private void CleanBufferButton_Click(object sender, EventArgs e)
         {
-            IOHelper.CleanBuffer();
+            try
+            {
+                IOHelper.CleanBuffer();
+            }
+            catch
+            {
+
+            }
         }
     }
 }
