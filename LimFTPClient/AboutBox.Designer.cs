@@ -67,6 +67,7 @@
             // 
             // textBoxDescription
             // 
+            this.textBoxDescription.AcceptsReturn = true;
             this.textBoxDescription.Location = new System.Drawing.Point(7, 100);
             this.textBoxDescription.Multiline = true;
             this.textBoxDescription.Name = "textBoxDescription";

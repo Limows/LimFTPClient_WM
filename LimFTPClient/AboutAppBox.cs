@@ -22,7 +22,8 @@ namespace LimFTPClient
             this.labelProductName.Text = AppProduct;
             //this.labelVersion.Text = String.Format("Версия {0}", AppVersion);
             this.labelCompanyName.Text = String.Format("Автор: {0}", AppCompany);
-            this.textBoxInstallPath.Text += String.Format("Путь установки: {0}", AppInstallPath);
+            this.labelInstallDate.Text = String.Format("Установлено: {0}", AppInstallDate);
+            this.textBoxInstallPath.Text = String.Format("Путь установки: {0}", AppInstallPath);
         }
 
         public string AppTitle
@@ -110,6 +111,14 @@ namespace LimFTPClient
             get
             {
                 return AppName.Replace(this.labelProductName.Text, String.Empty);
+            }
+        }
+
+        public string AppInstallDate
+        {
+            get
+            {
+                return Directory.GetLastWriteTime(AppInstallPath).ToString("dd.MM.yy");
             }
         }
 

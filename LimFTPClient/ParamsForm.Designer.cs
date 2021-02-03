@@ -45,35 +45,35 @@
             // 
             // SaveButton
             // 
-            this.SaveButton.Location = new System.Drawing.Point(158, 263);
+            this.SaveButton.Location = new System.Drawing.Point(80, 266);
             this.SaveButton.Name = "SaveButton";
-            this.SaveButton.Size = new System.Drawing.Size(77, 20);
-            this.SaveButton.TabIndex = 7;
+            this.SaveButton.Size = new System.Drawing.Size(77, 21);
+            this.SaveButton.TabIndex = 9;
             this.SaveButton.Text = "Сохранить";
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
             // DownloadPathLabel
             // 
-            this.DownloadPathLabel.Location = new System.Drawing.Point(5, 153);
+            this.DownloadPathLabel.Location = new System.Drawing.Point(5, 152);
             this.DownloadPathLabel.Name = "DownloadPathLabel";
             this.DownloadPathLabel.Size = new System.Drawing.Size(100, 20);
             this.DownloadPathLabel.Text = "Путь загрузки";
             // 
             // OpenDirButton1
             // 
-            this.OpenDirButton1.Location = new System.Drawing.Point(178, 175);
+            this.OpenDirButton1.Location = new System.Drawing.Point(178, 174);
             this.OpenDirButton1.Name = "OpenDirButton1";
             this.OpenDirButton1.Size = new System.Drawing.Size(57, 21);
-            this.OpenDirButton1.TabIndex = 6;
+            this.OpenDirButton1.TabIndex = 7;
             this.OpenDirButton1.Text = "Обзор";
             this.OpenDirButton1.Click += new System.EventHandler(this.OpenDirButton1_Click);
             // 
             // DownloadPathBox
             // 
-            this.DownloadPathBox.Location = new System.Drawing.Point(5, 175);
+            this.DownloadPathBox.Location = new System.Drawing.Point(5, 174);
             this.DownloadPathBox.Name = "DownloadPathBox";
             this.DownloadPathBox.Size = new System.Drawing.Size(167, 21);
-            this.DownloadPathBox.TabIndex = 5;
+            this.DownloadPathBox.TabIndex = 6;
             this.DownloadPathBox.GotFocus += new System.EventHandler(this.DownloadPathBox_GotFocus);
             this.DownloadPathBox.LostFocus += new System.EventHandler(this.DownloadPathBox_LostFocus);
             // 
@@ -89,7 +89,7 @@
             this.AutoInstallBox.Location = new System.Drawing.Point(5, 61);
             this.AutoInstallBox.Name = "AutoInstallBox";
             this.AutoInstallBox.Size = new System.Drawing.Size(230, 20);
-            this.AutoInstallBox.TabIndex = 13;
+            this.AutoInstallBox.TabIndex = 3;
             this.AutoInstallBox.Text = "Автоматическая установка";
             // 
             // RmPackageBox
@@ -97,7 +97,7 @@
             this.RmPackageBox.Location = new System.Drawing.Point(5, 35);
             this.RmPackageBox.Name = "RmPackageBox";
             this.RmPackageBox.Size = new System.Drawing.Size(230, 20);
-            this.RmPackageBox.TabIndex = 14;
+            this.RmPackageBox.TabIndex = 2;
             this.RmPackageBox.Text = "Удалить после установки";
             // 
             // OverwriteDirsBox
@@ -105,7 +105,7 @@
             this.OverwriteDirsBox.Location = new System.Drawing.Point(5, 9);
             this.OverwriteDirsBox.Name = "OverwriteDirsBox";
             this.OverwriteDirsBox.Size = new System.Drawing.Size(230, 20);
-            this.OverwriteDirsBox.TabIndex = 15;
+            this.OverwriteDirsBox.TabIndex = 1;
             this.OverwriteDirsBox.Text = "Перезаписывать файлы";
             // 
             // DeviceInstallButton
@@ -113,7 +113,7 @@
             this.DeviceInstallButton.Location = new System.Drawing.Point(5, 119);
             this.DeviceInstallButton.Name = "DeviceInstallButton";
             this.DeviceInstallButton.Size = new System.Drawing.Size(100, 20);
-            this.DeviceInstallButton.TabIndex = 16;
+            this.DeviceInstallButton.TabIndex = 4;
             this.DeviceInstallButton.Text = "Устройство";
             // 
             // CardInstallButton
@@ -121,15 +121,15 @@
             this.CardInstallButton.Location = new System.Drawing.Point(111, 119);
             this.CardInstallButton.Name = "CardInstallButton";
             this.CardInstallButton.Size = new System.Drawing.Size(100, 20);
-            this.CardInstallButton.TabIndex = 17;
+            this.CardInstallButton.TabIndex = 5;
             this.CardInstallButton.Text = "SD Card";
             // 
             // CleanBufferButton
             // 
-            this.CleanBufferButton.Location = new System.Drawing.Point(5, 202);
+            this.CleanBufferButton.Location = new System.Drawing.Point(5, 201);
             this.CleanBufferButton.Name = "CleanBufferButton";
-            this.CleanBufferButton.Size = new System.Drawing.Size(126, 21);
-            this.CleanBufferButton.TabIndex = 20;
+            this.CleanBufferButton.Size = new System.Drawing.Size(122, 21);
+            this.CleanBufferButton.TabIndex = 8;
             this.CleanBufferButton.Text = "Очистить буффер";
             this.CleanBufferButton.Click += new System.EventHandler(this.CleanBufferButton_Click);
             // 

@@ -42,13 +42,19 @@ namespace LimFTPClient
                 Thread DownloadingThread = new Thread(DownloadingStarter);
                 ParamsHelper.IsThreadAlive = true;
                 ParamsHelper.IsThreadError = false;
+                ParamsHelper.ThreadMessage = "";
 
                 DownloadingThread.Start();
 
                 StatusLabel.Text = ParamsHelper.ThreadMessage;
 
                 DownloadingTimer.Enabled = true;
-                DownloadButton.Enabled = false;
+                DownloadButton.Visible = false;
+                StatusBar.Visible = true;
+                StatusLabel.Left = 12;
+                StatusLabel.Width = 220;
+                DescriptionBox.Top = 120;
+                StatusBar.Value = StatusBar.Minimum;
             }
             else
             {
@@ -62,6 +68,8 @@ namespace LimFTPClient
             this.Text = AppName.Replace("_", " ");
             NameLabel.Text = AppName.Replace("_", " ");
             StatusLabel.Text = "";
+            StatusBar.Visible = false;
+            DescriptionBox.Top = 100;
 
             ParamsHelper.CurrentURI = ParamsHelper.AppURI;
 
@@ -81,19 +89,21 @@ namespace LimFTPClient
             if (String.IsNullOrEmpty(FileSize))
             {
                 SizeLabel.Text = "0 МБ";
+                StatusBar.Maximum = 100;
             }
             else
             {
                 SizeLabel.Text = FileSize;
+                StatusBar.Maximum = (int)(Convert.ToDouble(FileSize.Remove(4,3)) * 100);
             }
 
             if (String.IsNullOrEmpty(InfoName))
             {
-                AboutAppBox.Text = "Для этого приложения ещё нет описания";
+                DescriptionBox.Text = "Для этого приложения ещё нет описания";
             }
             else
             {   
-                AboutAppBox.Text = IOHelper.ReadTextFile(InfoName);
+                DescriptionBox.Text = IOHelper.ReadTextFile(InfoName);
             }
 
             if (String.IsNullOrEmpty(LogoName))
@@ -205,9 +215,18 @@ namespace LimFTPClient
         {
             if (!ParamsHelper.IsThreadAlive)
             {
-                DownloadingTimer.Enabled = false;
-                DownloadButton.Enabled = true;
-                StatusLabel.Text = ParamsHelper.ThreadMessage;
+                try
+                {
+                    DownloadingTimer.Enabled = false;
+                    DownloadButton.Visible = true;
+                    StatusBar.Visible = false;
+                    StatusLabel.Width = 142;
+                    StatusLabel.Left = 90;
+                    DescriptionBox.Top = 100;
+                    StatusLabel.Text = ParamsHelper.ThreadMessage;
+                }
+                catch
+                { }
 
                 if (ParamsHelper.IsThreadError)
                 {
@@ -252,6 +271,9 @@ namespace LimFTPClient
             else
             {
                 StatusLabel.Text = ParamsHelper.ThreadMessage;
+
+                if (StatusBar.Value < StatusBar.Maximum) StatusBar.Value += 2;
+                else StatusBar.Value = StatusBar.Minimum;
 
                 if (ParamsHelper.IsThreadWaiting)
                 {

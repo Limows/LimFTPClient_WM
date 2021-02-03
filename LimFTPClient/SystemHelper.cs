@@ -91,15 +91,24 @@ namespace LimFTPClient
             string SoftwareKey = "Software\\Apps\\Microsoft Application Installer";
 
             using (RegistryKey AppInstallerKey = Registry.LocalMachine.OpenSubKey(SoftwareKey, true))
-            {
+            {   
                 using (RegistryKey InstallKey = AppInstallerKey.CreateSubKey("Install"))
                 {
-                    InstallKey.SetValue(CabPath, InstallPath);
+                    if (InstallKey.ValueCount != 0)
+                    {
+                        InstallKey.Close();
+                        AppInstallerKey.DeleteSubKey("Install");
+                    }
+                }
+
+                using (RegistryKey InstallKey = AppInstallerKey.CreateSubKey("Install"))
+                {
+                    InstallKey.SetValue(CabPath, ParamsHelper.InstallPath);
 
                     Process InstallProc = new Process();
                     InstallProc.StartInfo.FileName = "\\windows\\wceload.exe";
 
-                    InstallProc.StartInfo.Arguments = ConsoleArguments + "\"" + CabPath + "\"";
+                    InstallProc.StartInfo.Arguments = ConsoleArguments; +"\"" + CabPath + "\"";
 
                     InstallProc.Start();
 
