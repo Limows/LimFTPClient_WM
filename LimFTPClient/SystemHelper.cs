@@ -108,7 +108,7 @@ namespace LimFTPClient
                     Process InstallProc = new Process();
                     InstallProc.StartInfo.FileName = "\\windows\\wceload.exe";
 
-                    InstallProc.StartInfo.Arguments = ConsoleArguments; +"\"" + CabPath + "\"";
+                    InstallProc.StartInfo.Arguments = ConsoleArguments +"\"" + CabPath + "\"";
 
                     InstallProc.Start();
 
