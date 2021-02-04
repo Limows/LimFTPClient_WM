@@ -17,7 +17,7 @@ namespace LimFTPClient
         static public string DownloadPath;
         static public string InstallPath;
         static public string ConfigPath;
-        static public string OSVersion;
+        static public int OSVersion;
         static public List<string> AppsList;
         static public bool IsThreadAlive;
         static public bool IsThreadError;
@@ -27,6 +27,7 @@ namespace LimFTPClient
         static public bool IsAutoInstall;
         static public bool IsRmPackage;
         static public bool IsOverwrite;
+        static public bool IsUninstalling;
         
         /*
         public enum OSVersions

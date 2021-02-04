@@ -9,5 +9,6 @@ namespace NetCFLibFTP
     class FTPParameters
     {
         static public AutoResetEvent EndResponseEvent;
+        static public AutoResetEvent EndConnectEvent;
     }
 }

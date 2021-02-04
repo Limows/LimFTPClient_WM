@@ -94,7 +94,7 @@ namespace LimFTPClient
             else
             {
                 SizeLabel.Text = FileSize;
-                StatusBar.Maximum = (int)(Convert.ToDouble(FileSize.Remove(4,3)) * 100);
+                StatusBar.Maximum = (int)(Convert.ToDouble(FileSize.Split(' ')[0]) * 100);
             }
 
             if (String.IsNullOrEmpty(InfoName))
@@ -272,7 +272,7 @@ namespace LimFTPClient
             {
                 StatusLabel.Text = ParamsHelper.ThreadMessage;
 
-                if (StatusBar.Value < StatusBar.Maximum) StatusBar.Value += 2;
+                if (StatusBar.Value + 2 < StatusBar.Maximum) StatusBar.Value += 2;
                 else StatusBar.Value = StatusBar.Minimum;
 
                 if (ParamsHelper.IsThreadWaiting)

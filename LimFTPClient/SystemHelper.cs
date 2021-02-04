@@ -103,7 +103,7 @@ namespace LimFTPClient
 
                 using (RegistryKey InstallKey = AppInstallerKey.CreateSubKey("Install"))
                 {
-                    InstallKey.SetValue(CabPath, ParamsHelper.InstallPath);
+                    InstallKey.SetValue(CabPath, InstallPath);
 
                     Process InstallProc = new Process();
                     InstallProc.StartInfo.FileName = "\\windows\\wceload.exe";
@@ -203,20 +203,24 @@ namespace LimFTPClient
                 }
             }
 
-            SoftwareKey = "Security\\AppInstall\\";
-
-            using (RegistryKey RegKey = Registry.LocalMachine.OpenSubKey(SoftwareKey, true))
+            if (ParamsHelper.OSVersion == 5)
             {
-                using (RegistryKey AppKey = RegKey.CreateSubKey(AppName))
-                {   
-                    AppKey.SetValue("InstallDir", InstallPath);
-                    AppKey.SetValue("Role", 24);
-                    //AppKey.SetValue("InstlDir", InstallPath);
-                    using (RegistryKey ExecKey = AppKey.CreateSubKey("ExecutableFiles"))
+
+                SoftwareKey = "Security\\AppInstall\\";
+
+                using (RegistryKey RegKey = Registry.LocalMachine.OpenSubKey(SoftwareKey, true))
+                {
+                    using (RegistryKey AppKey = RegKey.CreateSubKey(AppName))
                     {
-                        foreach (string exec in ExecFiles)
+                        AppKey.SetValue("InstallDir", InstallPath);
+                        AppKey.SetValue("Role", 24);
+                        //AppKey.SetValue("InstlDir", InstallPath);
+                        using (RegistryKey ExecKey = AppKey.CreateSubKey("ExecutableFiles"))
                         {
-                            ExecKey.SetValue(exec, "", 0);
+                            foreach (string exec in ExecFiles)
+                            {
+                                ExecKey.SetValue(exec, "", 0);
+                            }
                         }
                     }
                 }
@@ -229,34 +233,61 @@ namespace LimFTPClient
 
             using (RegistryKey RegKey = Registry.LocalMachine.OpenSubKey(SoftwareKey, true))
             {
-                RegKey.DeleteSubKey(AppName);
+                try
+                {
+                    RegKey.DeleteSubKey(AppName);
+                }
+                catch
+                { }
             }
 
-            SoftwareKey = "Security\\AppInstall\\";
-
-            using (RegistryKey RegKey = Registry.LocalMachine.OpenSubKey(SoftwareKey, true))
+            if (ParamsHelper.OSVersion == 5)
             {
-                using (RegistryKey AppKey = RegKey.CreateSubKey(AppName))
-                {
-                    AppKey.DeleteSubKey("ExecutableFiles");
-                }
 
-                RegKey.DeleteSubKey(AppName);
+                SoftwareKey = "Security\\AppInstall\\";
+
+                using (RegistryKey RegKey = Registry.LocalMachine.OpenSubKey(SoftwareKey, true))
+                {
+                    using (RegistryKey AppKey = RegKey.CreateSubKey(AppName))
+                    {
+                        AppKey.DeleteSubKey("ExecutableFiles");
+                    }
+
+                    RegKey.DeleteSubKey(AppName);
+                }
             }
         }
 
         static public bool IsCabInstalled(string AppName)
         {
-            string SoftwareKey = "Security\\AppInstall\\";
-
-            using (RegistryKey RegKey = Registry.LocalMachine.OpenSubKey(SoftwareKey, true))
+            if (ParamsHelper.OSVersion == 5)
             {
-                using (RegistryKey AppKey = RegKey.CreateSubKey(AppName))
-                {
-                    string UninstallPath = (string)AppKey.GetValue("Uninstall", String.Empty);
+                string SoftwareKey = "Security\\AppInstall\\";
 
-                    if (String.IsNullOrEmpty(UninstallPath)) return false;
-                    else return true;
+                using (RegistryKey RegKey = Registry.LocalMachine.OpenSubKey(SoftwareKey, true))
+                {
+                    using (RegistryKey AppKey = RegKey.CreateSubKey(AppName))
+                    {
+                        string UninstallPath = (string)AppKey.GetValue("Uninstall", String.Empty);
+
+                        if (String.IsNullOrEmpty(UninstallPath)) return false;
+                        else return true;
+                    }
+                }
+            }
+            else
+            {
+                string SoftwareKey = "Software\\Apps\\";
+
+                using (RegistryKey RegKey = Registry.LocalMachine.OpenSubKey(SoftwareKey, true))
+                {
+                    using (RegistryKey AppKey = RegKey.CreateSubKey(AppName))
+                    {
+                        string CabPath = (string)AppKey.GetValue("CabFile", String.Empty);
+
+                        if (String.IsNullOrEmpty(CabPath)) return false;
+                        else return true;
+                    }
                 }
             }
         }
@@ -265,7 +296,34 @@ namespace LimFTPClient
         {
             if (IsCabInstalled(AppName))
             {
-                return false;
+                try
+                {
+                    if (ParamsHelper.OSVersion == 4)
+                    {
+                        Process InstallProc = new Process();
+                        ParamsHelper.IsUninstalling = true;
+
+                        InstallProc.StartInfo.FileName = "\\windows\\unload.exe";
+
+                        InstallProc.StartInfo.Arguments = AppName;
+
+                        InstallProc.Start();
+
+                        InstallProc.WaitForExit();
+
+                        RemoveFromRegistry(AppName);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
             else
             {

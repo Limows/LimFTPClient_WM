@@ -61,6 +61,12 @@ namespace LimFTPClient
         private void MainForm_Closing(object sender, CancelEventArgs e)
         {
             IOHelper.SaveParameters();
+
+            if (ParamsHelper.OSVersion == 4 && ParamsHelper.IsUninstalling)
+            {
+                e.Cancel = true;
+                ParamsHelper.IsUninstalling = false;
+            }
         }
 
         private void Connect()
@@ -79,12 +85,16 @@ namespace LimFTPClient
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            int MajorOSVersion = Environment.OSVersion.Version.Major;
+            ParamsHelper.OSVersion = Environment.OSVersion.Version.Major;
 
-            if (MajorOSVersion == 4) ParamsHelper.OSVersion = "WinMobile_2003";
-            else ParamsHelper.OSVersion = "WinMobile_5";
-
-            ParamsHelper.SystemURI = new Uri(ParamsHelper.ServerURI.ToString() + "/" + ParamsHelper.OSVersion);
+            if (ParamsHelper.OSVersion == 4)
+            {
+                ParamsHelper.SystemURI = new Uri(ParamsHelper.ServerURI.ToString() + "/WinMobile_2003");
+            }
+            else
+            {
+                ParamsHelper.SystemURI = new Uri(ParamsHelper.ServerURI.ToString() + "/WinMobile_5");
+            }
 
             GetAppsList();
 
