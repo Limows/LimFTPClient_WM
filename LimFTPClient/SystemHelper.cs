@@ -6,6 +6,8 @@ using System.IO;
 using System.Threading;
 using System.Diagnostics;
 using System.Reflection;
+using System.Xml;
+using Microsoft.WindowsMobile.Configuration;
 
 namespace LimFTPClient
 {
@@ -315,7 +317,17 @@ namespace LimFTPClient
                     }
                     else
                     {
-                        return false;
+                        XmlDocument UninstallData = new XmlDocument();
+
+                        UninstallData.LoadXml("<wap-provisioningdoc>" +
+                                        "<characteristic type=\"UnInstall\">" +
+                                            "<characteristic type=\"" + AppName + "\">" +
+                                                "<parm name=\"uninstall\" value=\"1\"/>" +
+                                            "</characteristic>" +
+                                        "</characteristic>" +
+                                    "</wap-provisioningdoc>");
+
+                        Microsoft.WindowsMobile.Configuration.ConfigurationManager.ProcessConfiguration(UninstallData, false);
                     }
 
                     return true;
@@ -346,6 +358,18 @@ namespace LimFTPClient
                     return false;
                 }
             }
+        }
+
+        private static List<string> UninstallDataParser(string AppName)
+        {
+            List<string> UninstallInfo = new List<string>();
+            string UninstallDataPath = "\\windows\\AppMgr\\" + AppName;
+            XmlDocument UninstallData = new XmlDocument();
+            string UninstallFilePath = Directory.GetFiles(UninstallDataPath, "*.tmp")[0];
+
+            UninstallData.Load(UninstallFilePath);
+
+            return UninstallInfo;
         }
     }
 }

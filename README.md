@@ -8,7 +8,9 @@ You need the following stuff to build this program:
 
  - Visual Studio 2005/2008
  - Windows Mobile SDK
- - ICSharpCode.SharpZipLib
+ - ICSharpCode.SharpZipLib (you can get it [here])
+
+You also need to copy Microsoft.WindowsMobile.Configuration library from SDK installation path.
  
 ## Installation
 
@@ -72,3 +74,5 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/Limows
 ## License
 
 This project is licensed under the terms of the [2-Clause BSD License](https://opensource.org/licenses/BSD-2-Clause).
+
+[here]: https://sourceforge.net/projects/sharpdevelop/files/SharpZipLib/0.85.5/SharpZipLib_0855_Bin.zip/download?use_mirror=iweb

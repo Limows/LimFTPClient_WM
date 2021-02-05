@@ -199,7 +199,15 @@ namespace LimFTPClient
                     {
                         ListingThreadTimer.Enabled = false;
                         Cursor.Current = Cursors.Default;
-                        MessageBox.Show("Не удалось подключиться к серверу", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
+
+                        if (NewEx.Message == "Repository is empty")
+                        {
+                            MessageBox.Show("Отсуствуют доступные приложения", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Не удалось подключиться к серверу", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
+                        }
                     }
 
                 }

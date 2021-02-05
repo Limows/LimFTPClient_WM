@@ -1,6 +1,24 @@
 # Changelog
 
-## [v0.6.2] - (03.01.21)
+## [v0.6.3] - (05.02.21)
+
+### Added
+
+ - More parameters
+ - Downloading and installing animation
+
+### Changed
+
+ - New Parameters form
+ - Install and uninstall functions have become more efficient
+ - Small UI changes
+
+### Fixed
+
+ - Stability fixes
+ - Many fixes for WinMobile
+
+## [v0.6.2] - (03.02.21)
 
 ### Added
 
@@ -151,7 +169,6 @@
  - List of installed apps
  - Installed app info
  
-
 ### Changed
 
  - OpenNetCF lib removed
@@ -180,6 +197,7 @@
 
  - Ported from Windows version of LimFTPClient
 
+[v0.6.3]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.6.3
 [v0.6.2]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.6.2
 [v0.6.1]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.6.1
 [v0.6.0]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.6.0

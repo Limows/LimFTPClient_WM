@@ -250,7 +250,6 @@ namespace NetCFLibFTP
 
                 if (socket != null)
                 {
-                    //Thread.Sleep(1000);
                     socket.EndConnect(state);
                     //m_success = true;
                 }
@@ -291,41 +290,25 @@ namespace NetCFLibFTP
 
                 try
                 {
-                    IPAddress address = Dns.GetHostEntry(m_host).AddressList[0];
+                    IPAddress address = IPAddress.Parse(m_host);
                     endpoint = new IPEndPoint(address, m_port);
                 }
-                catch (SocketException)
+                catch (System.FormatException)
                 {
-                    m_cmdsocket = null;
-			        m_server	= FTPServerType.Unknown;
-			        m_connected = false;
-                    return;
+                    try
+                    {
+                        IPAddress address = Dns.GetHostEntry(m_host).AddressList[0];
+                        endpoint = new IPEndPoint(address, m_port);
+                    }
+                    catch (SocketException)
+                    {
+                        m_cmdsocket = null;
+                        m_connected = false;
+                        return;
+                    }
                 }
 
                 // make the connection
-                /*
-                try
-                {
-                    m_cmdsocket.Connect(endpoint);
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-                 */
-                /*
-                try
-                {
-                    FTPParameters.EndConnectEvent = new AutoResetEvent(false);
-                    m_cmdsocket.BeginConnect(endpoint, EndConnection, m_cmdsocket);
-                    FTPParameters.EndConnectEvent.WaitOne(5000, false);
-                }
-                catch
-                {
-
-                }
-                 */
-
                 var ConnectionResult = m_cmdsocket.BeginConnect(endpoint, null, null);
 
                 bool IsConnected = ConnectionResult.AsyncWaitHandle.WaitOne(5000, false);
@@ -339,9 +322,7 @@ namespace NetCFLibFTP
                 // check the result
                 ReadResponse();
 
-                response = m_response;
-
-                if (response.ID != StatusCode.ServiceReady)
+                if (m_response.ID != StatusCode.ServiceReady)
                 {
                     m_cmdsocket.Close();
                     m_cmdsocket = null;
@@ -746,11 +727,6 @@ namespace NetCFLibFTP
 
             dirInfo.Append(Encoding.ASCII.GetString(m_buffer, 0, recievedBytes));
 
-            if (String.IsNullOrEmpty(dirInfo.ToString()))
-            {
-                throw new Exception("WTF");
-            }
-
             FTPParameters.EndResponseEvent.Set();
         }
 
@@ -850,18 +826,6 @@ namespace NetCFLibFTP
 				ProtocolType.Tcp);
 
             IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(ipAddress), port);
-            /*
-            try
-            {
-                FTPParameters.EndConnectEvent = new AutoResetEvent(false);
-                socket.BeginConnect(endpoint, EndConnection, socket);
-                FTPParameters.EndConnectEvent.WaitOne(5000, false);
-            }
-            catch
-            {
-
-            }
-            */
 
             var ConnectionResult = socket.BeginConnect(endpoint, null, null);
 
@@ -872,16 +836,6 @@ namespace NetCFLibFTP
                 socket.Close();
                 throw new FTPException("Can't connect to remote server");
             }
-            /*
-			try
-			{
-				socket.Connect(endpoint);
-			}
-			catch(Exception)
-			{
-				throw new FTPException("Can't connect to remote server");
-			}
-             */
 
 			return socket;
 		}
