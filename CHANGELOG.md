@@ -1,5 +1,18 @@
 # Changelog
 
+## [v0.6.4] - (06.02.21)
+
+### Added
+
+### Changed
+
+ - Auto loading removable devices list
+ 
+### Fixed
+
+ - UI fixes for VGA screen
+ - Install to SD now works on WM2003
+
 ## [v0.6.3] - (05.02.21)
 
 ### Added
