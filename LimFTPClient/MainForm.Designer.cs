@@ -165,7 +165,7 @@
             this.InstalledPage.Controls.Add(this.InstalledBox);
             this.InstalledPage.Location = new System.Drawing.Point(0, 0);
             this.InstalledPage.Name = "InstalledPage";
-            this.InstalledPage.Size = new System.Drawing.Size(240, 245);
+            this.InstalledPage.Size = new System.Drawing.Size(232, 242);
             this.InstalledPage.Text = "Установленные";
             // 
             // InstalledLabel

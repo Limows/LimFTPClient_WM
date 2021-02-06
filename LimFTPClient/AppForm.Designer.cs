@@ -97,9 +97,9 @@
             // 
             // StatusLabel
             // 
-            this.StatusLabel.Location = new System.Drawing.Point(90, 73);
+            this.StatusLabel.Location = new System.Drawing.Point(90, 75);
             this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(142, 20);
+            this.StatusLabel.Size = new System.Drawing.Size(142, 19);
             this.StatusLabel.Text = "Статус";
             // 
             // AppForm

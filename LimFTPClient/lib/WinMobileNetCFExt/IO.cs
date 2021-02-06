@@ -6,6 +6,7 @@ using System.Reflection;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.IO.Compression;
+using System.Linq;
 
 namespace WinMobileNetCFExt
 {
@@ -43,7 +44,7 @@ namespace WinMobileNetCFExt
         /// Get removable storage directory
         /// </summary>
         /// <returns>Path to removable storage</returns> 
-        static public string GetRemovableStorageDirectory()
+        static public string GetFirstRemovableStorage()
         {
             string removableStorageDirectory = null;
 
@@ -67,6 +68,31 @@ namespace WinMobileNetCFExt
             }
 
             return removableStorageDirectory;
+        }
+
+        static public List<string> GetAllRemovableStorages()
+        {
+            List<string> RemovableStorages = new List<string>();
+
+            WIN32_FIND_DATA findData = new WIN32_FIND_DATA();
+            IntPtr handle = IntPtr.Zero;
+
+            handle = FindFirstFlashCard(ref findData);
+
+            if (handle != INVALID_HANDLE_VALUE)
+            {
+                do
+                {
+                    if (!String.IsNullOrEmpty(findData.cFileName))
+                    {
+                        RemovableStorages.Add(findData.cFileName);
+                    }
+                }
+                while (FindNextFlashCard(handle, ref findData));
+                FindClose(handle);
+            }
+
+            return RemovableStorages;
         }
 
         public static readonly IntPtr INVALID_HANDLE_VALUE = (IntPtr)(-1);

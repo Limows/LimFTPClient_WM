@@ -51,10 +51,20 @@ namespace LimFTPClient
                 DownloadingTimer.Enabled = true;
                 DownloadButton.Visible = false;
                 StatusBar.Visible = true;
-                StatusLabel.Left = 12;
-                StatusLabel.Width = 220;
-                DescriptionBox.Top = 120;
                 StatusBar.Value = StatusBar.Minimum;
+
+                if (this.Width == 480)
+                {
+                    StatusLabel.Left = 24;
+                    StatusLabel.Width = 440;
+                    DescriptionBox.Top = 240;
+                }
+                else
+                {
+                    DescriptionBox.Top = 120;
+                    StatusLabel.Left = 12;
+                    StatusLabel.Width = 220;
+                }
             }
             else
             {
@@ -69,7 +79,15 @@ namespace LimFTPClient
             NameLabel.Text = AppName.Replace("_", " ");
             StatusLabel.Text = "";
             StatusBar.Visible = false;
-            DescriptionBox.Top = 100;
+
+            if (this.Width == 480)
+            {
+                DescriptionBox.Top = 200;
+            }
+            else
+            {
+                DescriptionBox.Top = 100;
+            }
 
             ParamsHelper.CurrentURI = ParamsHelper.AppURI;
 
@@ -224,6 +242,17 @@ namespace LimFTPClient
                     StatusLabel.Left = 90;
                     DescriptionBox.Top = 100;
                     StatusLabel.Text = ParamsHelper.ThreadMessage;
+
+                    if (this.Width == 480)
+                    {
+                        StatusLabel.Left = 180;
+                        DescriptionBox.Top = 200;
+                    }
+                    else
+                    {
+                        StatusLabel.Left = 90;
+                        DescriptionBox.Top = 100;
+                    }
                 }
                 catch
                 { }

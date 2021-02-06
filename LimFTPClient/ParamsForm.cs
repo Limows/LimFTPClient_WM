@@ -45,7 +45,7 @@ namespace LimFTPClient
             }
         }
 
-        private void OpenDirButton1_Click(object sender, EventArgs e)
+        private void OpenDirButton_Click(object sender, EventArgs e)
         {
             DownloadPathBox.Text = OpenDirDialog();
         }
@@ -68,13 +68,80 @@ namespace LimFTPClient
             AutoInstallBox.Checked = ParamsHelper.IsAutoInstall;
             RmPackageBox.Checked = ParamsHelper.IsRmPackage;
 
-            if (ParamsHelper.InstallPath == "\\Program Files")
+            List<string> StoragesNames = IO.GetAllRemovableStorages();
+
+            if (!(StoragesNames.Count == 0))
             {
-                DeviceInstallButton.Checked = true;
+                int ButtonTop;
+                int ButtonLeft;
+                int ButtonWidth;
+
+                if (this.Width == 480)
+                {
+                    ButtonTop = 303;
+                    ButtonLeft = 14;
+                    ButtonWidth = 400;
+                }
+                else
+                {
+                    ButtonTop = 140;
+                    ButtonLeft = 7;
+                    ButtonWidth = 200;
+                }
+
+                int i = 1;
+
+                foreach (string storage in StoragesNames)
+                {
+                    RadioButton StorageButton = new RadioButton();
+
+                    StorageButton.Left = ButtonLeft;
+                    StorageButton.Top = ButtonTop;
+                    StorageButton.Width = ButtonWidth;
+                    StorageButton.Text = storage;
+                    StorageButton.Name = "StorageButton" + i;
+                    StorageButton.CheckedChanged += StorageButton_CheckedChanged;
+
+                    if (!String.IsNullOrEmpty(ParamsHelper.InstallPath))
+                    {
+                        if (storage == ParamsHelper.InstallPath.Split('\\')[1])
+                        {
+                            StorageButton.Checked = true;
+                        }
+                    }
+
+                    InstallTabPage.Controls.Add(StorageButton);
+
+                    if (this.Width == 480)
+                    {
+                        ButtonTop += 46;
+                    }
+                    else
+                    {
+                        ButtonTop += 23;
+                    }
+
+                    i++;
+                }
             }
-            else
+        }
+
+        private void StorageButton_CheckedChanged(object sender, EventArgs e)
+        {
+            string DriveName;
+
+            try
             {
-                CardInstallButton.Checked = true;
+                if (((RadioButton)sender).Checked)
+                {
+                    DriveName = ((RadioButton)sender).Text;
+                    ParamsHelper.InstallPath = @"\" + DriveName + @"\Program Files";
+                    DeviceInstallButton.Checked = false;
+                }
+            }
+            catch
+            {
+                ParamsHelper.InstallPath = null;
             }
         }
 
@@ -107,23 +174,24 @@ namespace LimFTPClient
             ParamsHelper.IsRmPackage = RmPackageBox.Checked;
             ParamsHelper.IsOverwrite = OverwriteDirsBox.Checked;
 
-            if (DeviceInstallButton.Checked)
+            if (String.IsNullOrEmpty(ParamsHelper.InstallPath))
             {
-                ParamsHelper.InstallPath = "\\Program Files";
+                MessageBox.Show("Выберите место для установки", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+                e.Cancel = true;
+                return;
             }
             else
             {
-                string RemovableStorageDir = IO.GetRemovableStorageDirectory();
-
-                if (!String.IsNullOrEmpty(RemovableStorageDir))
+                try
                 {
-                    ParamsHelper.InstallPath = "\\" + IO.GetRemovableStorageDirectory() + "\\Program Files";
+                    if (!Directory.Exists(ParamsHelper.InstallPath))
+                    {
+                        Directory.CreateDirectory(ParamsHelper.InstallPath);
+                    }
                 }
-                else
+                catch
                 {
-                    MessageBox.Show("SD Card не найдена", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
-                    e.Cancel = true;
-                    return;
+                    MessageBox.Show("Выбранное устройство не готово", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
                 }
             }
 
@@ -138,13 +206,23 @@ namespace LimFTPClient
                 e.Cancel = true;
                 return;
             }
-            else
-            {
-                ParamsHelper.DownloadPath += "\\AppManager";
-                Directory.CreateDirectory(ParamsHelper.DownloadPath);
-            }
 
             e.Cancel = false;
+        }
+
+        private void DeviceInstallButton_CheckedChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (((RadioButton)sender).Checked)
+                {
+                    ParamsHelper.InstallPath = @"\Program Files";
+                }
+            }
+            catch
+            {
+                ParamsHelper.InstallPath = null;
+            }
         }
     }
 }

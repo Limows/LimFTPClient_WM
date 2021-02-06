@@ -42,7 +42,6 @@
             this.RmPackageBox = new System.Windows.Forms.CheckBox();
             this.AutoInstallBox = new System.Windows.Forms.CheckBox();
             this.InstallPathLabel = new System.Windows.Forms.Label();
-            this.CardInstallButton = new System.Windows.Forms.RadioButton();
             this.DeviceInstallButton = new System.Windows.Forms.RadioButton();
             this.DownloadTabPage = new System.Windows.Forms.TabPage();
             this.HttpServerButton = new System.Windows.Forms.RadioButton();
@@ -123,11 +122,10 @@
             this.InstallTabPage.Controls.Add(this.RmPackageBox);
             this.InstallTabPage.Controls.Add(this.AutoInstallBox);
             this.InstallTabPage.Controls.Add(this.InstallPathLabel);
-            this.InstallTabPage.Controls.Add(this.CardInstallButton);
             this.InstallTabPage.Controls.Add(this.DeviceInstallButton);
             this.InstallTabPage.Location = new System.Drawing.Point(0, 0);
             this.InstallTabPage.Name = "InstallTabPage";
-            this.InstallTabPage.Size = new System.Drawing.Size(240, 271);
+            this.InstallTabPage.Size = new System.Drawing.Size(232, 268);
             this.InstallTabPage.Text = "Установка";
             // 
             // OverwriteDirsBox
@@ -161,21 +159,15 @@
             this.InstallPathLabel.Size = new System.Drawing.Size(100, 20);
             this.InstallPathLabel.Text = "Место установки";
             // 
-            // CardInstallButton
-            // 
-            this.CardInstallButton.Location = new System.Drawing.Point(7, 143);
-            this.CardInstallButton.Name = "CardInstallButton";
-            this.CardInstallButton.Size = new System.Drawing.Size(100, 20);
-            this.CardInstallButton.TabIndex = 5;
-            this.CardInstallButton.Text = "SD Card";
-            // 
             // DeviceInstallButton
             // 
+            this.DeviceInstallButton.Checked = true;
             this.DeviceInstallButton.Location = new System.Drawing.Point(7, 117);
             this.DeviceInstallButton.Name = "DeviceInstallButton";
             this.DeviceInstallButton.Size = new System.Drawing.Size(100, 20);
             this.DeviceInstallButton.TabIndex = 4;
             this.DeviceInstallButton.Text = "Устройство";
+            this.DeviceInstallButton.CheckedChanged += new System.EventHandler(this.DeviceInstallButton_CheckedChanged);
             // 
             // DownloadTabPage
             // 
@@ -239,7 +231,7 @@
             this.OpenDirButton.Size = new System.Drawing.Size(57, 21);
             this.OpenDirButton.TabIndex = 7;
             this.OpenDirButton.Text = "Обзор";
-            this.OpenDirButton.Click += new System.EventHandler(this.OpenDirButton1_Click);
+            this.OpenDirButton.Click += new System.EventHandler(this.OpenDirButton_Click);
             // 
             // TabControl
             // 
@@ -282,7 +274,6 @@
         private System.Windows.Forms.CheckBox RmPackageBox;
         private System.Windows.Forms.CheckBox AutoInstallBox;
         private System.Windows.Forms.Label InstallPathLabel;
-        private System.Windows.Forms.RadioButton CardInstallButton;
         private System.Windows.Forms.RadioButton DeviceInstallButton;
         private System.Windows.Forms.TabPage DownloadTabPage;
         private System.Windows.Forms.TextBox DownloadPathBox;

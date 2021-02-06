@@ -88,7 +88,7 @@ namespace LimFTPClient
 
         static public bool CabInstall(string CabPath, string InstallPath, bool Overwrite)
         {   
-            string ConsoleArguments = "/delete 0 /noaskdest ";
+            string ConsoleArguments = "/delete 0 /noaskdest";
 
             string SoftwareKey = "Software\\Apps\\Microsoft Application Installer";
 
@@ -110,7 +110,7 @@ namespace LimFTPClient
                     Process InstallProc = new Process();
                     InstallProc.StartInfo.FileName = "\\windows\\wceload.exe";
 
-                    InstallProc.StartInfo.Arguments = ConsoleArguments +"\"" + CabPath + "\"";
+                    InstallProc.StartInfo.Arguments = ConsoleArguments;// +"\"" + CabPath + "\"";
 
                     InstallProc.Start();
 
