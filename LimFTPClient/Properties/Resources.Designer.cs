@@ -57,9 +57,9 @@ namespace LimFTPClient.Properties {
             }
         }
         
-        internal static System.Drawing.Icon BigIcon {
+        internal static System.Drawing.Icon logo {
             get {
-                object obj = ResourceManager.GetObject("BigIcon", resourceCulture);
+                object obj = ResourceManager.GetObject("logo", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

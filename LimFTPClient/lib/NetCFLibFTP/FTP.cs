@@ -170,7 +170,7 @@ namespace NetCFLibFTP
             FileNotFound = 550
         }
 
-		private static int BUFFER_SIZE = 2048;
+		private static int BUFFER_SIZE = 1024;
         private static int DEFAULT_PORT = 21;
 
 		private bool				m_connected		= false;
@@ -186,7 +186,7 @@ namespace NetCFLibFTP
 		private FTPServerType		m_server		= FTPServerType.Unknown;
 		private int					m_timeout		= 5000;
         private FTPResponse         m_response      = new FTPResponse();
-        private StringBuilder       dirInfo         = new StringBuilder(BUFFER_SIZE);
+        private Stream              m_data          = null;
 
 		/// <summary>
 		/// Event raised when the FTP server sends a response
@@ -251,12 +251,11 @@ namespace NetCFLibFTP
                 if (socket != null)
                 {
                     socket.EndConnect(state);
-                    //m_success = true;
                 }
             }
-            catch (Exception)
+            catch
             {
-                //m_success = false;
+
             }
             finally
             {
@@ -309,11 +308,11 @@ namespace NetCFLibFTP
                 }
 
                 // make the connection
-                var ConnectionResult = m_cmdsocket.BeginConnect(endpoint, null, null);
+                FTPParameters.EndConnectEvent = new AutoResetEvent(false);
+                m_cmdsocket.BeginConnect(endpoint, EndConnection, m_cmdsocket);
+                FTPParameters.EndConnectEvent.WaitOne(m_timeout, false);
 
-                bool IsConnected = ConnectionResult.AsyncWaitHandle.WaitOne(5000, false);
-
-                if (!IsConnected)
+                if (!m_cmdsocket.Connected)
                 {
                     m_cmdsocket.Close();
                     return;
@@ -408,12 +407,11 @@ namespace NetCFLibFTP
 		/// <param name="overwrite">Overwrite the local file if it already exists</param>
         public void GetFile(string remoteFileName, string localFileName, bool overwrite)
         {
-            int bytesrecvd = 0;
             FTPResponse response;
 
-            using (var output = File.Create(localFileName))
+            using (m_data = File.Create(localFileName))
             {
-                using (var socket = OpenDataSocket())
+                using (Socket m_datasocket = OpenDataSocket())
                 {
                     response = SendCommand("RETR " + remoteFileName);
 
@@ -429,10 +427,12 @@ namespace NetCFLibFTP
                         }
                     }
 
+                    /*
+
                     // get the data
                     while (true)
                     {
-                        bytesrecvd = socket.Receive(m_buffer, m_buffer.Length, 0);
+                        bytesrecvd = m_datasocket.Receive(m_buffer, m_buffer.Length, 0);
                         output.Write(m_buffer, 0, bytesrecvd);
 
                         if (bytesrecvd <= 0)
@@ -440,6 +440,11 @@ namespace NetCFLibFTP
                             break;
                         }
                     }
+                     */
+
+                    FTPParameters.EndResponseEvent = new AutoResetEvent(false);
+                    m_datasocket.BeginReceive(m_buffer, 0, m_buffer.Length, 0, EndDataResponse, m_datasocket);
+                    FTPParameters.EndResponseEvent.WaitOne();
                 }
 
                 ReadResponse();
@@ -474,15 +479,10 @@ namespace NetCFLibFTP
 		public string GetFileList(bool Detailed)
 		{
 			FTPResponse		response;
-			byte[]			buffer = new byte[1024];
+            StringBuilder dirInfo = new StringBuilder(BUFFER_SIZE);
 
             using (Socket m_datasocket = OpenDataSocket())
             {
-
-                //ReadResponse();
-
-                //response = m_response;
-
                 if (Detailed)
                 {
                     response = SendCommand("LIST");
@@ -504,18 +504,26 @@ namespace NetCFLibFTP
                     }
                 }
 
-                try
+                using(m_data = new MemoryStream())
                 {
                     FTPParameters.EndResponseEvent = new AutoResetEvent(false);
                     m_datasocket.BeginReceive(m_buffer, 0, m_buffer.Length, 0, EndDataResponse, m_datasocket);
-                    FTPParameters.EndResponseEvent.WaitOne();
-                }
-                catch
-                {
+                    FTPParameters.EndResponseEvent.WaitOne(m_timeout, false);
 
-                }
+                    using (BinaryReader Reader = new BinaryReader(m_data))
+                    {
+                        m_data.Position = 0;
+
+                        int count = Reader.Read(m_buffer, 0, m_buffer.Length);
+
+                        while (count > 0)
+                        {
+                            dirInfo.Append(Encoding.ASCII.GetString(m_buffer, 0, count));
+                            count = Reader.Read(m_buffer, 0, m_buffer.Length);
+                        }
+                    }
+                }            
             }
-
 			return dirInfo.ToString();
 		}
 
@@ -606,16 +614,9 @@ namespace NetCFLibFTP
 
         private void ReadResponse()
         {
-            try
-            {
-                FTPParameters.EndResponseEvent = new AutoResetEvent(false);
-                m_cmdsocket.BeginReceive(m_buffer, 0, m_buffer.Length, 0, EndCommandResponse, m_cmdsocket);
-                FTPParameters.EndResponseEvent.WaitOne(5000, false);
-            }
-            catch
-            {
-                return;
-            }
+            FTPParameters.EndResponseEvent = new AutoResetEvent(false);
+            m_cmdsocket.BeginReceive(m_buffer, 0, m_buffer.Length, 0, EndCommandResponse, m_cmdsocket);
+            FTPParameters.EndResponseEvent.WaitOne(m_timeout, false);
         }
 
         private void EndCommandResponse(IAsyncResult state)
@@ -714,20 +715,32 @@ namespace NetCFLibFTP
         {
             int recievedBytes = 0;
             Socket socket = (Socket)state.AsyncState;
-            
-            try
-            {
-                recievedBytes = socket.EndReceive(state);
-            }
-            catch
-            {
-                FTPParameters.EndResponseEvent.Set();
-                return;
-            }
+            BinaryWriter Writer = new BinaryWriter(m_data);
 
-            dirInfo.Append(Encoding.ASCII.GetString(m_buffer, 0, recievedBytes));
+                try
+                {
+                    recievedBytes = socket.EndReceive(state);
+                    Writer.Write(m_buffer, 0, recievedBytes);
+                    Writer.Flush();
+                    //m_data.Write(m_buffer, 0, recievedBytes);
+                    //dirInfo.Append(Encoding.ASCII.GetString(m_buffer, 0, recievedBytes));
+                }
+                catch
+                {
+                    FTPParameters.EndResponseEvent.Set();
+                    Writer.Flush();
+                    return;
+                }
 
-            FTPParameters.EndResponseEvent.Set();
+                if (recievedBytes > 0)
+                {
+                    socket.BeginReceive(m_buffer, 0, m_buffer.Length, 0, EndDataResponse, socket);
+                }
+                else
+                {
+                    FTPParameters.EndResponseEvent.Set();
+                    Writer.Flush();
+                }
         }
 
 		private void CheckConnect()
@@ -827,11 +840,11 @@ namespace NetCFLibFTP
 
             IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(ipAddress), port);
 
-            var ConnectionResult = socket.BeginConnect(endpoint, null, null);
+            FTPParameters.EndConnectEvent = new AutoResetEvent(false);
+            socket.BeginConnect(endpoint, EndConnection, socket);
+            FTPParameters.EndConnectEvent.WaitOne(m_timeout, false);
 
-            bool IsConnected = ConnectionResult.AsyncWaitHandle.WaitOne(5000, false);
-
-            if (!IsConnected)
+            if (!socket.Connected)
             {
                 socket.Close();
                 throw new FTPException("Can't connect to remote server");

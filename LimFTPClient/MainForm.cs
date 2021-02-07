@@ -142,9 +142,9 @@ namespace LimFTPClient
 
             if (!String.IsNullOrEmpty(InstalledBox.Text))
             {   
-                //AboutAppBox NewAboutAppBox = new AboutAppBox(InstalledBox.Text);
-                //string AppName = NewAboutAppBox.AppProduct;
+                Cursor.Current = Cursors.WaitCursor;
                 IsUninstalled = SystemHelper.AppUninstall(InstalledBox.Text);
+                Cursor.Current = Cursors.Default;
                     
                 if (!IsUninstalled)
                 {

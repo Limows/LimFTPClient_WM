@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.6.5] - (07.02.21)
+
+### Added
+
+ - Animation during uninstall
+
+### Changed
+ 
+### Fixed
+
+ - Try to fix connection unstability on WM2003
+
 ## [v0.6.4] - (06.02.21)
 
 ### Added

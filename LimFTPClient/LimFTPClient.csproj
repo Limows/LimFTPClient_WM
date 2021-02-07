@@ -146,7 +146,6 @@
   <ItemGroup>
     <Content Include="logo.ico" />
     <None Include="Resources\NoIMG.png" />
-    <None Include="Resources\BigIcon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>
