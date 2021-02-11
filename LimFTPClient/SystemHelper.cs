@@ -359,17 +359,5 @@ namespace LimFTPClient
                 }
             }
         }
-
-        private static List<string> UninstallDataParser(string AppName)
-        {
-            List<string> UninstallInfo = new List<string>();
-            string UninstallDataPath = "\\windows\\AppMgr\\" + AppName;
-            XmlDocument UninstallData = new XmlDocument();
-            string UninstallFilePath = Directory.GetFiles(UninstallDataPath, "*.tmp")[0];
-
-            UninstallData.Load(UninstallFilePath);
-
-            return UninstallInfo;
-        }
     }
 }

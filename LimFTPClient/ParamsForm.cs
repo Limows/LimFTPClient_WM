@@ -124,6 +124,10 @@ namespace LimFTPClient
                     i++;
                 }
             }
+            else
+            {
+                DeviceInstallButton.Checked = true;
+            }
         }
 
         private void StorageButton_CheckedChanged(object sender, EventArgs e)
@@ -176,8 +180,11 @@ namespace LimFTPClient
 
             if (String.IsNullOrEmpty(ParamsHelper.InstallPath))
             {
-                MessageBox.Show("Выберите место для установки", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
-                e.Cancel = true;
+                //MessageBox.Show("Выберите место для установки", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+                //e.Cancel = true;
+
+                MessageBox.Show("Выбрано место установки по умолчанию", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+                DeviceInstallButton.Checked = true;
                 return;
             }
             else
@@ -223,6 +230,16 @@ namespace LimFTPClient
             {
                 ParamsHelper.InstallPath = null;
             }
+        }
+
+        private void TempSizeBox_GotFocus(object sender, EventArgs e)
+        {
+            InputPanel.Enabled = true;
+        }
+
+        private void TempSizeBox_LostFocus(object sender, EventArgs e)
+        {
+            InputPanel.Enabled = false;
         }
     }
 }

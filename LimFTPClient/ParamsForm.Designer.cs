@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             this.InputPanel = new Microsoft.WindowsCE.Forms.InputPanel(this.components);
             this.BufferTabPage = new System.Windows.Forms.TabPage();
-            this.UsedTempSizeBox = new System.Windows.Forms.Label();
             this.UsedTempSizeLabel = new System.Windows.Forms.Label();
             this.MBLabel = new System.Windows.Forms.Label();
             this.TempSizeBox = new System.Windows.Forms.TextBox();
@@ -60,7 +59,6 @@
             // BufferTabPage
             // 
             this.BufferTabPage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
-            this.BufferTabPage.Controls.Add(this.UsedTempSizeBox);
             this.BufferTabPage.Controls.Add(this.UsedTempSizeLabel);
             this.BufferTabPage.Controls.Add(this.MBLabel);
             this.BufferTabPage.Controls.Add(this.TempSizeBox);
@@ -68,26 +66,19 @@
             this.BufferTabPage.Controls.Add(this.CleanBufferButton);
             this.BufferTabPage.Location = new System.Drawing.Point(0, 0);
             this.BufferTabPage.Name = "BufferTabPage";
-            this.BufferTabPage.Size = new System.Drawing.Size(232, 268);
+            this.BufferTabPage.Size = new System.Drawing.Size(240, 271);
             this.BufferTabPage.Text = "Хранилище";
-            // 
-            // UsedTempSizeBox
-            // 
-            this.UsedTempSizeBox.Location = new System.Drawing.Point(101, 40);
-            this.UsedTempSizeBox.Name = "UsedTempSizeBox";
-            this.UsedTempSizeBox.Size = new System.Drawing.Size(104, 20);
-            this.UsedTempSizeBox.Text = "0 МБ";
             // 
             // UsedTempSizeLabel
             // 
             this.UsedTempSizeLabel.Location = new System.Drawing.Point(7, 39);
             this.UsedTempSizeLabel.Name = "UsedTempSizeLabel";
-            this.UsedTempSizeLabel.Size = new System.Drawing.Size(116, 21);
-            this.UsedTempSizeLabel.Text = "Занято сейчас:";
+            this.UsedTempSizeLabel.Size = new System.Drawing.Size(198, 21);
+            this.UsedTempSizeLabel.Text = "Занято сейчас: 0 МБ";
             // 
             // MBLabel
             // 
-            this.MBLabel.Location = new System.Drawing.Point(180, 17);
+            this.MBLabel.Location = new System.Drawing.Point(179, 17);
             this.MBLabel.Name = "MBLabel";
             this.MBLabel.Size = new System.Drawing.Size(25, 20);
             this.MBLabel.Text = "МБ";
@@ -98,6 +89,8 @@
             this.TempSizeBox.Name = "TempSizeBox";
             this.TempSizeBox.Size = new System.Drawing.Size(45, 21);
             this.TempSizeBox.TabIndex = 10;
+            this.TempSizeBox.GotFocus += new System.EventHandler(this.TempSizeBox_GotFocus);
+            this.TempSizeBox.LostFocus += new System.EventHandler(this.TempSizeBox_LostFocus);
             // 
             // TempSizeLabel
             // 
@@ -125,7 +118,7 @@
             this.InstallTabPage.Controls.Add(this.DeviceInstallButton);
             this.InstallTabPage.Location = new System.Drawing.Point(0, 0);
             this.InstallTabPage.Name = "InstallTabPage";
-            this.InstallTabPage.Size = new System.Drawing.Size(232, 268);
+            this.InstallTabPage.Size = new System.Drawing.Size(240, 271);
             this.InstallTabPage.Text = "Установка";
             // 
             // OverwriteDirsBox
@@ -287,7 +280,6 @@
         private System.Windows.Forms.Label TempSizeLabel;
         private System.Windows.Forms.Label MBLabel;
         private System.Windows.Forms.Button CleanBufferButton;
-        private System.Windows.Forms.Label UsedTempSizeBox;
         private System.Windows.Forms.Label UsedTempSizeLabel;
     }
 }
