@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.6.6] - (12.02.21)
+
+### Added
+
+ - Setting the size of the temporary file storage
+
+### Changed
+ 
+### Fixed
+
+ - Inability to choose a place to install without a memory card
+
 ## [v0.6.5] - (07.02.21)
 
 ### Added
@@ -222,8 +234,6 @@
 
  - Ported from Windows version of LimFTPClient
 
-[v0.6.5]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.6.5
-[v0.6.4]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.6.4
 [v0.6.3]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.6.3
 [v0.6.2]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.6.2
 [v0.6.1]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.6.1

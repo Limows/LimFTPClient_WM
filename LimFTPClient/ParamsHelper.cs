@@ -16,6 +16,7 @@ namespace LimFTPClient
         static public string DownloadPath;
         static public string InstallPath;
         static public string ConfigPath;
+        static public string TempPath;
         static public int OSVersion;
         static public List<string> AppsList;
         static public bool IsThreadAlive;
@@ -27,23 +28,26 @@ namespace LimFTPClient
         static public bool IsRmPackage;
         static public bool IsOverwrite;
         static public bool IsUninstalling;
-        
-        /*
-        public enum OSVersions
-        {
-            WinMobile5 = "WinMobile_5",
-            WinMobile2003 = "WinMobile_2003"
-        }
-         */
+        static public ulong TempSize;
 
         /// <summary>
         /// Convert bytes to megabytes
         /// </summary>
-        /// <param name="Bytes"></param>
+        /// <param name="Bytes">Bytes</param>
         /// <returns>Megabytes</returns> 
         static public double BytesToMegs(ulong Bytes)
         {
             return ((double)Bytes / 1024) / 1024;
+        }
+
+        /// <summary>
+        /// Convert megabytes to bytes
+        /// </summary>
+        /// <param name="Megs">Megs</param>
+        /// <returns>Bytes</returns> 
+        static public ulong MegsToBytes(double Megs)
+        {
+            return (ulong)(Megs * 1024 * 1024);
         }
 
     }

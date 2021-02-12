@@ -46,7 +46,7 @@ namespace LimFTPClient
             string ScrShotName = AppName + ".png";
             string LogoName = "Logo.png";
             string FileSize;
-            string BufferPath = IOHelper.GetCurrentDirectory() + "\\Temp\\" + AppName;
+            string BufferPath = ParamsHelper.TempPath + "\\" + AppName;
             string AppInfo;
 
             if (!Directory.Exists(BufferPath)) Directory.CreateDirectory(BufferPath);
@@ -57,7 +57,7 @@ namespace LimFTPClient
             {
                 Ftp.ChangeDirectory(URI.AbsolutePath);
                 FileSize = Ftp.GetFileSize(FileName);
-                FileSize = ParamsHelper.BytesToMegs((ulong)Convert.ToInt64(FileSize)).ToString("0.##") + " МБ";
+                FileSize = ParamsHelper.BytesToMegs((ulong)Convert.ToInt64(FileSize)).ToString("0.###") + " МБ";
             }
             catch
             {

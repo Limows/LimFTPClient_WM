@@ -67,6 +67,8 @@ namespace LimFTPClient
             OverwriteDirsBox.Checked = ParamsHelper.IsOverwrite;
             AutoInstallBox.Checked = ParamsHelper.IsAutoInstall;
             RmPackageBox.Checked = ParamsHelper.IsRmPackage;
+            TempSizeBox.Text = ParamsHelper.BytesToMegs(ParamsHelper.TempSize).ToString("0.##");
+            UsedTempSizeLabel.Text = "Занято сейчас: " + ParamsHelper.BytesToMegs(IOHelper.GetDirectorySize(ParamsHelper.TempPath)).ToString("0.###") + " МБ";
 
             List<string> StoragesNames = IO.GetAllRemovableStorages();
 
@@ -164,6 +166,7 @@ namespace LimFTPClient
             try
             {
                 IOHelper.CleanBuffer();
+                UsedTempSizeLabel.Text = "Занято сейчас: " + ParamsHelper.BytesToMegs(IOHelper.GetDirectorySize(ParamsHelper.TempPath)).ToString("0.###") + " МБ";
             }
             catch
             {
@@ -180,11 +183,8 @@ namespace LimFTPClient
 
             if (String.IsNullOrEmpty(ParamsHelper.InstallPath))
             {
-                //MessageBox.Show("Выберите место для установки", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
-                //e.Cancel = true;
-
-                MessageBox.Show("Выбрано место установки по умолчанию", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
-                DeviceInstallButton.Checked = true;
+                MessageBox.Show("Выберите место для установки", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+                e.Cancel = true;
                 return;
             }
             else
@@ -212,6 +212,17 @@ namespace LimFTPClient
                 MessageBox.Show("Путь не может быть пустым", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
                 e.Cancel = true;
                 return;
+            }
+
+            if (String.IsNullOrEmpty(TempSizeBox.Text) || Convert.ToDouble(TempSizeBox.Text) == 0)
+            {
+                MessageBox.Show("Не задан размер хранилища", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+                e.Cancel = true;
+                return;
+            }
+            else
+            {
+                ParamsHelper.TempSize = ParamsHelper.MegsToBytes(Convert.ToDouble(TempSizeBox.Text));
             }
 
             e.Cancel = false;

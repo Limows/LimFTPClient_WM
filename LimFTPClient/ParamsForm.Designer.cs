@@ -154,11 +154,11 @@
             // 
             // DeviceInstallButton
             // 
-            this.DeviceInstallButton.Checked = true;
             this.DeviceInstallButton.Location = new System.Drawing.Point(7, 117);
             this.DeviceInstallButton.Name = "DeviceInstallButton";
             this.DeviceInstallButton.Size = new System.Drawing.Size(100, 20);
             this.DeviceInstallButton.TabIndex = 4;
+            this.DeviceInstallButton.TabStop = false;
             this.DeviceInstallButton.Text = "Устройство";
             this.DeviceInstallButton.CheckedChanged += new System.EventHandler(this.DeviceInstallButton_CheckedChanged);
             // 

@@ -51,6 +51,8 @@ namespace LimFTPClient
 
         static public void LoadParameters()
         {
+            ParamsHelper.TempPath = GetCurrentDirectory() + "\\Temp";
+
             if (String.IsNullOrEmpty(ParamsHelper.ConfigPath))
             {
                 ParamsHelper.ConfigPath = IOHelper.GetConfigPath();
@@ -65,6 +67,7 @@ namespace LimFTPClient
                 ParamsHelper.IsAutoInstall = Reader.ReadBoolean();
                 ParamsHelper.DownloadPath = Reader.ReadString();
                 ParamsHelper.InstallPath = Reader.ReadString();
+                ParamsHelper.TempSize = (ulong)Reader.ReadInt64();
             }
         }
 
@@ -80,7 +83,7 @@ namespace LimFTPClient
 
         static public void CleanBuffer()
         {
-            Directory.Delete(GetCurrentDirectory() + "\\Temp", true);
+            Directory.Delete(ParamsHelper.TempPath, true);
         }
 
         static private string GetConfigPath()
@@ -117,6 +120,7 @@ namespace LimFTPClient
                     Writer.Write(ParamsHelper.IsAutoInstall);
                     Writer.Write(ParamsHelper.DownloadPath);
                     Writer.Write(ParamsHelper.InstallPath);
+                    Writer.Write(ParamsHelper.TempSize);
                 }
             }
         }
@@ -130,6 +134,37 @@ namespace LimFTPClient
 
             File.Delete(ParamsHelper.ConfigPath);
 
+        }
+
+        static public ulong GetDirectorySize(string Path)
+        {
+            ulong Size = 0;
+            DirectoryInfo Directory = new DirectoryInfo(Path);
+
+            if (Directory.Exists)
+            {
+                // Add file sizes.
+                FileInfo[] Files = Directory.GetFiles();
+
+                foreach (FileInfo file in Files)
+                {
+                    Size += (ulong)file.Length;
+                }
+
+                // Add subdirectory sizes.
+                DirectoryInfo[] Directories = Directory.GetDirectories();
+
+                foreach (DirectoryInfo directory in Directories)
+                {
+                    Size += GetDirectorySize(directory.FullName);
+                }
+
+                return Size;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }
