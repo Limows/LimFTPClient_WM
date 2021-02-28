@@ -244,6 +244,7 @@
 
  - Ported from Windows version of LimFTPClient
 
+[v0.6.7]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.6.7
 [v0.6.6]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.6.6
 [v0.6.5]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.6.5
 [v0.6.4]: https://github.com/Limows/LimFTPClient_WM/releases/tag/v0.6.4
