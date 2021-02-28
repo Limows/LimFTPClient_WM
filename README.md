@@ -66,6 +66,8 @@ You need the following stuff to install this program:
  - HP iPaq H2200
  - Asus MyPal A639
  - Dell Axim x51v
+ - HTC HD2
+ - HP iPaq 214
 
 ## Contributing
 

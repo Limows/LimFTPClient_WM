@@ -1,5 +1,15 @@
 # Changelog
 
+## [v0.6.7] - (28.02.21)
+
+### Added
+
+### Changed
+ 
+### Fixed
+
+ - Critical error that could cause the application to crash when choosing an installation location
+
 ## [v0.6.6] - (12.02.21)
 
 ### Added

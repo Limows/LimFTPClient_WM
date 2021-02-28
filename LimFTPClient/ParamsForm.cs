@@ -202,11 +202,6 @@ namespace LimFTPClient
                 }
             }
 
-            if (!Directory.Exists(ParamsHelper.InstallPath))
-            {
-                Directory.CreateDirectory(ParamsHelper.InstallPath);
-            }
-
             if (String.IsNullOrEmpty(ParamsHelper.DownloadPath))
             {
                 MessageBox.Show("Путь не может быть пустым", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
